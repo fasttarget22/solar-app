@@ -1043,27 +1043,27 @@ async function loadAll(){
       fetch(API + '/api/summary').then(r=>r.json()),
       fetch(API + '/api/live').then(r=>r.json()).then(d=>[d])
     ]);
-    document.getElementById('sTotalSolar').textContent = sr.total_solar.toFixed(2);
-    document.getElementById('sTotalWapda').textContent = sr.total_utility.toFixed(2);
+    document.getElementById('sTsolar').textContent = sr.total_solar.toFixed(2);
+    document.getElementById('sTwapda').textContent = sr.total_utility.toFixed(2);
     document.getElementById('sPeak').textContent = sr.peak_load.toFixed(0) + 'W';
     document.getElementById('sCount').textContent = sr.record_count;
     document.getElementById('sSaved').textContent = 'PKR ' + Math.round(sr.total_solar*22).toLocaleString();
     const rt = sr.total_solar>0 ? Math.min(100, Math.round(sr.total_solar/(sr.total_solar+sr.total_utility)*100)) : 0;
     document.getElementById('sRatio').textContent = rt + '%';
-    document.getElementById('ratioFill').style.width = rt + '%';
+    document.getElementById('ratioF').style.width = rt + '%';
     if(hr.length){
       const l = hr[0];
       document.getElementById('cSolar').textContent = (l.solar_kwh||0).toFixed(3);
       const bp = l.battery_pct||0;
       document.getElementById('cBatt').textContent = bp.toFixed(1) + '%';
-      document.getElementById('battProg').style.width = bp + '%';
+      document.getElementById('battP').style.width = bp + '%';
       document.getElementById('cVolt').textContent = (l.voltage||48).toFixed(1) + 'V';
       const lw = l.load_w||0;
       document.getElementById('cLoad').textContent = lw.toFixed(0) + 'W';
       document.getElementById('cGrid').textContent = (l.utility_kwh||0).toFixed(3);
       const bk = (bp/100) * BATT_CAP;
       document.getElementById('cBkwh').textContent = bk.toFixed(2);
-      document.getElementById('bkwhProg').style.width = (bk/BATT_CAP*100) + '%';
+      document.getElementById('bkwhP').style.width = (bk/BATT_CAP*100) + '%';
       setSrc(l.solar_kwh||0, l.utility_kwh||0);updateMeter(l.solar_kwh||0,l.utility_kwh||0,lw);analyzeLoad(lw,l.solar_kwh||0,l.utility_kwh||0);checkVoiceAlerts(l.solar_kwh||0,l.utility_kwh||0,lw,bp);updatePowerFlow(l.solar_kwh||0,l.utility_kwh||0,lw,bp);
       setAlerts(l.solar_kwh||0, l.utility_kwh||0, lw);
       updateBattHours(bp, lw, solar, grid);

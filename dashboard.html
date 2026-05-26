@@ -484,6 +484,17 @@ for(let i=0;i<15;i++){
   pw.appendChild(p);
 }
 
+
+function shareFamily(){
+  const url='https://solar-app-yrm6.onrender.com/dashboard';
+  const solar=document.getElementById('sTsolar').textContent;
+  const batt=document.getElementById('cBatt').textContent;
+  const load=document.getElementById('cLoad').textContent;
+  const saved=document.getElementById('sSaved').textContent;
+  const msg='\u2600\ufe0f *Sufly Solar - Abbottabad Prime*\n\n\ud83d\udd0b Battery: '+batt+'\n\ud83c\udfe0 Load: '+load+'\n\u2600\ufe0f Total Solar: '+solar+' kWh\n\ud83d\udcb0 Saved: '+saved+'\n\n\ud83d\udcf1 Live: '+url;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg));
+}
+
 function toggleLang(){
   isUrdu = !isUrdu;
   document.body.classList.toggle('urdu-mode', isUrdu);

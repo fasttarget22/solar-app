@@ -24,9 +24,157 @@ def summary():
     return jsonify({'total_solar':sum(x.get('solar_kwh',0)for x in rows),'total_battery':sum(x.get('battery_kwh',0)for x in rows),'total_utility':sum(x.get('utility_kwh',0)for x in rows),'avg_battery_pct':sum(x.get('battery_pct',0)for x in rows)/len(rows),'peak_load':max((x.get('load_w',0)for x in rows),default=0),'record_count':len(rows),'today':{'s':0,'b':0,'u':0}})
 
 
+
 @app.route('/dashboard')
 def dashboard():
-    return """<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Solar Monitor Pro</title><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#060a0e;color:#c8e6c9;font-family:monospace}header{padding:14px 16px;border-bottom:1px solid #1a2a1a;display:flex;justify-content:space-between;align-items:center;background:rgba(0,255,136,.03)}.logo{color:#00ff88;font-size:16px;letter-spacing:3px}.hdot{width:8px;height:8px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}.src-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid #1a2a1a;font-size:11px;letter-spacing:2px;color:#4a6a4a}.src-badge{padding:4px 10px;border-radius:2px;font-size:10px;letter-spacing:2px;font-weight:700}.solar-src{background:#003322;color:#00ff88;border:1px solid #00ff88}.grid-src{background:#001a33;color:#00aaff;border:1px solid #00aaff}.mixed-src{background:#332200;color:#ffaa00;border:1px solid #ffaa00}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px}.card{background:#0d1318;border:1px solid #1a2a1a;padding:14px;position:relative}.card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}.g::before{background:#00ff88}.a::before{background:#ffaa00}.b::before{background:#00aaff}.r::before{background:#ff4444}.lbl{font-size:9px;letter-spacing:2px;color:#4a6a4a;margin-bottom:6px}.val{font-size:26px;font-weight:700;line-height:1}.g .val{color:#00ff88}.a .val{color:#ffaa00}.b .val{color:#00aaff}.r .val{color:#ff4444}.unt{font-size:10px;color:#4a6a4a;margin-top:3px}.bar{margin-top:8px;height:4px;background:#0a1a0a;border-radius:2px}.fill{height:100%;border-radius:2px;transition:width 1s}.alert{background:#1a0a0a;border:1px solid #ff4444;padding:8px 16px;font-size:11px;color:#ff4444;letter-spacing:2px;display:none;margin:0 12px}.charts{padding:0 12px 12px}.chart-box{background:#0d1318;border:1px solid #1a2a1a;padding:14px;margin-bottom:10px}.chart-title{font-size:9px;letter-spacing:3px;color:#4a6a4a;margin-bottom:12px}.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 12px 12px}.stat{background:#0d1318;border:1px solid #1a2a1a;padding:12px}.stat-lbl{font-size:9px;letter-spacing:2px;color:#4a6a4a;margin-bottom:4px}.stat-val{font-size:18px;font-weight:700;color:#00ff88}.stat-val.am{color:#ffaa00}.stat-val.bl{color:#00aaff}.tbl{padding:0 12px 12px;overflow-x:auto}.tbl-title{font-size:9px;letter-spacing:3px;color:#4a6a4a;padding-bottom:8px;border-bottom:1px solid #1a2a1a;margin-bottom:8px}table{width:100%;border-collapse:collapse;font-size:11px}th{text-align:left;color:#4a6a4a;padding:5px 6px;border-bottom:1px solid #1a2a1a}td{padding:5px 6px;border-bottom:1px solid rgba(26,42,26,.3)}.g2{color:#00ff88}.am2{color:#ffaa00}.bl2{color:#00aaff}.btn{margin:0 12px 12px;background:none;border:1px solid #1a2a1a;color:#4a6a4a;font-family:monospace;font-size:10px;padding:8px 14px;cursor:pointer;letter-spacing:2px}.ts{font-size:9px;color:#4a6a4a;padding:0 12px 6px}.eff-bar{margin-top:6px;height:4px;background:#0a0a1a;border-radius:2px}.eff-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#00aaff,#00ff88);transition:width 1s}</style></head><body><header><div class="logo">⚡ SOLAR MONITOR</div><div class="hdot"></div></header><div class="src-bar">POWER SOURCE: <span class="src-badge solar-src" id="src-badge">LOADING...</span><span id="src-detail" style="margin-left:4px"></span></div><div class="alert" id="low-batt">⚠ LOW BATTERY — SWITCH TO GRID</div><div class="cards"><div class="card g"><div class="lbl">SOLAR NOW</div><div class="val" id="solar-now">--</div><div class="unt">kWh this reading</div></div><div class="card a"><div class="lbl">BATTERY</div><div class="val" id="batt-pct">--</div><div class="unt">% charged</div><div class="bar"><div class="fill" id="batt-fill" style="width:0;background:#ffaa00"></div></div></div><div class="card b"><div class="lbl">VOLTAGE</div><div class="val" id="voltage">--</div><div class="unt">volts (48V system)</div></div><div class="card g"><div class="lbl">HOME LOAD</div><div class="val" id="load-now">--</div><div class="unt">watts current</div></div><div class="card b"><div class="lbl">GRID USAGE</div><div class="val" id="grid-now">--</div><div class="unt">kWh this reading</div></div><div class="card a"><div class="lbl">BATT ENERGY</div><div class="val" id="batt-kwh">--</div><div class="unt">of 4.8 kWh max</div><div class="bar"><div class="fill" id="batt-kwh-fill" style="width:0;background:#ffaa00"></div></div></div></div><div class="stats-grid"><div class="stat"><div class="stat-lbl">TOTAL SOLAR</div><div class="stat-val" id="t-solar">--</div><div class="unt">kWh generated</div></div><div class="stat"><div class="stat-lbl">PEAK LOAD 24H</div><div class="stat-val am" id="peak">--</div><div class="unt">watts maximum</div></div><div class="stat"><div class="stat-lbl">TOTAL GRID</div><div class="stat-val bl" id="t-grid">--</div><div class="unt">kWh from Wapda</div></div><div class="stat"><div class="stat-lbl">SOLAR SAVINGS</div><div class="stat-val" id="savings">--</div><div class="unt">est. PKR saved</div></div><div class="stat"><div class="stat-lbl">SOLAR RATIO</div><div class="stat-val" id="sol-ratio">--</div><div class="unt">vs grid usage</div><div class="eff-bar"><div class="eff-fill" id="eff-fill" style="width:0"></div></div></div><div class="stat"><div class="stat-lbl">TOTAL READINGS</div><div class="stat-val bl" id="t-count">--</div><div class="unt">data points</div></div></div><div class="charts"><div class="chart-box"><div class="chart-title">// BATTERY % HISTORY</div><canvas id="battChart" height="120"></canvas></div><div class="chart-box"><div class="chart-title">// SOLAR vs GRID vs LOAD</div><canvas id="sglChart" height="120"></canvas></div><div class="chart-box"><div class="chart-title">// VOLTAGE HISTORY</div><canvas id="voltChart" height="100"></canvas></div></div><div class="ts" id="ts"></div><button class="btn" onclick="loadAll()">⟳ REFRESH</button><div class="tbl"><div class="tbl-title">// RECENT READINGS</div><table><thead><tr><th>#</th><th>Solar</th><th>Batt%</th><th>Grid</th><th>Load W</th><th>Volt</th></tr></thead><tbody id="tbody"></tbody></table></div><script>const A="";let bC,sC,vC;function mkCharts(){const o={responsive:true,animation:{duration:600},plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:"rgba(0,255,136,0.05)"},ticks:{color:"#4a6a4a",font:{size:9}}}}};bC=new Chart(document.getElementById("battChart"),{type:"line",data:{labels:[],datasets:[{data:[],borderColor:"#ffaa00",backgroundColor:"rgba(255,170,0,0.1)",fill:true,tension:0.4,pointRadius:2,pointBackgroundColor:"#ffaa00"}]},options:{...o,scales:{...o.scales,y:{...o.scales.y,min:0,max:100}}}});sC=new Chart(document.getElementById("sglChart"),{type:"line",data:{labels:[],datasets:[{label:"Solar",data:[],borderColor:"#00ff88",backgroundColor:"rgba(0,255,136,0.05)",fill:false,tension:0.4,pointRadius:2},{label:"Grid",data:[],borderColor:"#00aaff",backgroundColor:"rgba(0,170,255,0.05)",fill:false,tension:0.4,pointRadius:2},{label:"LoadkW",data:[],borderColor:"#ffaa00",backgroundColor:"rgba(255,170,0,0.05)",fill:false,tension:0.4,pointRadius:2}]},options:{...o,plugins:{legend:{display:true,labels:{color:"#4a6a4a",font:{size:9},boxWidth:12}}}}});vC=new Chart(document.getElementById("voltChart"),{type:"line",data:{labels:[],datasets:[{data:[],borderColor:"#00aaff",backgroundColor:"rgba(0,170,255,0.1)",fill:true,tension:0.4,pointRadius:2,pointBackgroundColor:"#00aaff"}]},options:{...o,scales:{...o.scales,y:{...o.scales.y,min:40,max:52}}}});}function setSrc(s,u,l){const b=document.getElementById("src-badge"),d=document.getElementById("src-detail");if(s>0&&u==0){b.className="src-badge solar-src";b.textContent="SOLAR ONLY";d.textContent="Running on clean energy ☀";}else if(s>0&&u>0){b.className="src-badge mixed-src";b.textContent="SOLAR+WAPDA";d.textContent="Mixed source";}else{b.className="src-badge grid-src";b.textContent="WAPDA/GRID";d.textContent="No solar input";}}async function loadAll(){try{const sr=await fetch(A+"/api/summary"),sd=await sr.json();document.getElementById("t-solar").textContent=sd.total_solar.toFixed(2);document.getElementById("t-grid").textContent=sd.total_utility.toFixed(2);document.getElementById("peak").textContent=sd.peak_load.toFixed(0)+"W";document.getElementById("t-count").textContent=sd.record_count;const ratio=sd.total_solar>0?Math.min(100,Math.round(sd.total_solar/(sd.total_solar+sd.total_utility)*100)):0;document.getElementById("sol-ratio").textContent=ratio+"%";document.getElementById("eff-fill").style.width=ratio+"%";const pkr=Math.round(sd.total_solar*50);document.getElementById("savings").textContent="PKR "+pkr;const hr=await fetch(A+"/api/history"),rows=await hr.json();if(rows.length){const last=rows[0];document.getElementById("solar-now").textContent=(last.solar_kwh||0).toFixed(2);document.getElementById("batt-pct").textContent=(last.battery_pct||0).toFixed(1)+"%";document.getElementById("batt-fill").style.width=(last.battery_pct||0)+"%";document.getElementById("voltage").textContent=(last.voltage||48).toFixed(1)+"V";document.getElementById("load-now").textContent=(last.load_w||0).toFixed(0)+"W";document.getElementById("grid-now").textContent=(last.utility_kwh||0).toFixed(2);const bkwh=((last.battery_pct||0)/100*4.8);document.getElementById("batt-kwh").textContent=bkwh.toFixed(2);document.getElementById("batt-kwh-fill").style.width=(bkwh/4.8*100)+"%";setSrc(last.solar_kwh||0,last.utility_kwh||0,last.load_w||0);const alert=document.getElementById("low-batt");alert.style.display=(last.battery_pct||0)<20?"block":"none";const rev=[...rows].reverse().slice(-20);const lbs=rev.map((_,i)=>i+1);bC.data.labels=lbs;bC.data.datasets[0].data=rev.map(r=>r.battery_pct||0);bC.update();sC.data.labels=lbs;sC.data.datasets[0].data=rev.map(r=>r.solar_kwh||0);sC.data.datasets[1].data=rev.map(r=>r.utility_kwh||0);sC.data.datasets[2].data=rev.map(r=>((r.load_w||0)/1000));sC.update();vC.data.labels=lbs;vC.data.datasets[0].data=rev.map(r=>r.voltage||48);vC.update();document.getElementById("tbody").innerHTML=rows.slice(0,15).map((r,i)=>`<tr><td style="color:#4a6a4a">${rows.length-i}</td><td class="g2">${(r.solar_kwh||0).toFixed(2)}</td><td class="am2">${(r.battery_pct||0).toFixed(1)}%</td><td class="bl2">${(r.utility_kwh||0).toFixed(2)}</td><td>${(r.load_w||0).toFixed(0)}W</td><td class="bl2">${(r.voltage||0).toFixed(1)}V</td></tr>`).join("");}document.getElementById("ts").textContent="// Updated: "+new Date().toLocaleTimeString();}catch(e){console.error(e);}}mkCharts();loadAll();setInterval(loadAll,30000);</script></body></html>"""
+    return """<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Shahadat Sufly Solar Monitor</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0f1a;--card:#111827;--card2:#1a2235;--border:rgba(255,255,255,0.08);--green:#00e676;--green2:#00c853;--amber:#ffab00;--blue:#40c4ff;--red:#ff5252;--purple:#e040fb;--text:#f0f4ff;--muted:#8892a4;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:"Inter",sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(0,230,118,0.05) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(64,196,255,0.05) 0%,transparent 60%);pointer-events:none;z-index:0}
+header{position:relative;z-index:10;background:linear-gradient(135deg,#0d1b2a 0%,#1a2540 100%);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#00e676,#00c853);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 20px rgba(0,230,118,0.4);animation:logoGlow 3s ease-in-out infinite}
+@keyframes logoGlow{0%,100%{box-shadow:0 0 20px rgba(0,230,118,0.4)}50%{box-shadow:0 0 40px rgba(0,230,118,0.9),0 0 70px rgba(0,230,118,0.3)}}
+.logo-main{font-family:"Orbitron",monospace;font-size:13px;font-weight:900;color:var(--green);letter-spacing:2px}
+.logo-name{font-size:9px;color:var(--amber);letter-spacing:1px;margin-top:1px}
+.logo-sub{font-size:8px;color:var(--muted);letter-spacing:2px}
+.live-wrap{display:flex;align-items:center;gap:6px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:livePulse 1.5s infinite}
+@keyframes livePulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:0.4}}
+.live-text{font-size:10px;letter-spacing:2px;color:var(--green);font-family:"Orbitron",monospace}
+.lang-btn{background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;transition:all 0.2s}
+.lang-btn:hover{background:rgba(0,230,118,0.15);border-color:var(--green);color:var(--green)}
+.src-banner{position:relative;z-index:5;padding:10px 16px;display:flex;align-items:center;gap:10px;font-size:12px;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.2)}
+.src-badge{padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:2px;animation:badgePulse 2s infinite}
+@keyframes badgePulse{0%,100%{opacity:1}50%{opacity:0.6}}
+.badge-solar{background:rgba(0,230,118,0.15);color:var(--green);border:1px solid var(--green)}
+.badge-grid{background:rgba(64,196,255,0.15);color:var(--blue);border:1px solid var(--blue)}
+.badge-mixed{background:rgba(255,171,0,0.15);color:var(--amber);border:1px solid var(--amber)}
+.alert-bar{display:none;z-index:20;background:linear-gradient(135deg,#2d0a0a,#1a0606);border-bottom:2px solid var(--red);padding:10px 16px;animation:alertFlash 1s infinite}
+@keyframes alertFlash{0%,100%{opacity:1}50%{opacity:0.6}}
+.alert-icon{font-size:20px;animation:shake 0.5s infinite}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-10deg)}75%{transform:rotate(10deg)}}
+.alert-text{font-size:12px;color:var(--red);font-weight:600;letter-spacing:1px}
+.main{position:relative;z-index:5;padding:12px}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.card{background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border:1px solid var(--border);border-radius:16px;padding:14px;position:relative;overflow:hidden;transition:transform 0.2s}
+.card:active{transform:scale(0.97)}
+.card-glow{position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:0.15;filter:blur(20px)}
+.card.green .card-glow{background:var(--green)}
+.card.amber .card-glow{background:var(--amber)}
+.card.blue .card-glow{background:var(--blue)}
+.card-icon{font-size:22px;margin-bottom:8px}
+.card-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:4px;text-transform:uppercase}
+.card-val{font-family:"Orbitron",monospace;font-size:24px;font-weight:700;line-height:1}
+.card.green .card-val{color:var(--green);text-shadow:0 0 15px rgba(0,230,118,0.5)}
+.card.amber .card-val{color:var(--amber);text-shadow:0 0 15px rgba(255,171,0,0.5)}
+.card.blue .card-val{color:var(--blue);text-shadow:0 0 15px rgba(64,196,255,0.5)}
+.card-unit{font-size:9px;color:var(--muted);margin-top:4px}
+.prog-bg{margin-top:10px;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
+.green .prog-fill{background:linear-gradient(90deg,var(--green2),var(--green));box-shadow:0 0 8px var(--green)}
+.amber .prog-fill{background:linear-gradient(90deg,#ff8f00,var(--amber));box-shadow:0 0 8px var(--amber)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.stat{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:12px;padding:12px}
+.stat-icon{font-size:16px;margin-bottom:4px}
+.stat-lbl{font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:3px}
+.stat-val{font-family:"Orbitron",monospace;font-size:16px;font-weight:700;color:var(--green)}
+.stat-val.am{color:var(--amber)}.stat-val.bl{color:var(--blue)}.stat-val.pu{color:var(--purple)}
+.stat-unit{font-size:9px;color:var(--muted)}
+.eff-bg{margin-top:6px;height:3px;background:rgba(255,255,255,0.06);border-radius:2px}
+.eff-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--green));transition:width 1s}
+.chart-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:10px}
+.chart-hdr{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.chart-title{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.tbl-card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{text-align:left;color:var(--muted);padding:5px 8px;border-bottom:1px solid var(--border);font-weight:500;font-size:10px;letter-spacing:1px}
+td{padding:7px 8px;border-bottom:1px solid rgba(255,255,255,0.04)}
+tr:hover td{background:rgba(255,255,255,0.03)}
+.tg{color:var(--green);font-family:"Orbitron",monospace;font-size:11px}.ta{color:var(--amber)}.tb{color:var(--blue)}.tm{color:var(--muted)}
+footer{position:relative;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-top:1px solid var(--border);background:rgba(0,0,0,0.3)}
+.refresh-btn{background:linear-gradient(135deg,var(--green2),var(--green));border:none;color:#000;padding:10px 20px;border-radius:25px;font-weight:700;font-size:11px;letter-spacing:2px;cursor:pointer;box-shadow:0 4px 15px rgba(0,230,118,0.3);transition:all 0.2s}
+.refresh-btn:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(0,230,118,0.5)}
+.ts{font-size:9px;color:var(--muted);letter-spacing:1px}
+.ur{display:none}
+body.urdu .en{display:none!important}
+body.urdu .ur{display:block!important}
+body.urdu{direction:rtl}
+</style>
+</head>
+<body>
+<header>
+<div class="logo-wrap">
+<div class="logo-icon">&#9889;</div>
+<div>
+<div class="logo-main">SOLAR PRO</div>
+<div class="logo-name">Shahadat Sufly</div>
+<div class="logo-sub en">ABBOTTABAD PRIME MONITOR</div>
+<div class="logo-sub ur">ایبٹ آباد پرائم مانیٹر</div>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:8px">
+<button class="lang-btn" onclick="toggleLang()" id="langBtn">اردو</button>
+<div class="live-wrap"><div class="live-dot"></div><div class="live-text en">LIVE</div><div class="live-text ur">لائیو</div></div>
+</div>
+</header>
+<div class="src-banner">
+<div style="font-size:18px" id="src-icon">&#9728;</div>
+<div><div style="font-size:9px;letter-spacing:2px;color:var(--muted)" class="en">POWER SOURCE</div><div style="font-size:10px;color:var(--muted)" class="ur">بجلی کا ذریعہ</div><div style="font-weight:600;font-size:13px" id="src-val">--</div></div>
+<div style="margin-left:auto"><span class="src-badge badge-solar" id="src-badge">--</span></div>
+</div>
+<div class="alert-bar" id="alert-bar">
+<div style="display:flex;align-items:center;gap:10px">
+<div class="alert-icon">&#128308;</div>
+<div><div class="alert-text en">&#9888; LOW BATTERY! Switch to Wapda immediately</div><div class="alert-text ur">&#9888; بیٹری کم ہے! فوری واپڈا پر جائیں</div></div>
+</div>
+</div>
+<div class="main">
+<div class="cards">
+<div class="card green"><div class="card-glow"></div><div class="card-icon">&#9728;&#65039;</div><div class="card-lbl en">SOLAR NOW</div><div class="card-lbl ur">ابھی سولر</div><div class="card-val" id="c-solar">--</div><div class="card-unit en">kWh this reading</div><div class="card-unit ur">کلو واٹ</div></div>
+<div class="card amber"><div class="card-glow"></div><div class="card-icon">&#128267;</div><div class="card-lbl en">BATTERY</div><div class="card-lbl ur">بیٹری</div><div class="card-val" id="c-batt">--</div><div class="card-unit en">% charged (4.8kWh)</div><div class="card-unit ur">فیصد چارج</div><div class="prog-bg"><div class="prog-fill" id="batt-prog" style="width:0%"></div></div></div>
+<div class="card blue"><div class="card-glow"></div><div class="card-icon">&#9889;</div><div class="card-lbl en">VOLTAGE</div><div class="card-lbl ur">وولٹیج</div><div class="card-val" id="c-volt">--</div><div class="card-unit en">volts — 48V system</div><div class="card-unit ur">وولٹ سسٹم</div></div>
+<div class="card green"><div class="card-glow"></div><div class="card-icon">&#127968;</div><div class="card-lbl en">HOME LOAD</div><div class="card-lbl ur">گھر کا بوجھ</div><div class="card-val" id="c-load">--</div><div class="card-unit en">watts right now</div><div class="card-unit ur">واٹ ابھی</div></div>
+<div class="card blue"><div class="card-glow"></div><div class="card-icon">&#128268;</div><div class="card-lbl en">WAPDA/GRID</div><div class="card-lbl ur">واپڈا</div><div class="card-val" id="c-grid">--</div><div class="card-unit en">kWh from grid</div><div class="card-unit ur">کلو واٹ گرڈ سے</div></div>
+<div class="card amber"><div class="card-glow"></div><div class="card-icon">&#128262;</div><div class="card-lbl en">BATT ENERGY</div><div class="card-lbl ur">بیٹری توانائی</div><div class="card-val" id="c-bkwh">--</div><div class="card-unit en">of 4.8 kWh total</div><div class="card-unit ur">4.8 میں سے</div><div class="prog-bg"><div class="prog-fill" id="bkwh-prog" style="width:0%"></div></div></div>
+</div>
+<div class="stats">
+<div class="stat"><div class="stat-icon">&#9728;&#65039;</div><div class="stat-lbl en">TOTAL SOLAR</div><div class="stat-lbl ur">کل سولر</div><div class="stat-val" id="s-solar">--</div><div class="stat-unit">kWh</div></div>
+<div class="stat"><div class="stat-icon">&#9888;&#65039;</div><div class="stat-lbl en">PEAK LOAD</div><div class="stat-lbl ur">زیادہ بوجھ</div><div class="stat-val am" id="s-peak">--</div><div class="stat-unit">watts</div></div>
+<div class="stat"><div class="stat-icon">&#127758;</div><div class="stat-lbl en">TOTAL WAPDA</div><div class="stat-lbl ur">کل واپڈا</div><div class="stat-val bl" id="s-grid">--</div><div class="stat-unit">kWh</div></div>
+<div class="stat"><div class="stat-icon">&#128176;</div><div class="stat-lbl en">PKR SAVED</div><div class="stat-lbl ur">بچت</div><div class="stat-val pu" id="s-save">--</div><div class="stat-unit">est. rupees</div></div>
+<div class="stat"><div class="stat-icon">&#127807;</div><div class="stat-lbl en">SOLAR RATIO</div><div class="stat-lbl ur">سولر فیصد</div><div class="stat-val" id="s-ratio">--</div><div class="eff-bg"><div class="eff-fill" id="ratio-fill" style="width:0%"></div></div></div>
+<div class="stat"><div class="stat-icon">&#128203;</div><div class="stat-lbl en">READINGS</div><div class="stat-lbl ur">ریکارڈ</div><div class="stat-val bl" id="s-count">--</div><div class="stat-unit">total logged</div></div>
+</div>
+<div class="chart-card"><div class="chart-hdr"><span style="font-size:16px">&#128267;</span><span class="chart-title en">BATTERY LEVEL HISTORY</span><span class="chart-title ur">بیٹری تاریخ</span></div><canvas id="battChart" height="110"></canvas></div>
+<div class="chart-card"><div class="chart-hdr"><span style="font-size:16px">&#128200;</span><span class="chart-title en">SOLAR vs WAPDA vs HOME LOAD</span><span class="chart-title ur">سولر بمقابلہ واپڈا</span></div><canvas id="sglChart" height="110"></canvas></div>
+<div class="chart-card"><div class="chart-hdr"><span style="font-size:16px">&#9889;</span><span class="chart-title en">VOLTAGE HISTORY (48V)</span><span class="chart-title ur">وولٹیج تاریخ</span></div><canvas id="voltChart" height="90"></canvas></div>
+<div class="tbl-card"><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="font-size:16px">&#128203;</span><span class="chart-title en">RECENT READINGS</span><span class="chart-title ur">حالیہ ریکارڈ</span></div>
+<table><thead><tr><th>#</th><th class="en">Solar</th><th class="en">Batt%</th><th class="en">Wapda</th><th class="en">Load</th><th class="en">Volt</th></tr></thead><tbody id="tbody"></tbody></table></div>
+</div>
+<footer>
+<div class="ts" id="ts">--</div>
+<button class="refresh-btn en" onclick="loadAll()">&#10227; REFRESH</button>
+<button class="refresh-btn ur" onclick="loadAll()">&#10227; تازہ کریں</button>
+</footer>
+<script>
+const API="";let isU=false,bC,sC,vC;
+function toggleLang(){isU=!isU;document.body.classList.toggle("urdu",isU);document.getElementById("langBtn").textContent=isU?"English":"اردو";}
+function mkCharts(){const base={responsive:true,animation:{duration:800},plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:"rgba(255,255,255,0.05)"},ticks:{color:"#8892a4",font:{size:9},maxTicksLimit:4}}}};bC=new Chart(document.getElementById("battChart"),{type:"line",data:{labels:[],datasets:[{data:[],borderColor:"#ffab00",backgroundColor:"rgba(255,171,0,0.12)",fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:"#ffab00",pointBorderColor:"#1a2235",pointBorderWidth:2}]},options:{...base,scales:{...base.scales,y:{...base.scales.y,min:0,max:100}}}});sC=new Chart(document.getElementById("sglChart"),{type:"line",data:{labels:[],datasets:[{label:"Solar",data:[],borderColor:"#00e676",fill:false,tension:0.4,pointRadius:2,borderWidth:2},{label:"Wapda",data:[],borderColor:"#40c4ff",fill:false,tension:0.4,pointRadius:2,borderWidth:2},{label:"Load kW",data:[],borderColor:"#ffab00",fill:false,tension:0.4,pointRadius:2,borderWidth:2}]},options:{...base,plugins:{legend:{display:true,labels:{color:"#8892a4",font:{size:9},boxWidth:10}}}}});vC=new Chart(document.getElementById("voltChart"),{type:"line",data:{labels:[],datasets:[{data:[],borderColor:"#40c4ff",backgroundColor:"rgba(64,196,255,0.1)",fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:"#40c4ff",pointBorderColor:"#1a2235",pointBorderWidth:2}]},options:{...base,scales:{...base.scales,y:{...base.scales.y,min:42,max:52}}}});}
+function setSrc(s,g){const b=document.getElementById("src-badge"),v=document.getElementById("src-val"),i=document.getElementById("src-icon");if(s>0&&g==0){b.className="src-badge badge-solar";b.textContent=isU?"صرف سولر":"SOLAR ONLY";v.style.color="var(--green)";v.textContent=isU?"سولر توانائی سے چل رہا ہے ☀":"Pure solar energy ☀";i.textContent="☀️";}else if(s>0&&g>0){b.className="src-badge badge-mixed";b.textContent=isU?"ملا جلا":"SOLAR+WAPDA";v.style.color="var(--amber)";v.textContent=isU?"سولر اور واپڈا دونوں":"Solar & Wapda mixed";i.textContent="⚡";}else{b.className="src-badge badge-grid";b.textContent=isU?"صرف واپڈا":"WAPDA ONLY";v.style.color="var(--blue)";v.textContent=isU?"واپڈا سے چل رہا ہے":"Running on grid";i.textContent="🔌";}}
+async function loadAll(){try{const[sr,hr]=await Promise.all([fetch(API+"/api/summary").then(r=>r.json()),fetch(API+"/api/history").then(r=>r.json())]);document.getElementById("s-solar").textContent=sr.total_solar.toFixed(2);document.getElementById("s-grid").textContent=sr.total_utility.toFixed(2);document.getElementById("s-peak").textContent=sr.peak_load.toFixed(0)+"W";document.getElementById("s-count").textContent=sr.record_count;document.getElementById("s-save").textContent="PKR "+Math.round(sr.total_solar*50).toLocaleString();const rt=sr.total_solar>0?Math.min(100,Math.round(sr.total_solar/(sr.total_solar+sr.total_utility)*100)):0;document.getElementById("s-ratio").textContent=rt+"%";document.getElementById("ratio-fill").style.width=rt+"%";if(hr.length){const l=hr[0];document.getElementById("c-solar").textContent=(l.solar_kwh||0).toFixed(2);const bp=(l.battery_pct||0).toFixed(1);document.getElementById("c-batt").textContent=bp+"%";document.getElementById("batt-prog").style.width=bp+"%";document.getElementById("c-volt").textContent=(l.voltage||48).toFixed(1)+"V";document.getElementById("c-load").textContent=(l.load_w||0).toFixed(0)+"W";document.getElementById("c-grid").textContent=(l.utility_kwh||0).toFixed(2);const bk=((l.battery_pct||0)/100*4.8);document.getElementById("c-bkwh").textContent=bk.toFixed(2);document.getElementById("bkwh-prog").style.width=(bk/4.8*100)+"%";setSrc(l.solar_kwh||0,l.utility_kwh||0);document.getElementById("alert-bar").style.display=(l.battery_pct||0)<20?"block":"none";const rv=[...hr].reverse().slice(-20);const lb=rv.map((_,i)=>i+1);bC.data.labels=lb;bC.data.datasets[0].data=rv.map(r=>r.battery_pct||0);bC.update();sC.data.labels=lb;sC.data.datasets[0].data=rv.map(r=>r.solar_kwh||0);sC.data.datasets[1].data=rv.map(r=>r.utility_kwh||0);sC.data.datasets[2].data=rv.map(r=>(r.load_w||0)/1000);sC.update();vC.data.labels=lb;vC.data.datasets[0].data=rv.map(r=>r.voltage||48);vC.update();document.getElementById("tbody").innerHTML=hr.slice(0,15).map((r,i)=>`<tr><td class="tm">${hr.length-i}</td><td class="tg">${(r.solar_kwh||0).toFixed(2)}</td><td class="ta">${(r.battery_pct||0).toFixed(1)}%</td><td class="tb">${(r.utility_kwh||0).toFixed(2)}</td><td>${(r.load_w||0).toFixed(0)}W</td><td class="tb">${(r.voltage||0).toFixed(1)}V</td></tr>`).join("");}document.getElementById("ts").textContent=(isU?"آخری تازہ: ":"Updated: ")+new Date().toLocaleTimeString();}catch(e){console.error(e);}}
+mkCharts();loadAll();setInterval(loadAll,30000);
+</script>
+</body></html>"""
 
 @app.route('/')
 def index():

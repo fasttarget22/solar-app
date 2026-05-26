@@ -384,7 +384,16 @@ footer{position:relative;z-index:5;padding:10px 14px;border-top:1px solid var(--
     <text x="40" y="155" text-anchor="middle" font-size="28" id="pfBattIcon">&#128267;</text>
     <text x="40" y="172" text-anchor="middle" font-size="8" fill="#8892a4">BATTERY</text>
     <text x="40" y="184" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffab00" id="pfBattVal">--%</text>
-    <text x="150" y="100" text-anchor="middle" font-size="38" id="pfHomeIcon">&#127968;</text>
+    <g id="pfHomeIcon">
+      <style>
+        @keyframes homeFanSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .fan-spin-active { animation: homeFanSpin 1s linear infinite; transform-origin: center; transform-box: fill-box; }
+      </style>
+      <text x="150" y="105" text-anchor="middle" font-size="44" opacity="0.85">🏠</text>
+      <text id="shLight" x="136" y="100" text-anchor="middle" font-size="11" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">💡</text>
+      <text id="shFan" x="150" y="88" text-anchor="middle" font-size="12" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">🌀</text>
+      <text id="shTV" x="164" y="100" text-anchor="middle" font-size="11" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">📺</text>
+    </g>
     <text x="150" y="120" text-anchor="middle" font-size="9" fill="#8892a4">HOME</text>
     <text x="150" y="133" text-anchor="middle" font-size="10" font-weight="bold" fill="#f0f4ff" id="pfHomeLoad">--W</text>
     <text x="260" y="100" text-anchor="middle" font-size="28" id="pfGridIcon">&#128268;</text>
@@ -706,6 +715,24 @@ function updatePowerFlow(solar,grid,load,batt){
   document.getElementById('pfBattVal').textContent=batt.toFixed(0)+'%';
   document.getElementById('pfGridVal').textContent=gridW+'W';
   document.getElementById('pfHomeLoad').textContent=load.toFixed(0)+'W';
+  
+  // Dynamic Smart Appliance Controllers
+  var sLight = document.getElementById('shLight');
+  var sFan = document.getElementById('shFan');
+  var sTV = document.getElementById('shTV');
+  
+  if(sLight) {
+    if(load > 30) { sLight.style.opacity = '1'; sLight.style.filter = 'drop-shadow(0 0 5px #ffd600)'; }
+    else { sLight.style.opacity = '0.2'; sLight.style.filter = 'grayscale(1)'; }
+  }
+  if(sTV) {
+    if(load > 120) { sTV.style.opacity = '1'; sTV.style.filter = 'drop-shadow(0 0 5px #29b6f6)'; }
+    else { sTV.style.opacity = '0.2'; sTV.style.filter = 'grayscale(1)'; }
+  }
+  if(sFan) {
+    if(load > 300) { sFan.style.opacity = '1'; sFan.style.filter = 'none'; sFan.classList.add('fan-spin-active'); }
+    else { sFan.style.opacity = '0.2'; sFan.style.filter = 'grayscale(1)'; sFan.classList.remove('fan-spin-active'); }
+  }
 
   // Solar line
   var sl=document.getElementById('pfLineSolar');

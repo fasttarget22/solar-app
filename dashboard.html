@@ -569,8 +569,10 @@ footer{position:relative;z-index:5;padding:10px 14px;border-top:1px solid var(--
 
 <script>
 const API = '';
-const BATT_CAP = 4.8;
-const SAFE_MIN = 20;
+const BC = parseFloat(localStorage.getItem('batt')||4.8);
+const SM = parseFloat(localStorage.getItem('safe')||20);
+const BATT_CAP = BC;
+const SAFE_MIN = SM;
 let popupShown = false;
 let isUrdu = false;
 
@@ -742,8 +744,6 @@ function updatePowerFlow(solar,grid,load,batt){
 
 
 let PKR_RATE=parseFloat(localStorage.getItem('pkr')||22);
-let BATT_CAP=parseFloat(localStorage.getItem('batt')||4.8);
-let SAFE_MIN=parseFloat(localStorage.getItem('safe')||20);
 let REFRESH_INT=parseInt(localStorage.getItem('refresh')||30);
 let refreshTimer=null;
 

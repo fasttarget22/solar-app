@@ -1,405 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="https://www.cloudflare.com/favicon.ico" />
-    <title>Unauthorized</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Shahadat Sufly Solar Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght=400;700;900&family=Inter:wght=300;400;500;600;700&family=Noto+Nastaliq+Urdu:wght=400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-      body {
-        font-family: system-ui;
-        font-weight: 300;
-        font-size: 1.25rem;
-        color: #36393a;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      main {
-        max-width: 1200px;
-        margin-top: 120px;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-      }
-      #text {
-        max-width: 60%;
-        margin-left: 1rem;
-        margin-right: 1rem;
-      }
-      main > section > div {
-        margin-bottom: 3.25rem;
-      }
-      svg {
-        margin-left: 2rem;
-      }
-      h1 {
-        font-size: 3.75rem;
-        font-weight: 400;
-        margin-bottom: 0.5rem;
-      }
-      h3 {
-        font-size: 2rem;
-        font-weight: 400;
-        color: #92979b;
-        margin: 0;
-      }
-      a {
-        color: #0055dc;
-      }
-      p {
-        margin: 0;
-      }
-      #error-title {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-      }
-      #footer-title {
-        font-weight: 700;
-        margin-bottom: 0.75rem;
-      }
+        :root {
+            --bg: #0a0f1a; --card-start: #111827; --card-end: #1a2235; --border: rgba(255, 255, 255, 0.08);
+            --green: #00e676; --green-glow: rgba(0, 230, 118, 0.4); --amber: #ffab00; --amber-glow: rgba(255, 171, 0, 0.4);
+            --blue: #40c4ff; --blue-glow: rgba(64, 196, 255, 0.4); --red: #ff5252; --red-glow: rgba(255, 82, 82, 0.4);
+            --purple: #e040fb; --text: #f0f4ff; --muted: #8892a4; --orange: #ff6d00; --header-bg: linear-gradient(135deg, #0d1b2a, #1a2540);
+        }
+        body.bmode { --bg: #1a0505; --card-start: #1f0808; --card-end: #2a0a0a; --green: #ff5252; --header-bg: linear-gradient(135deg, #1a0808, #2a0f0f); }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; }
+        .particles { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+        .particle { position: absolute; background: var(--green); border-radius: 50%; animation: float linear infinite; opacity: 0; }
+        @keyframes float { 0% { transform: translateY(105vh) scale(0); opacity: 0; } 10% { opacity: 0.6; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+        header { position: relative; z-index: 10; background: var(--header-bg); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .logo-box { width: 44px; height: 44px; background: #111827; border: 2px solid var(--green); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--green); }
+        .avatar-wrap { position: relative; width: 46px; height: 46px; }
+        .avatar-ring { position: absolute; inset: -3px; border-radius: 50%; border: 2px dashed var(--green); animation: ringRotate 3s linear infinite; opacity: 0.7; }
+        @keyframes ringRotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .avatar-circle { width: 46px; height: 46px; border-radius: 50%; background: #111827; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', monospace; font-size: 22px; font-weight: 900; color: var(--green); }
+        .brand-text { display: flex; flex-direction: column; }
+        .title-main { font-family: 'Orbitron', monospace; font-size: 15px; font-weight: 900; letter-spacing: 2px; color: #ffffff; }
+        .subtitle-user { font-size: 11px; color: var(--amber); font-weight: 700; }
+        .subtitle-loc { font-size: 8px; color: var(--muted); letter-spacing: 1px; }
+        .toggle-btn { background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .live-indicator { display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.2); padding: 5px 10px; border-radius: 20px; }
+        .live-dot { width: 8px; height: 8px; background: #00e676; border-radius: 50%; }
+        .live-text { font-family: 'Orbitron', monospace; font-size: 9px; font-weight: 700; color: var(--green); }
+        .source-bar { padding: 10px 16px; background: rgba(0, 0, 0, 0.2); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .source-title-block { display: flex; flex-direction: column; }
+        .source-label { font-size: 8px; color: var(--muted); font-weight: 700; }
+        .source-status-text { font-size: 13px; font-weight: 600; }
+        .source-badge { padding: 5px 14px; border-radius: 20px; font-size: 10px; font-weight: 900; }
+        .badge-sol { background: rgba(0, 230, 118, 0.15); color: #00e676; border: 1px solid #00e676; }
+        .badge-mix { background: rgba(255, 171, 0, 0.15); color: #ffab00; border: 1px solid #ffab00; }
+        .badge-grid { background: rgba(64, 196, 255, 0.15); color: #40c4ff; border: 1px solid #40c4ff; }
+        .badge-bat { background: rgba(255, 82, 82, 0.15); color: #ff5252; border: 1px solid #ff5252; }
+        .alert-banner { display: none; padding: 12px 16px; border-bottom: 2px solid transparent; }
+        .alert-banner.active { display: block; }
+        .alert-banner-red { background: linear-gradient(90deg, #3a0808, #220303); border-color: var(--red); }
+        .alert-banner-amber { background: linear-gradient(90deg, #2d1e00, #1a1100); border-color: var(--amber); }
+        .alert-content-wrap { display: flex; align-items: center; gap: 12px; }
+        .alert-urdu { font-family: 'Noto Nastaliq Urdu', serif; font-size: 15px; font-weight: 700; direction: rtl; text-align: right; }
+        .alert-banner-red .alert-urdu { color: var(--red); }
+        .alert-banner-amber .alert-urdu { color: var(--amber); }
+        .alert-english { font-size: 10px; color: var(--muted); text-transform: uppercase; }
+        main { padding: 14px; }
+        .battery-remaining-card { background: linear-gradient(135deg, var(--card-start), var(--card-end)); border: 1px solid var(--border); border-radius: 20px; padding: 16px; margin-bottom: 14px; }
+        .battery-remaining-card.safe { border-color: var(--green); }
+        .battery-remaining-card.caution { border-color: var(--amber); }
+        .battery-remaining-card.danger { border-color: var(--orange); }
+        .battery-remaining-card.critical { border-color: var(--red); }
+        .br-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .br-main-value { font-family: 'Orbitron', monospace; font-size: 36px; font-weight: 900; }
+        .br-unit-label { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+        .br-progress-bar-bg { height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; margin-top: 14px; }
+        .br-progress-fill { height: 100%; width: 0%; border-radius: 4px; transition: width 1s; }
+        .safe .br-progress-fill { background: var(--green); }
+        .caution .br-progress-fill { background: var(--amber); }
+        .danger .br-progress-fill { background: var(--orange); }
+        .critical .br-progress-fill { background: var(--red); }
+        .br-suggestion-box { margin-top: 12px; padding: 10px 14px; border-radius: 12px; background: rgba(0,0,0,0.18); text-align: right; }
+        .br-urdu-suggestion { font-family: 'Noto Nastaliq Urdu', serif; font-size: 14px; font-weight: 700; }
+        .safe .br-urdu-suggestion { color: var(--green); }
+        .caution .br-urdu-suggestion { color: var(--amber); }
+        .danger .br-urdu-suggestion { color: var(--orange); }
+        .critical .br-urdu-suggestion { color: var(--red); }
+        .br-bottom-details { margin-top: 10px; font-size: 9px; color: var(--muted); }
+        .grid-6 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+        .card-main { background: linear-gradient(135deg, var(--card-start), var(--card-end)); border: 1px solid var(--border); border-radius: 20px; padding: 14px; position: relative; overflow: hidden; }
+        .card-main-val { font-family: 'Orbitron', monospace; font-size: 24px; font-weight: 700; margin-top: 4px; }
+        .card-sol .card-main-val { color: var(--green); }
+        .card-bat .card-main-val { color: var(--amber); }
+        .card-vlt .card-main-val { color: var(--blue); }
+        .card-wda .card-main-val { color: var(--blue); }
+        .card-eng .card-main-val { color: var(--amber); }
+        .card-progress-bar-container { margin-top: 8px; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; }
+        .card-progress-bar-fill { height: 100%; width: 0%; background: var(--amber); }
+        .inverter-row-card { background: linear-gradient(135deg, var(--card-start), var(--card-end)); border: 1px solid var(--border); border-radius: 18px; padding: 12px 16px; margin-bottom: 14px; display: flex; justify-content: space-between; }
+        .inv-item { display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1; }
+        .inv-value { font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700; }
+        .inv-mode-badge { padding: 4px 12px; border-radius: 14px; font-size: 9px; font-weight: 700; background: rgba(0, 230, 118, 0.12); color: var(--green); border: 1px solid var(--green); }
+        .inv-label { font-size: 8px; color: var(--muted); text-transform: uppercase; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .stat-card { background: linear-gradient(135deg, var(--card-start), var(--card-end)); border: 1px solid var(--border); border-radius: 16px; padding: 12px; }
+        .stat-val-text { font-family: 'Orbitron', monospace; font-size: 15px; font-weight: 700; color: #ffffff; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+        .modal-overlay.show { display: flex; }
+        .modal-container { background: linear-gradient(135deg, #250808, #150303); border: 2px solid var(--red); border-radius: 24px; padding: 24px; max-width: 320px; width: 90%; text-align: center; }
+        .modal-title-urdu { font-family: 'Noto Nastaliq Urdu', serif; font-size: 19px; font-weight: 700; color: var(--red); }
+        .modal-value-orbitron { font-family: 'Orbitron', monospace; font-size: 32px; font-weight: 900; color: var(--amber); margin: 10px 0; }
+        .modal-msg-urdu { font-family: 'Noto Nastaliq Urdu', serif; font-size: 13px; direction: rtl; margin-bottom: 18px; }
+        .modal-close-btn { background: linear-gradient(135deg, var(--red), #cc0000); border: none; color: #ffffff; padding: 12px 28px; border-radius: 24px; font-weight: 700; width: 100%; }
+        footer { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-top: 1px solid var(--border); margin-top: 14px; }
+        .footer-timestamp { font-size: 9px; color: var(--muted); font-family: 'Orbitron', monospace; }
+        .refresh-btn { background: var(--green); border: none; color: #000000; padding: 10px 18px; border-radius: 25px; font-weight: 700; font-size: 11px; }
+        [data-lang="ur"] { display: none; }
+        body.lang-urdu [data-lang="en"] { display: none; }
+        body.lang-urdu [data-lang="ur"] { display: inline; }
     </style>
-  </head>
+</head>
+<body>
+    <div class="particles" id="particle-canvas"></div>
 
-  <body>
+    <div class="modal-overlay" id="alert-modal">
+        <div class="modal-container">
+            <div class="modal-title-urdu">بیٹری ختم ہونے والی ہے!</div>
+            <div class="modal-value-orbitron" id="pop-time-val">--:--</div>
+            <div class="modal-msg-urdu">فوری واپڈا لگائیں یا گھر کا بوجھ کم کریں تاکہ لیتھیم بیٹری محفوظ رہے۔</div>
+            <button class="modal-close-btn" onclick="dismissModal()">سمجھ گیا — ٹھیک ہے</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-left">
+            <div class="logo-box"><i class="fas fa-bolt"></i></div>
+            <div class="avatar-wrap">
+                <div class="avatar-ring"></div>
+                <div class="avatar-circle">S</div>
+            </div>
+            <div class="brand-text">
+                <div class="title-main">SOLAR PRO</div>
+                <div class="subtitle-user">Shahadat Sufly ⚡</div>
+                <div class="subtitle-loc">ABBOTTABAD PRIME MONITOR</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="toggle-btn" id="lang-toggle-node" onclick="toggleLanguageSystem()">اردو</button>
+            <div class="live-indicator"><div class="live-dot"></div><div class="live-text">LIVE</div></div>
+        </div>
+    </header>
+
+    <div class="source-bar">
+        <div class="source-meta">
+            <span id="source-icon-node">☀️</span>
+            <div class="source-title-block">
+                <div class="source-label">POWER SOURCE</div>
+                <div class="source-status-text" id="source-text-node">
+                    <span data-lang="en">Pure Solar Energy</span><span data-lang="ur">صرف سولر انرجی</span>
+                </div>
+            </div>
+        </div>
+        <span class="source-badge badge-sol" id="source-badge-node">SOLAR ONLY</span>
+    </div>
+
+    <div class="alerts-container">
+        <div class="alert-banner alert-banner-red" id="alert-bmode-node">
+            <div class="alert-content-wrap">
+                <div class="alert-text-block">
+                    <div class="alert-urdu">صرف بیٹری چل رہی ہے! فوری اقدام کریں</div>
+                    <div class="alert-english">Battery Only Mode Active! Direct Resource Check</div>
+                </div>
+            </div>
+        </div>
+        <div class="alert-banner alert-banner-red" id="alert-high-node">
+            <div class="alert-content-wrap">
+                <div class="alert-text-block">
+                    <div class="alert-urdu">کیا چل رہا ہے؟! بوجھ بہت زیادہ ہے</div>
+                    <div class="alert-english">Critical Overload Warning! Load Exceeds 1200W</div>
+                </div>
+            </div>
+        </div>
+        <div class="alert-banner alert-banner-amber" id="alert-med-node">
+            <div class="alert-content-wrap">
+                <div class="alert-text-block">
+                    <div class="alert-urdu">غیر ضروری پنکھے بند کرو</div>
+                    <div class="alert-english">High Load Alert! Turn off unnecessary fans (>300W)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main>
-      <section id="text">
-        <div>
-          <h1>Error 401</h1>
-          <h3>This bucket cannot be viewed</h3>
+        <div class="battery-remaining-card safe" id="br-card-node">
+            <div class="br-top">
+                <div>
+                    <span class="br-unit-label" data-lang="en">Battery Hours Remaining</span>
+                    <span class="br-unit-label" data-lang="ur">بیٹری کا بقیہ وقت</span>
+                    <div class="br-main-value" id="br-value-node">--.- HRS</div>
+                </div>
+                <div id="br-icon-node">🟢</div>
+            </div>
+            <div class="br-progress-wrapper"><div class="br-progress-bar-bg"><div class="br-progress-fill" id="br-fill-node"></div></div></div>
+            <div class="br-suggestion-box">
+                <div class="br-urdu-suggestion" id="br-urdu-sug-node">لوڈنگ ہو رہی ہے...</div>
+            </div>
+            <div class="br-bottom-details" id="br-subtext-node">Usable: --% | --.-- kWh from 4.8kWh reserve</div>
         </div>
 
-        <div>
-          <p id="error-title">You are not authorized to view this bucket</p>
-          <p>
-            This bucket does not exist or is not publicly accessible at this
-            URL. Check the URL of the bucket that you’re looking for or contact
-            the owner to enable Public access.
-          </p>
+        <div class="grid-6">
+            <div class="card-main card-sol">
+                <div class="br-unit-label" data-lang="en">Solar Now</div><div class="br-unit-label" data-lang="ur">سولر کرنٹ</div>
+                <div class="card-main-val" id="val-solar-now">-.---</div>
+            </div>
+            <div class="card-main card-bat">
+                <div class="br-unit-label" data-lang="en">Battery %</div><div class="br-unit-label" data-lang="ur">بیٹری فیصد</div>
+                <div class="card-main-val" id="val-battery-pct">--%</div>
+                <div class="card-progress-bar-container"><div class="card-progress-bar-fill" id="fill-battery-pct"></div></div>
+            </div>
+            <div class="card-main card-vlt">
+                <div class="br-unit-label" data-lang="en">Voltage</div><div class="br-unit-label" data-lang="ur">وولٹیج</div>
+                <div class="card-main-val" id="val-voltage">--.-V</div>
+            </div>
+            <div class="card-main card-lod">
+                <div class="br-unit-label" data-lang="en">Home Load</div><div class="br-unit-label" data-lang="ur">گھر کا بوجھ</div>
+                <div class="card-main-val" id="val-home-load">----W</div>
+            </div>
+            <div class="card-main card-wda">
+                <div class="br-unit-label" data-lang="en">Wapda / Grid</div><div class="br-unit-label" data-lang="ur">واپڈا گرڈ</div>
+                <div class="card-main-val" id="val-wapda-now">-.---</div>
+            </div>
+            <div class="card-main card-eng">
+                <div class="br-unit-label" data-lang="en">Batt Energy</div><div class="br-unit-label" data-lang="ur">بیٹری انرجی</div>
+                <div class="card-main-val" id="val-batt-kwh">-.--</div>
+            </div>
         </div>
 
-        <div>
-          <p id="footer-title">Is this your bucket?</p>
-          <p>
-            Learn how to enable
-            <a
-              href="https://developers.cloudflare.com/r2/data-access/public-buckets/"
-              >Public Access</a
-            >
-          </p>
+        <div class="inverter-row-card">
+            <div class="inv-item"><div class="inv-value" id="inv-temp-val">--°C</div><div class="inv-label">Inverter Temp</div></div>
+            <div class="inv-item"><span class="inv-mode-badge" id="inv-mode-val">HYBRID</span><div class="inv-label">Operation Mode</div></div>
+            <div class="inv-item"><div class="inv-value" id="inv-fan-val">-- RPM</div><div class="inv-label">Cooling Fan</div></div>
         </div>
-      </section>
 
-      <section>
-        <svg
-          width="358"
-          height="408"
-          viewBox="0 0 358 408"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <ellipse cx="109" cy="337.683" rx="109" ry="18.5" fill="#E2F5FA" />
-          <path
-            d="M47.9743 206.243H182.823L164.937 330.629H63.7419L47.9743 206.243Z"
-            fill="#C5EBF5"
-          />
-          <path
-            d="M47.9743 206.243H182.823L164.937 330.629H63.7419L47.9743 206.243Z"
-            stroke="#0055DC"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M47.9743 206.243H182.823L164.937 330.629H63.7419L47.9743 206.243Z"
-            stroke="#0055DC"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <rect
-            x="-1"
-            y="1"
-            width="146.798"
-            height="21.2497"
-            rx="2.40792"
-            transform="matrix(-1 0 0 1 187.798 193.458)"
-            fill="#C5EBF5"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <rect
-            x="64.026"
-            y="76.1826"
-            width="100.522"
-            height="175.914"
-            fill="url(#paint0_linear_53_739)"
-          />
-          <rect
-            x="83.2496"
-            y="110.737"
-            width="101.569"
-            height="175.914"
-            fill="url(#paint1_linear_53_739)"
-          />
-          <rect
-            x="103.925"
-            y="141.103"
-            width="100.522"
-            height="175.914"
-            fill="url(#paint2_linear_53_739)"
-          />
-          <rect
-            x="123.701"
-            y="186.128"
-            width="100.522"
-            height="175.914"
-            fill="url(#paint3_linear_53_739)"
-          />
-          <rect
-            x="143.478"
-            y="231.974"
-            width="100.522"
-            height="175.914"
-            fill="url(#paint4_linear_53_739)"
-          />
-          <path
-            d="M63.7422 330.629H164.937L181.499 215.448"
-            stroke="#0055DC"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-dasharray="5.11 5.11"
-          />
-          <path
-            d="M63.7422 330.629H164.937L181.499 215.448"
-            stroke="#0055DC"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-dasharray="5.11 5.11"
-          />
-          <rect
-            x="-1"
-            y="1"
-            width="146.798"
-            height="21.2497"
-            rx="2.40792"
-            transform="matrix(-1 0 0 1 187.798 193.458)"
-            stroke="#0055DC"
-            stroke-width="2"
-            stroke-dasharray="5.11 5.11"
-          />
-          <path
-            d="M195.39 172.097C189.203 174.553 182.197 171.528 179.741 165.342C177.285 159.155 180.31 152.148 186.497 149.693C192.684 147.237 199.69 150.262 202.146 156.449C204.601 162.635 201.577 169.642 195.39 172.097Z"
-            fill="#C5EBF5"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M228.763 172.719C228.222 175.894 227.299 178.652 226.275 180.541C225.761 181.49 225.248 182.169 224.788 182.577C224.318 182.993 224.032 183.022 223.902 183C223.772 182.977 223.511 182.855 223.206 182.307C222.906 181.769 222.648 180.959 222.477 179.893C222.137 177.772 222.181 174.864 222.723 171.688C223.265 168.513 224.187 165.755 225.211 163.866C225.725 162.917 226.238 162.238 226.698 161.83C227.168 161.414 227.455 161.385 227.584 161.407C227.714 161.429 227.975 161.552 228.28 162.1C228.58 162.637 228.838 163.448 229.009 164.514C229.349 166.635 229.305 169.543 228.763 172.719Z"
-            fill="#C5EBF5"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M215.162 167.381C214.717 168.822 213.189 169.628 211.749 169.183C210.308 168.738 209.502 167.21 209.947 165.77C210.392 164.33 211.92 163.523 213.36 163.968C214.8 164.413 215.607 165.941 215.162 167.381Z"
-            fill="#C5EBF5"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M251.519 49.0641L248.674 33.3086"
-            stroke="#6ECCE5"
-            stroke-width="2"
-            stroke-miterlimit="10"
-          />
-          <path
-            d="M215.88 55.0798L287.924 42.0709C295.187 40.7594 302.137 45.584 303.449 52.8468L312.062 100.549C313.374 107.811 308.549 114.762 301.286 116.074L229.243 129.082C221.98 130.394 215.029 125.569 213.718 118.307L205.104 70.6048C203.793 63.342 208.618 56.3912 215.88 55.0798Z"
-            fill="#C5EBF5"
-            stroke="#0055DC"
-            stroke-width="2"
-            stroke-miterlimit="10"
-          />
-          <path
-            d="M221.468 115.052L213.509 70.9743C212.749 66.7695 215.542 62.7453 219.747 61.9861L286.718 49.893C290.923 49.1338 294.947 51.9269 295.707 56.1317L303.666 100.209C304.425 104.414 301.632 108.438 297.427 109.198L230.456 121.291C226.251 122.05 222.227 119.257 221.468 115.052Z"
-            fill="white"
-          />
-          <path
-            d="M266.182 79.289C266.829 82.8697 270.256 85.2483 273.836 84.6017C277.417 83.9551 279.796 80.5282 279.149 76.9475C278.503 73.3668 275.076 70.9882 271.495 71.6348C267.914 72.2813 265.536 75.7082 266.182 79.289Z"
-            fill="#6ECCE5"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M227.233 86.3222C227.879 89.9029 231.306 92.2815 234.887 91.6349C238.468 90.9883 240.846 87.5614 240.2 83.9807C239.553 80.4 236.126 78.0214 232.546 78.668C228.965 79.3145 226.586 82.7414 227.233 86.3222Z"
-            fill="#6ECCE5"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M202.739 83.3698L207.255 82.5542L211.553 106.353L207.036 107.169L202.739 83.3698Z"
-            fill="#0055DC"
-          />
-          <path
-            d="M305.601 64.7965L310.118 63.981L314.415 87.7802L309.899 88.5958L305.601 64.7965Z"
-            fill="#0055DC"
-          />
-          <path
-            d="M270.151 105.039L254.914 107.79L254.828 107.314C254.068 103.106 256.863 99.0795 261.071 98.3197C265.278 97.5599 269.305 100.355 270.065 104.563L270.151 105.039Z"
-            fill="#6ECCE5"
-            stroke="#0055DC"
-            stroke-width="2"
-            stroke-miterlimit="10"
-          />
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M279.257 90.2231C271.522 91.6199 264.118 86.4814 262.722 78.746C261.325 71.0106 266.463 63.6075 274.199 62.2108C281.934 60.814 289.337 65.9524 290.734 73.6878C292.131 81.4232 286.992 88.8263 279.257 90.2231ZM260.299 79.1835C261.938 88.2567 270.621 94.2839 279.694 92.6456C288.768 91.0072 294.795 82.3237 293.156 73.2504C291.518 64.1771 282.835 58.1499 273.761 59.7883C267.464 60.9253 262.635 65.4557 260.816 71.1546L256.028 72.0191L250.936 72.9386C247.229 68.3233 241.178 65.829 234.942 66.9549C225.869 68.5933 219.842 77.2768 221.48 86.3501C223.119 95.4234 231.802 101.451 240.875 99.8122C249.949 98.1738 255.976 89.4903 254.337 80.417C253.995 78.5199 253.344 76.7559 252.447 75.1673L256.466 74.4416L260.21 73.7655C259.95 75.5184 259.967 77.3429 260.299 79.1835ZM223.903 85.9127C225.299 93.6481 232.703 98.7865 240.438 97.3897C248.173 95.993 253.312 88.5899 251.915 80.8545C250.518 73.1191 243.115 67.9806 235.38 69.3774C227.644 70.7742 222.506 78.1773 223.903 85.9127Z"
-            fill="#0055DC"
-          />
-          <path
-            d="M307.389 69.3174L291.111 72.2567"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M222.719 84.4253L207.784 87.1221"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M244.314 18.1074L247.859 17.4673L249.299 25.4438L245.754 26.0839L244.314 18.1074Z"
-            fill="#0055DC"
-          />
-          <path
-            d="M236.326 29.6166L244.302 28.1763L244.943 31.7214L236.966 33.1617L236.326 29.6166Z"
-            fill="#0055DC"
-          />
-          <path
-            d="M247.034 33.1743L250.58 32.5342L252.02 40.5107L248.475 41.1508L247.034 33.1743Z"
-            fill="#0055DC"
-          />
-          <path
-            d="M251.391 26.8964L259.368 25.4561L260.008 29.0012L252.031 30.4415L251.391 26.8964Z"
-            fill="#0055DC"
-          />
-          <path
-            d="M269.605 258.704C257.641 258.379 246.247 248.106 237.915 232.703C229.618 217.367 224.543 197.256 225.068 177.914C225.593 158.594 231.565 147.103 240.267 140.482C249.014 133.827 260.721 131.935 273.035 132.27C285.353 132.605 296.942 135.075 305.316 142.166C313.646 149.221 318.987 161.017 318.459 180.452C317.931 199.908 311.771 219.713 302.656 234.547C293.503 249.443 281.57 259.029 269.605 258.704Z"
-            fill="white"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M269.74 253.706C260.558 253.457 250.409 245.29 242.313 230.324C234.432 215.756 229.565 196.512 230.067 178.05C230.564 159.726 236.156 149.892 243.294 144.461C250.701 138.827 261.024 136.945 272.899 137.268C284.799 137.591 295.001 139.984 302.085 145.982C308.905 151.758 313.962 161.869 313.461 180.316C312.956 198.896 307.051 217.845 298.396 231.929C289.509 246.391 278.935 253.956 269.74 253.706Z"
-            fill="white"
-            stroke="#C5EBF5"
-            stroke-width="12"
-          />
-          <path
-            d="M269.605 258.704C257.641 258.379 246.247 248.106 237.915 232.703C229.618 217.367 224.543 197.256 225.068 177.914C225.593 158.594 231.565 147.103 240.267 140.482C249.014 133.827 260.721 131.935 273.035 132.27C285.353 132.605 296.942 135.075 305.316 142.166C313.646 149.221 318.987 161.017 318.459 180.452C317.931 199.908 311.771 219.713 302.656 234.547C293.503 249.443 281.57 259.029 269.605 258.704Z"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M294.294 175.556C296.826 181.711 293.889 188.755 287.733 191.287C281.578 193.82 274.534 190.883 272.002 184.727C269.469 178.571 272.406 171.528 278.562 168.995C284.718 166.463 291.761 169.4 294.294 175.556Z"
-            fill="#C5EBF5"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M305.587 171.338C306.161 172.732 305.496 174.327 304.102 174.901C302.708 175.474 301.113 174.809 300.539 173.415C299.966 172.021 300.631 170.426 302.025 169.853C303.419 169.279 305.014 169.944 305.587 171.338Z"
-            fill="#C5EBF5"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M315.533 163.486C315.665 163.489 315.941 163.572 316.323 164.069C316.698 164.557 317.073 165.321 317.398 166.35C318.045 168.399 318.428 171.282 318.357 174.503C318.287 177.723 317.779 180.587 317.043 182.605C316.674 183.62 316.266 184.366 315.87 184.837C315.467 185.317 315.187 185.388 315.055 185.385C314.924 185.382 314.648 185.299 314.266 184.802C313.891 184.314 313.516 183.551 313.191 182.521C312.544 180.473 312.161 177.589 312.232 174.369C312.302 171.148 312.81 168.285 313.546 166.266C313.915 165.252 314.323 164.505 314.719 164.034C315.122 163.554 315.402 163.483 315.533 163.486Z"
-            fill="#C5EBF5"
-            stroke="#0055DC"
-            stroke-width="2"
-          />
-          <path
-            d="M277.871 272.897C295.11 268.122 308.594 262.482 307.99 260.3C307.385 258.117 292.921 260.219 275.682 264.995C258.444 269.77 244.959 275.411 245.564 277.593C246.168 279.775 260.633 277.673 277.871 272.897Z"
-            stroke="#0055DC"
-            stroke-width="2"
-            stroke-miterlimit="10"
-          />
-          <path
-            opacity="0.65"
-            d="M285.486 292.262C308.037 286.015 325.306 277.298 324.058 272.792C322.809 268.286 303.517 269.698 280.966 275.945C258.416 282.192 241.147 290.909 242.395 295.415C243.643 299.921 262.936 298.509 285.486 292.262Z"
-            stroke="#3790E0"
-            stroke-width="2"
-            stroke-miterlimit="10"
-          />
-          <path
-            opacity="0.61"
-            d="M296.204 314.889C325.458 306.785 347.861 295.477 346.241 289.631C344.622 283.785 319.594 285.616 290.339 293.72C261.085 301.824 238.682 313.132 240.302 318.978C241.921 324.824 266.949 322.993 296.204 314.889Z"
-            stroke="#6ECCE5"
-            stroke-width="2"
-            stroke-miterlimit="10"
-          />
-          <ellipse cx="274" cy="345.683" rx="56" ry="9.5" fill="#E2F5FA" />
-          <defs>
-            <linearGradient
-              id="paint0_linear_53_739"
-              x1="114.287"
-              y1="152.621"
-              x2="114.287"
-              y2="252.096"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stop-color="white" />
-              <stop offset="1" stop-color="white" stop-opacity="0" />
-            </linearGradient>
-            <linearGradient
-              id="paint1_linear_53_739"
-              x1="134.034"
-              y1="187.176"
-              x2="134.034"
-              y2="286.651"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stop-color="white" />
-              <stop offset="1" stop-color="white" stop-opacity="0" />
-            </linearGradient>
-            <linearGradient
-              id="paint2_linear_53_739"
-              x1="154.186"
-              y1="217.542"
-              x2="154.186"
-              y2="317.017"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stop-color="white" />
-              <stop offset="1" stop-color="white" stop-opacity="0" />
-            </linearGradient>
-            <linearGradient
-              id="paint3_linear_53_739"
-              x1="173.962"
-              y1="262.567"
-              x2="173.962"
-              y2="362.042"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stop-color="white" />
-              <stop offset="1" stop-color="white" stop-opacity="0" />
-            </linearGradient>
-            <linearGradient
-              id="paint4_linear_53_739"
-              x1="193.739"
-              y1="308.413"
-              x2="193.739"
-              y2="407.888"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stop-color="white" />
-              <stop offset="1" stop-color="white" stop-opacity="0" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </section>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="br-unit-label" data-lang="en">Total Solar</div><div class="br-unit-label" data-lang="ur">کل سولر پیداوار</div>
+                <div class="stat-val-text" id="stat-total-solar">--.-- kWh</div>
+            </div>
+            <div class="stat-card">
+                <div class="br-unit-label" data-lang="en">Peak Load</div><div class="br-unit-label" data-lang="ur">زیادہ سے زیادہ لوڈ</div>
+                <div class="stat-val-text" id="stat-peak-load">---- W</div>
+            </div>
+            <div class="stat-card">
+                <div class="br-unit-label" data-lang="en">Total Wapda</div><div class="br-unit-label" data-lang="ur">کل واپڈا استعمال</div>
+                <div class="stat-val-text" id="stat-total-wapda">--.-- kWh</div>
+            </div>
+            <div class="stat-card">
+                <div class="br-unit-label" data-lang="en">PKR Saved</div><div class="br-unit-label" data-lang="ur">بچت (روپے)</div>
+                <div class="stat-val-text" id="stat-pkr-saved">PKR 0</div>
+            </div>
+        </div>
     </main>
-  </body>
+    <footer>
+        <div class="footer-timestamp" id="timestamp-node">UPDATED: --:--:-- --</div>
+        <button class="refresh-btn" onclick="executeDataFetchPipeline()">REFRESH</button>
+    </footer>
+
+    <script>
+        const API_BASE = "";
+        const SYSTEM_CAPACITY_KWH = 4.8;
+        const LITHIUM_SAFE_MIN_PCT = 20;
+        let isUrduLanguageActive = false;
+        let isModalPopupSuppressed = false;
+
+        function initializeParticleCanvas() {
+            const pWrap = document.getElementById("particle-canvas");
+            pWrap.innerHTML = "";
+            for (let i = 0; i < 15; i++) {
+                const node = document.createElement("div");
+                node.className = "particle";
+                const size = Math.random() * 3 + 2;
+                node.style.width = size + "px";
+                node.style.height = size + "px";
+                node.style.left = (Math.random() * 100) + "%";
+                node.style.animationDuration = (Math.random() * 10 + 8) + "s";
+                pWrap.appendChild(node);
+            }
+        }
+
+        function toggleLanguageSystem() {
+            isUrduLanguageActive = !isUrduLanguageActive;
+            const toggleBtn = document.getElementById("lang-toggle-node");
+            if (isUrduLanguageActive) {
+                document.body.classList.add("lang-urdu");
+                toggleBtn.innerText = "English";
+            } else {
+                document.body.classList.remove("lang-urdu");
+                toggleBtn.innerText = "اردو";
+            }
+            executeDataFetchPipeline();
+        }
+
+        function triggerModalPopup(hours, minutes) {
+            if (isModalPopupSuppressed) return;
+            const target = document.getElementById("alert-modal");
+            const timeDisplay = document.getElementById("pop-time-val");
+            timeDisplay.innerText = hours === 0 && minutes > 0 ? minutes + " MIN" : hours.toFixed(1) + " HRS";
+            target.classList.add("show");
+        }
+
+        function dismissModal() {
+            document.getElementById("alert-modal").classList.remove("show");
+            isModalPopupSuppressed = true;
+        }
+
+        function calculateBatteryMetrics(batteryPct, loadWatts) {
+            if (loadWatts <= 0) {
+                return { hours: 99, level: "safe", usableKwh: (Math.max(0, batteryPct - LITHIUM_SAFE_MIN_PCT) / 100) * SYSTEM_CAPACITY_KWH, usablePct: Math.max(0, batteryPct - LITHIUM_SAFE_MIN_PCT) };
+            }
+            const usablePercent = Math.max(0, batteryPct - LITHIUM_SAFE_MIN_PCT);
+            const usableKwh = (usablePercent / 100) * SYSTEM_CAPACITY_KWH;
+            const hours = usableKwh / (loadWatts / 1000);
+            let level = "safe";
+            if (hours < 1) level = "critical";
+            else if (hours < 3) level = "danger";
+            else if (hours < 8) level = "caution";
+            return { hours, level, usableKwh, usablePct: usablePercent };
+        }
+
+        function renderBatteryRemainingCard(metrics) {
+            const card = document.getElementById("br-card-node");
+            const valDisplay = document.getElementById("br-value-node");
+            const iconDisplay = document.getElementById("br-icon-node");
+            const urduSug = document.getElementById("br-urdu-sug-node");
+            const fill = document.getElementById("br-fill-node");
+            const subtext = document.getElementById("br-subtext-node");
+
+            card.className = "battery-remaining-card " + metrics.level;
+            subtext.innerText = "Usable: " + metrics.usablePct.toFixed(0) + "% | " + metrics.usableKwh.toFixed(2) + " kWh (20% Safe Cutoff)";
+
+            let barProgress = (metrics.hours / 12) * 100;
+            if (metrics.hours >= 99) {
+                valDisplay.innerText = "∞ HRS"; iconDisplay.innerText = "🟢";
+                urduSug.innerText = "بیٹری محفوظ ہے — بے فکر رہیں ✅"; fill.style.width = "100%";
+            } else {
+                valDisplay.innerText = metrics.level === "critical" ? Math.round(metrics.hours * 60) + " MIN" : metrics.hours.toFixed(1) + " HRS";
+                if (metrics.level === "safe") { iconDisplay.innerText = "🟢"; urduSug.innerText = "بیٹری محفوظ ہے — بے فکر رہیں ✅"; }
+                else if (metrics.level === "caution") { iconDisplay.innerText = "🟡"; urduSug.innerText = "غیر ضروری بوجھ بند کریں ⚡"; }
+                else if (metrics.level === "danger") { iconDisplay.innerText = "🟠"; urduSug.innerText = "واپڈا کے لیے تیار رہیں ⚠️"; }
+                else { iconDisplay.innerText = "🔴"; urduSug.innerText = "فوری واپڈا لگائیں! 🚨"; }
+                fill.style.width = Math.min(100, Math.max(5, barProgress)) + "%";
+            }
+        }
+
+        function updateSourceBannerSystem(solarKwh, utilityKwh) {
+            const badge = document.getElementById("source-badge-node");
+            const textBlock = document.getElementById("source-text-node");
+            const isBatteryOnly = (solarKwh === 0 && utilityKwh === 0);
+            if (isBatteryOnly) {
+                badge.className = "source-badge badge-bat"; badge.innerText = "BATTERY ONLY";
+                textBlock.innerHTML = `<span data-lang="en">Battery Discharge Mode</span><span data-lang="ur">صرف بیٹری</span>`;
+                document.body.classList.add("bmode");
+            } else {
+                document.body.classList.remove("bmode");
+                if (solarKwh > 0 && utilityKwh > 0) {
+                    badge.className = "source-badge badge-mix"; badge.innerText = "SOLAR + WAPDA";
+                    textBlock.innerHTML = `<span data-lang="en">Mixed Source</span><span data-lang="ur">مکسڈ سورس انرجی</span>`;
+                } else if (solarKwh > 0) {
+                    badge.className = "source-badge badge-sol"; badge.innerText = "SOLAR ONLY";
+                    textBlock.innerHTML = `<span data-lang="en">Pure Solar Energy</span><span data-lang="ur">صرف سولر انرجی</span>`;
+                } else {
+                    badge.className = "source-badge badge-grid"; badge.innerText = "WAPDA ONLY";
+                    textBlock.innerHTML = `<span data-lang="en">Grid Power</span><span data-lang="ur">واپڈا گرڈ پاور</span>`;
+                }
+            }
+        }
+
+        function manageSmartAlertSystem(isBatteryOnly, loadWatts) {
+            document.getElementById("alert-bmode-node").classList.toggle("active", isBatteryOnly);
+            document.getElementById("alert-high-node").classList.toggle("active", loadWatts > 1200);
+            document.getElementById("alert-med-node").classList.toggle("active", loadWatts > 300 && loadWatts <= 1200);
+        }
+
+        async function executeDataFetchPipeline() {
+            try {
+                const [summaryRes, historyRes] = await Promise.all([
+                    fetch(API_BASE + "/api/summary").then(r => r.json()),
+                    fetch(API_BASE + "/api/history").then(r => r.json())
+                ]);
+
+                if (historyRes && historyRes.length > 0) {
+                    const primary = historyRes[0];
+                    const batteryPct = parseFloat(primary.battery_pct) || 0;
+                    const loadWatts = parseFloat(primary.load_w) || 0;
+                    const solarKwh = parseFloat(primary.solar_kwh) || 0;
+                    const utilityKwh = parseFloat(primary.utility_kwh) || 0;
+
+                    document.getElementById("val-solar-now").innerText = solarKwh.toFixed(3);
+                    document.getElementById("val-battery-pct").innerText = batteryPct.toFixed(0) + "%";
+                    document.getElementById("fill-battery-pct").style.width = batteryPct + "%";
+                    document.getElementById("val-voltage").innerText = (parseFloat(primary.voltage) || 0).toFixed(1) + "V";
+                    document.getElementById("val-home-load").innerText = loadWatts.toFixed(0) + "W";
+                    document.getElementById("val-wapda-now").innerText = utilityKwh.toFixed(3);
+                    document.getElementById("val-batt-kwh").innerText = ((batteryPct / 100) * SYSTEM_CAPACITY_KWH).toFixed(2);
+
+                    const bMetrics = calculateBatteryMetrics(batteryPct, loadWatts);
+                    renderBatteryRemainingCard(bMetrics);
+                    const isBatteryOnly = (solarKwh === 0 && utilityKwh === 0);
+                    updateSourceBannerSystem(solarKwh, utilityKwh);
+                    manageSmartAlertSystem(isBatteryOnly, loadWatts);
+
+                    if (isBatteryOnly || bMetrics.hours < 3) triggerModalPopup(bMetrics.hours, Math.round(bMetrics.hours * 60));
+                    else { isModalPopupSuppressed = false; document.getElementById("alert-modal").classList.remove("show"); }
+
+                    let telemetry = { temp: "38", fan: "1420", mode: "SOLAR" };
+                    if (primary.notes) { try { Object.assign(telemetry, JSON.parse(primary.notes)); } catch(e){} }
+                    document.getElementById("inv-temp-val").innerText = telemetry.temp + "°C";
+                    document.getElementById("inv-fan-val").innerText = telemetry.fan + " RPM";
+                    document.getElementById("inv-mode-val").innerText = telemetry.mode.toUpperCase();
+                }
+
+                if (summaryRes) {
+                    const totalSolar = summaryRes.total_solar || 0;
+                    document.getElementById("stat-total-solar").innerText = totalSolar.toFixed(2) + " kWh";
+                    document.getElementById("stat-peak-load").innerText = (summaryRes.peak_load || 0).toFixed(0) + " W";
+                    document.getElementById("stat-total-wapda").innerText = (summaryRes.total_utility || 0).toFixed(2) + " kWh";
+                    document.getElementById("stat-pkr-saved").innerText = "PKR " + Math.round(totalSolar * 50).toLocaleString();
+                }
+                document.getElementById("timestamp-node").innerText = "UPDATED: " + new Date().toLocaleTimeString();
+            } catch (e) { console.error(e); }
+        }
+
+        initializeParticleCanvas();
+        executeDataFetchPipeline();
+        setInterval(executeDataFetchPipeline, 30000);
+    </script>
+</body>
 </html>

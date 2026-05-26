@@ -455,6 +455,53 @@ footer{position:relative;z-index:5;padding:10px 14px;border-top:1px solid var(--
   <div class="ti"><div class="tic">&#127744;</div><div class="tv2" id="fanV">--</div><div class="tl2">FAN</div></div>
 </div>
 
+<div style="position:relative;z-index:5;margin:0 0 10px 0;background:linear-gradient(135deg,rgba(0,26,10,0.9),rgba(0,20,8,0.9));border:1px solid rgba(0,230,118,0.3);border-radius:18px;padding:14px;display:flex;align-items:center;gap:14px">
+  <div style="font-size:40px;animation:solarSpin 8s linear infinite">&#128293;</div>
+  <div style="flex:1">
+    <div style="font-size:9px;letter-spacing:2px;color:var(--muted)">&#9728;&#65039; PURE SOLAR STREAK</div>
+    <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px">
+      <div style="font-family:Orbitron,monospace;font-size:36px;font-weight:900;color:var(--green)" id="streakVal">--</div>
+      <div style="font-size:14px;color:var(--muted)">days</div>
+    </div>
+    <div style="font-size:11px;color:var(--amber);margin-top:3px;font-weight:600" id="streakMsg">Calculating...</div>
+  </div>
+</div>
+<div style="margin-bottom:10px;background:linear-gradient(135deg,rgba(15,10,30,0.9),rgba(10,8,25,0.9));border:1px solid rgba(224,64,251,0.3);border-radius:18px;padding:14px">
+  <div style="font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">&#127942; ACHIEVEMENTS</div>
+  <div id="badgeList" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+    <div style="color:var(--muted);font-size:11px">Loading...</div>
+  </div>
+</div>
+<div style="margin-bottom:10px;background:linear-gradient(135deg,rgba(10,5,30,0.9),rgba(8,4,22,0.9));border:1px solid rgba(224,64,251,0.3);border-radius:18px;padding:14px">
+  <div style="font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">&#128179; MONTHLY BILL COMPARISON</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center">
+    <div style="background:rgba(255,82,82,0.08);border:1px solid rgba(255,82,82,0.2);border-radius:12px;padding:10px">
+      <div style="font-size:9px;color:var(--muted);margin-bottom:4px">IF ONLY WAPDA</div>
+      <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:var(--red)" id="billFull">--</div>
+    </div>
+    <div style="background:rgba(64,196,255,0.08);border:1px solid rgba(64,196,255,0.2);border-radius:12px;padding:10px">
+      <div style="font-size:9px;color:var(--muted);margin-bottom:4px">WAPDA PAID</div>
+      <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:var(--blue)" id="billWapda">--</div>
+    </div>
+    <div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:12px;padding:10px">
+      <div style="font-size:9px;color:var(--muted);margin-bottom:4px">YOU SAVED</div>
+      <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:var(--green)" id="billSaved">--</div>
+    </div>
+  </div>
+</div>
+<div style="margin-bottom:10px;background:linear-gradient(135deg,rgba(5,15,30,0.9),rgba(4,12,24,0.9));border:1px solid rgba(64,196,255,0.3);border-radius:18px;padding:14px">
+  <div style="font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">&#9889; INVERTER EFFICIENCY SCORE</div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="font-family:Orbitron,monospace;font-size:52px;font-weight:900" id="effGrade" style="color:var(--green)">--</div>
+    <div style="flex:1">
+      <div style="font-family:Orbitron,monospace;font-size:16px;color:var(--text)" id="effScore">--</div>
+      <div style="margin-top:8px;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden">
+        <div id="effBar2" style="height:100%;border-radius:4px;width:0%;transition:width 1s;background:var(--green)"></div>
+      </div>
+      <div style="font-size:9px;color:var(--muted);margin-top:4px">Based on temp, battery & solar efficiency</div>
+    </div>
+  </div>
+</div>
 <!-- STATS -->
 <div class="stats">
   <div class="stat"><div class="si its">&#9728;&#65039;</div><div class="sl">TOTAL SOLAR</div><div class="sv" id="sTsolar">--</div><div class="su">kWh</div></div>
@@ -728,6 +775,95 @@ function saveSettings(){
   alert('Settings saved!');
 }
 
+
+function updateStreak(rows){
+  if(!rows||!rows.length)return;
+  let streak=0;
+  const today=new Date().toLocaleDateString();
+  const days={};
+  rows.forEach(r=>{
+    const d=new Date(r.ts).toLocaleDateString();
+    if(!days[d])days[d]={solar:0,wapda:0};
+    days[d].solar+=r.solar_kwh||0;
+    days[d].wapda+=r.utility_kwh||0;
+  });
+  const sortedDays=Object.keys(days).sort((a,b)=>new Date(b)-new Date(a));
+  for(const d of sortedDays){
+    if(days[d].wapda===0&&days[d].solar>0)streak++;
+    else break;
+  }
+  const el=document.getElementById('streakVal');
+  if(el){
+    el.textContent=streak;
+    const msg=document.getElementById('streakMsg');
+    if(streak>=7)msg.textContent='Amazing! '+streak+' days pure solar!';
+    else if(streak>=3)msg.textContent=streak+' days on pure solar!';
+    else if(streak===1)msg.textContent='1 day pure solar today!';
+    else msg.textContent='No pure solar streak yet';
+  }
+}
+
+
+function updateBadges(totalSolar, records, streak){
+  const badges=[];
+  if(totalSolar>=100)badges.push({icon:'&#127942;',name:'100 kWh Club',color:'#ffab00'});
+  if(totalSolar>=250)badges.push({icon:'&#11088;',name:'250 kWh Star',color:'#ffab00'});
+  if(totalSolar>=500)badges.push({icon:'&#128081;',name:'500 kWh Legend',color:'#e040fb'});
+  if(records>=500)badges.push({icon:'&#128202;',name:'500 Readings',color:'#40c4ff'});
+  if(records>=1000)badges.push({icon:'&#128200;',name:'1000 Readings',color:'#e040fb'});
+  if(streak>=3)badges.push({icon:'&#128293;',name:'3 Day Streak',color:'#00e676'});
+  if(streak>=7)badges.push({icon:'&#127942;',name:'7 Day Solar Hero',color:'#ffab00'});
+  if(streak>=30)badges.push({icon:'&#128081;',name:'Solar Champion',color:'#e040fb'});
+  const el=document.getElementById('badgeList');
+  if(!el)return;
+  if(!badges.length){el.innerHTML='<div style="color:var(--muted);font-size:11px">Keep going to earn badges!</div>';return;}
+  el.innerHTML=badges.map(b=>`<div style="background:rgba(255,255,255,0.05);border:1px solid ${b.color}33;border-radius:12px;padding:8px;text-align:center"><div style="font-size:22px">${b.icon}</div><div style="font-size:9px;color:${b.color};font-weight:600;margin-top:3px;letter-spacing:1px">${b.name}</div></div>`).join('');
+}
+
+
+function updateBillComparison(totalSolar, totalWapda){
+  const pkr = parseFloat(localStorage.getItem('pkr')||22);
+  const solarCost = 0;
+  const wapdaCost = totalWapda * pkr;
+  const fullWapdaCost = (totalSolar + totalWapda) * pkr;
+  const saved = fullWapdaCost - wapdaCost;
+  const el = document.getElementById('billSaved');
+  const el2 = document.getElementById('billWapda');
+  const el3 = document.getElementById('billFull');
+  if(el) el.textContent = 'PKR ' + Math.round(saved).toLocaleString();
+  if(el2) el2.textContent = 'PKR ' + Math.round(wapdaCost).toLocaleString();
+  if(el3) el3.textContent = 'PKR ' + Math.round(fullWapdaCost).toLocaleString();
+}
+
+
+function updateEfficiencyScore(solar, load, batt, temp){
+  let score = 100;
+  if(temp > 55) score -= 30;
+  else if(temp > 50) score -= 15;
+  else if(temp > 45) score -= 5;
+  if(batt < 20) score -= 20;
+  else if(batt < 50) score -= 10;
+  const solarW = solar * 1000;
+  if(solarW > 0 && load > 0){
+    const eff = Math.min(100, (solarW / load) * 100);
+    if(eff < 50) score -= 10;
+  }
+  score = Math.max(0, Math.min(100, score));
+  let grade, color;
+  if(score >= 90){grade='A+';color='var(--green)';}
+  else if(score >= 80){grade='A';color='var(--green)';}
+  else if(score >= 70){grade='B';color='#aaee00';}
+  else if(score >= 60){grade='C';color='var(--amber)';}
+  else if(score >= 50){grade='D';color:'#ff6600';}
+  else{grade='F';color='var(--red)';}
+  const el = document.getElementById('effGrade');
+  const el2 = document.getElementById('effScore');
+  const el3 = document.getElementById('effBar2');
+  if(el){el.textContent = grade; el.style.color = color;}
+  if(el2) el2.textContent = score + '/100';
+  if(el3){el3.style.width = score + '%'; el3.style.background = color;}
+}
+
 function toggleLang(){
   isUrdu = !isUrdu;
   document.body.classList.toggle('urdu-mode', isUrdu);
@@ -933,6 +1069,7 @@ async function loadAll(){
       updateBattHours(bp, lw, solar, grid);
       const tempRaw=l.temp||'';
       const tempNum=tempRaw.match(/([0-9]+)/);
+      updateEfficiencyScore(solar,load,bp,tempNum?parseInt(tempNum[1]):40);
       document.getElementById('tempV').textContent=tempNum?tempNum[1]+'°C':'--';
       document.getElementById('fanV').textContent=l.fan||'--';
       const mode=l.notes||'';
@@ -943,7 +1080,7 @@ async function loadAll(){
 }
 
 loadAll();
-setInterval(loadAll, 30000);loadWeather();setInterval(loadWeather,600000);loadForecast();setInterval(loadForecast,1800000);updateApplianceTimes();setInterval(updateApplianceTimes,60000);
+setInterval(loadAll, 30000);loadWeather();setInterval(loadWeather,600000);loadForecast();setInterval(loadForecast,1800000);updateApplianceTimes();updateStreak(hr);updateBadges(sr.total_solar,sr.record_count,0);updateBillComparison(sr.total_solar,sr.total_utility);setInterval(updateApplianceTimes,60000);
 </script>
 </body>
 </html>

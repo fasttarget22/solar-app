@@ -930,9 +930,12 @@ async function loadAll(){
       setSrc(l.solar_kwh||0, l.utility_kwh||0);updateMeter(l.solar_kwh||0,l.utility_kwh||0,lw);analyzeLoad(lw,l.solar_kwh||0,l.utility_kwh||0);checkVoiceAlerts(l.solar_kwh||0,l.utility_kwh||0,lw,bp);updatePowerFlow(l.solar_kwh||0,l.utility_kwh||0,lw,bp);
       setAlerts(l.solar_kwh||0, l.utility_kwh||0, lw);
       updateBattHours(bp, lw);
-      document.getElementById('tempVal').textContent = '49°C';
-      document.getElementById('fanVal').textContent = '1%';
-      document.getElementById('modeBadge').textContent = (l.solar_kwh||0)>0 ? '☀️ SOLAR' : '🔌 GRID';
+      const tempRaw=l.temp||'';
+      const tempNum=tempRaw.match(/([0-9]+)/);
+      document.getElementById('tempV').textContent=tempNum?tempNum[1]+'°C':'--';
+      document.getElementById('fanV').textContent=l.fan||'--';
+      const mode=l.notes||'';
+      document.getElementById('modeB').textContent=mode?mode+' MODE':solar>0?'☀️ SOLAR':'🔌 GRID';
     }
     document.getElementById('updTime').textContent = 'Updated: ' + new Date().toLocaleTimeString();
   } catch(e){ console.error(e); }

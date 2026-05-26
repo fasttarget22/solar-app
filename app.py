@@ -76,6 +76,11 @@ def summary():
 def dashboard():
     return open('dashboard.html',encoding='utf-8').read()
 
+
+@app.route('/analytics')
+def analytics_page():
+    return open('analytics.html',encoding='utf-8').read()
+
 @app.route('/')
 def index():return 'Sufly Solar Running!'
 

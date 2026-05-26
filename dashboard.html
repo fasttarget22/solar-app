@@ -388,11 +388,17 @@ footer{position:relative;z-index:5;padding:10px 14px;border-top:1px solid var(--
       <style>
         @keyframes homeFanSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .fan-spin-active { animation: homeFanSpin 1s linear infinite; transform-origin: center; transform-box: fill-box; }
+        .room-shell { fill: rgba(30, 41, 59, 0.75); stroke: #475569; stroke-width: 2; transition: all 0.3s; }
       </style>
-      <text x="150" y="105" text-anchor="middle" font-size="44" opacity="0.85">🏠</text>
-      <text id="shLight" x="136" y="100" text-anchor="middle" font-size="11" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">💡</text>
-      <text id="shFan" x="150" y="88" text-anchor="middle" font-size="12" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">🌀</text>
-      <text id="shTV" x="164" y="100" text-anchor="middle" font-size="11" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">📺</text>
+      <polygon points="115,65 150,35 185,65" fill="#f43f5e" opacity="0.9" />
+      <rect class="room-shell" x="120" y="65" width="60" height="45" rx="5" />
+      <line x1="120" y1="88" x2="180" y2="88" stroke="#334155" stroke-dasharray="2,2" />
+      
+      <text id="shFan" x="150" y="82" text-anchor="middle" font-size="14" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">🌀</text>
+      
+      <text id="shLight" x="135" y="102" text-anchor="middle" font-size="12" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">💡</text>
+      
+      <text id="shTV" x="165" y="102" text-anchor="middle" font-size="12" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">📺</text>
     </g>
     <text x="150" y="120" text-anchor="middle" font-size="9" fill="#8892a4">HOME</text>
     <text x="150" y="133" text-anchor="middle" font-size="10" font-weight="bold" fill="#f0f4ff" id="pfHomeLoad">--W</text>

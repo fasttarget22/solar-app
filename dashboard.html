@@ -272,7 +272,7 @@ body.urdu-mode{direction:rtl}
     </div>
   </div>
   <div class="hdr-right">
-    <button onclick="toggleVoice()" id="voiceBtn" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:20px;font-size:11px;cursor:pointer">&#128263; Voice</button><button class="lang-btn" onclick="toggleLang()" id="langBtn">اردو</button>
+    <button onclick="toggleVoice()" id="voiceBtn" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:20px;font-size:11px;cursor:pointer">&#128263; Voice</button><button onclick="toggleSettings()" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:20px;font-size:11px;cursor:pointer">&#9881;&#65039;</button><button class="lang-btn" onclick="toggleLang()" id="langBtn">اردو</button>
     <div style="display:flex;align-items:center;gap:5px">
       <div class="live-dot"></div>
       <div class="live-txt en">LIVE</div>
@@ -745,6 +745,41 @@ function updatePowerFlow(solar,grid,load,batt){
   else battEl.style.filter='drop-shadow(0 0 6px rgba(255,171,0,0.4))';
 }
 
+
+let PKR_RATE=parseFloat(localStorage.getItem('pkr')||22);
+let BATT_CAP=parseFloat(localStorage.getItem('batt')||4.8);
+let SAFE_MIN=parseFloat(localStorage.getItem('safe')||20);
+let REFRESH_INT=parseInt(localStorage.getItem('refresh')||30);
+let refreshTimer=null;
+
+function toggleSettings(){
+  const p=document.getElementById('settingsPanel');
+  const show=p.style.display!=='flex';
+  p.style.display=show?'flex':'none';
+  if(show){
+    document.getElementById('setPKR').value=PKR_RATE;
+    document.getElementById('setBattCap').value=BATT_CAP;
+    document.getElementById('setSafeMin').value=SAFE_MIN;
+    document.getElementById('setRefresh').value=REFRESH_INT;
+  }
+}
+
+function saveSettings(){
+  PKR_RATE=parseFloat(document.getElementById('setPKR').value)||22;
+  BATT_CAP=parseFloat(document.getElementById('setBattCap').value)||4.8;
+  SAFE_MIN=parseFloat(document.getElementById('setSafeMin').value)||20;
+  REFRESH_INT=parseInt(document.getElementById('setRefresh').value)||30;
+  localStorage.setItem('pkr',PKR_RATE);
+  localStorage.setItem('batt',BATT_CAP);
+  localStorage.setItem('safe',SAFE_MIN);
+  localStorage.setItem('refresh',REFRESH_INT);
+  if(refreshTimer)clearInterval(refreshTimer);
+  refreshTimer=setInterval(loadAll,REFRESH_INT*1000);
+  toggleSettings();
+  loadAll();
+  alert('Settings saved!');
+}
+
 function toggleLang(){
   isUrdu = !isUrdu;
   document.body.classList.toggle('urdu-mode', isUrdu);
@@ -958,5 +993,24 @@ async function loadAll(){
 loadAll();
 setInterval(loadAll, 30000);loadWeather();setInterval(loadWeather,600000);loadForecast();setInterval(loadForecast,1800000);updateApplianceTimes();setInterval(updateApplianceTimes,60000);
 </script>
+<div id="settingsPanel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(5px)">
+<div style="background:linear-gradient(135deg,#111827,#1a2235);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:20px;width:90%;max-width:340px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+<div style="font-family:Orbitron,monospace;font-size:14px;color:#00e676;letter-spacing:2px">&#9881; SETTINGS</div>
+<button onclick="toggleSettings()" style="background:rgba(255,82,82,0.15);border:1px solid #ff5252;color:#ff5252;padding:4px 10px;border-radius:10px;font-size:11px;cursor:pointer">&#10005; Close</button>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<div><div style="font-size:9px;letter-spacing:1px;color:#8892a4;margin-bottom:4px">&#128176; PKR PER UNIT (currently 22)</div>
+<input id="setPKR" type="number" value="22" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f0f4ff;padding:8px 12px;border-radius:8px;font-size:14px;font-family:Orbitron,monospace"></div>
+<div><div style="font-size:9px;letter-spacing:1px;color:#8892a4;margin-bottom:4px">&#128267; BATTERY CAPACITY kWh (currently 4.8)</div>
+<input id="setBattCap" type="number" value="4.8" step="0.1" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f0f4ff;padding:8px 12px;border-radius:8px;font-size:14px;font-family:Orbitron,monospace"></div>
+<div><div style="font-size:9px;letter-spacing:1px;color:#8892a4;margin-bottom:4px">&#9888;&#65039; SAFE MINIMUM % (currently 20)</div>
+<input id="setSafeMin" type="number" value="20" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f0f4ff;padding:8px 12px;border-radius:8px;font-size:14px;font-family:Orbitron,monospace"></div>
+<div><div style="font-size:9px;letter-spacing:1px;color:#8892a4;margin-bottom:4px">&#9201; REFRESH INTERVAL seconds (currently 30)</div>
+<input id="setRefresh" type="number" value="30" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f0f4ff;padding:8px 12px;border-radius:8px;font-size:14px;font-family:Orbitron,monospace"></div>
+<div><div style="font-size:9px;letter-spacing:1px;color:#8892a4;margin-bottom:4px">&#128300; INVERTER MODEL</div>
+<input id="setInverter" type="text" value="Aliyar 48V 6200W" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f0f4ff;padding:8px 12px;border-radius:8px;font-size:12px"></div>
+<button onclick="saveSettings()" style="background:linear-gradient(135deg,#00c853,#00e676);border:none;color:#000;padding:12px;border-radius:12px;font-weight:700;font-size:12px;cursor:pointer;letter-spacing:1px;width:100%">&#10003; SAVE SETTINGS</button>
+</div></div></div>
 </body>
 </html>

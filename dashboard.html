@@ -2,257 +2,300 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <title>Sufly Solar Apps</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0f1a;--card:#111827;--card2:#1a2235;--border:rgba(255,255,255,0.08);--green:#00e676;--green2:#00c853;--amber:#ffab00;--blue:#40c4ff;--red:#ff5252;--purple:#e040fb;--text:#f0f4ff;--muted:#8892a4}
-body.bmode{--bg:#1a0505;--card:#1f0808;--card2:#2a0a0a}
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:"Inter",sans-serif;min-height:100vh;overflow-x:hidden;transition:background 1s}
-body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(0,230,118,0.05) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(64,196,255,0.04) 0%,transparent 60%);pointer-events:none;z-index:0}
-body.bmode::before{background:radial-gradient(ellipse at 50% 30%,rgba(255,82,82,0.12) 0%,transparent 70%)}
+:root{--bg:#060d1a;--card:rgba(255,255,255,0.05);--card2:rgba(255,255,255,0.08);--border:rgba(255,255,255,0.08);--green:#00e676;--green2:#00c853;--amber:#ffab00;--blue:#40c4ff;--red:#ff5252;--purple:#e040fb;--text:#f0f4ff;--muted:#8892a4;--nav:#0a1628}
+body.bmode{--bg:#120005;--card:rgba(255,0,30,0.06);--nav:#1a0008}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:"Inter",sans-serif;min-height:100vh;overflow-x:hidden;padding-bottom:70px}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 15% 15%,rgba(0,230,118,0.08) 0%,transparent 50%),radial-gradient(ellipse at 85% 85%,rgba(64,196,255,0.06) 0%,transparent 50%);pointer-events:none;z-index:0}
+body.bmode::before{background:radial-gradient(ellipse at 50% 20%,rgba(255,0,50,0.15) 0%,transparent 60%)}
+
+/* PARTICLES */
 .particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .particle{position:absolute;background:var(--green);border-radius:50%;animation:pfloat linear infinite;opacity:0}
 body.bmode .particle{background:var(--red)}
-@keyframes pfloat{0%{transform:translateY(100vh);opacity:0}10%{opacity:0.5}90%{opacity:0.2}100%{transform:translateY(-50px);opacity:0}}
+@keyframes pfloat{0%{transform:translateY(100vh);opacity:0}10%{opacity:0.4}90%{opacity:0.1}100%{transform:translateY(-50px);opacity:0}}
+
 /* HEADER */
-header{position:relative;z-index:10;background:linear-gradient(135deg,#0d1b2a,#1a2540);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
-body.bmode header{background:linear-gradient(135deg,#1a0808,#2a0f0f)}
+header{position:sticky;top:0;z-index:50;background:rgba(6,13,26,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;justify-content:space-between;align-items:center}
+body.bmode header{background:rgba(18,0,5,0.95)}
 .logo-sec{display:flex;align-items:center;gap:10px}
-.av-wrap{position:relative;width:44px;height:44px;flex-shrink:0}
-.av-img{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#111827,#1a2235);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-family:"Orbitron",monospace;font-size:18px;font-weight:900;color:var(--green);animation:avGlow 3s ease-in-out infinite}
-@keyframes avGlow{0%,100%{box-shadow:0 0 8px rgba(0,230,118,0.4)}50%{box-shadow:0 0 20px rgba(0,230,118,0.9),0 0 40px rgba(0,230,118,0.2)}}
-body.bmode .av-img{border-color:var(--red);color:var(--red);animation:avGlowR 0.8s ease-in-out infinite}
-@keyframes avGlowR{0%,100%{box-shadow:0 0 8px rgba(255,82,82,0.5)}50%{box-shadow:0 0 25px rgba(255,82,82,1)}}
-.av-ring{position:absolute;inset:-4px;border-radius:50%;border:2px dashed var(--green);animation:ringR 3s linear infinite;opacity:0.5}
-body.bmode .av-ring{border-color:var(--red);animation:ringR 0.8s linear infinite}
+.av-wrap{position:relative;width:42px;height:42px;flex-shrink:0}
+.av-img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--green);animation:avGlow 3s ease-in-out infinite}
+@keyframes avGlow{0%,100%{box-shadow:0 0 8px rgba(0,230,118,0.5)}50%{box-shadow:0 0 20px rgba(0,230,118,0.9),0 0 40px rgba(0,230,118,0.2)}}
+body.bmode .av-img{border-color:var(--red);animation:avGlowR 0.8s ease-in-out infinite}
+@keyframes avGlowR{0%,100%{box-shadow:0 0 8px rgba(255,0,50,0.5)}50%{box-shadow:0 0 25px rgba(255,0,50,1)}}
+.av-ring{position:absolute;inset:-3px;border-radius:50%;border:2px dashed var(--green);animation:ringR 3s linear infinite;opacity:0.6}
+body.bmode .av-ring{border-color:var(--red);animation:ringR 0.7s linear infinite}
 @keyframes ringR{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.av-dot{position:absolute;bottom:1px;right:1px;width:11px;height:11px;background:var(--green);border-radius:50%;border:2px solid #0d1b2a;animation:livePulse 1.5s infinite}
-@keyframes livePulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(0,230,118,0.5)}70%{transform:scale(1.4);box-shadow:0 0 0 6px rgba(0,230,118,0)}}
+.av-dot{position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:var(--green);border-radius:50%;border:2px solid var(--bg);animation:lp 1.5s infinite}
+@keyframes lp{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(0,230,118,0.5)}70%{transform:scale(1.4);box-shadow:0 0 0 5px rgba(0,230,118,0)}}
 .logo-main{font-family:"Orbitron",monospace;font-size:13px;font-weight:900;color:var(--green);letter-spacing:2px}
-.logo-name{font-size:10px;color:var(--amber);letter-spacing:1px;font-weight:600}
-.logo-sub{font-size:8px;color:var(--muted);letter-spacing:1px}
-.hdr-right{display:flex;align-items:center;gap:8px}
-.lang-btn{background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:20px;font-size:11px;cursor:pointer;transition:all 0.2s}
-.lang-btn:hover{background:rgba(0,230,118,0.15);border-color:var(--green);color:var(--green)}
-.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:livePulse 1.5s infinite}
-.live-txt{font-size:9px;letter-spacing:2px;color:var(--green);font-family:"Orbitron",monospace}
+.logo-name{font-size:9px;color:var(--amber);letter-spacing:1px;font-weight:600}
+.logo-sub{font-size:7px;color:var(--muted);letter-spacing:1px}
+.hdr-right{display:flex;align-items:center;gap:6px}
+.hdr-btn{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text);padding:5px 9px;border-radius:18px;font-size:11px;cursor:pointer;transition:all 0.2s}
+.live-wrap{display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:12px;background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:lp 1.5s infinite}
+.live-txt{font-size:8px;letter-spacing:2px;color:var(--green);font-family:"Orbitron",monospace}
+
+/* WEATHER BAR */
+.wt-bar{position:relative;z-index:5;padding:8px 14px;background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border);display:none}
+.wt-top{display:flex;align-items:center;gap:8px}
+.wt-icon{font-size:28px;animation:wtFloat 3s ease-in-out infinite}
+@keyframes wtFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.wt-city{font-size:7px;letter-spacing:2px;color:var(--muted)}
+.wt-desc{font-size:12px;font-weight:600}
+.wt-stats{display:flex;gap:8px;margin-left:auto}
+.wt-stat{text-align:center}
+.wt-lbl{font-size:7px;letter-spacing:1px;color:var(--muted)}
+.wt-val{font-family:"Orbitron",monospace;font-size:12px;font-weight:700}
+.wt-temp{color:var(--red)}.wt-hum{color:var(--blue)}.wt-cld{color:var(--amber)}.wt-wind{color:var(--green)}
+.wt-warn{margin-top:5px;padding:3px 10px;border-radius:8px;background:rgba(255,171,0,0.1);border:1px solid rgba(255,171,0,0.3);font-size:10px;color:var(--amber);font-weight:600;display:none;animation:af 1.5s infinite}
+.wt-good{margin-top:5px;padding:3px 10px;border-radius:8px;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);font-size:10px;color:var(--green);font-weight:600;display:none}
+@keyframes af{0%,100%{opacity:1}50%{opacity:0.6}}
+
 /* SOURCE BANNER */
-.src-ban{position:relative;z-index:5;padding:8px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.2)}
-.src-badge{padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;animation:badgePulse 2s infinite}
+.src-ban{position:relative;z-index:5;padding:8px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.15)}
+.src-badge{padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;animation:bp 2s infinite}
 .b-solar{background:rgba(0,230,118,0.15);color:var(--green);border:1px solid var(--green)}
 .b-grid{background:rgba(64,196,255,0.15);color:var(--blue);border:1px solid var(--blue)}
 .b-mixed{background:rgba(255,171,0,0.15);color:var(--amber);border:1px solid var(--amber)}
-.b-batt{background:rgba(255,82,82,0.15);color:var(--red);border:1px solid var(--red);animation:badgePulse 0.7s infinite}
-@keyframes badgePulse{0%,100%{opacity:1}50%{opacity:0.6}}
+.b-batt{background:rgba(255,82,82,0.15);color:var(--red);border:1px solid var(--red);animation:bp 0.7s infinite}
+@keyframes bp{0%,100%{opacity:1}50%{opacity:0.6}}
+.conn-s{font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:10px}
+.c-fresh{color:var(--green);background:rgba(0,230,118,0.1)}.c-stale{color:var(--amber);background:rgba(255,171,0,0.1)}
+
 /* ALERTS */
 .alerts{position:relative;z-index:15}
-.alert{display:none;padding:10px 14px;border-bottom:2px solid;animation:alertFlash 1s infinite}
-.al-batt{background:linear-gradient(135deg,#3d0000,#250000);border-color:var(--red)}
+.alert{display:none;padding:10px 14px;border-bottom:2px solid;animation:af 1s infinite}
+.al-batt{background:linear-gradient(135deg,#2d0000,#1a0000);border-color:var(--red)}
 .al-high{background:linear-gradient(135deg,#2d0505,#1a0303);border-color:var(--red)}
 .al-med{background:linear-gradient(135deg,#2d1a00,#1a1000);border-color:var(--amber)}
-@keyframes alertFlash{0%,100%{opacity:1}50%{opacity:0.65}}
-.al-inner{display:flex;align-items:center;gap:10px}
-.al-icon{font-size:22px;display:inline-block}
-.al-shake{animation:shake 0.4s infinite}
-@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
-.al-urdu{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:14px;font-weight:700;direction:rtl}
-.al-batt .al-urdu,.al-high .al-urdu{color:var(--red)}
-.al-med .al-urdu{color:var(--amber)}
-.al-sub{font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:1px}
-/* BATTERY HOURS CARD */
-.bh-card{position:relative;z-index:5;margin:10px 10px 0;border-radius:16px;padding:14px;border:2px solid;transition:all 0.5s}
-.bh-safe{background:linear-gradient(135deg,#003322,#001a11);border-color:var(--green)}
-.bh-caution{background:linear-gradient(135deg,#332200,#1a1000);border-color:var(--amber)}
-.bh-danger{background:linear-gradient(135deg,#330a00,#1a0500);border-color:#ff6600;animation:alertFlash 2s infinite}
-.bh-critical{background:linear-gradient(135deg,#3d0000,#220000);border-color:var(--red);animation:alertFlash 0.8s infinite}
+.al-temp{background:linear-gradient(135deg,#2d1500,#1a0a00);border-color:#ff6600;animation:af 0.6s infinite}
+.al-in{display:flex;align-items:center;gap:10px}
+.al-ic{font-size:20px;display:inline-block}
+.al-sk{animation:sk 0.4s infinite}
+@keyframes sk{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
+.al-ur{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:13px;font-weight:700;direction:rtl}
+.al-batt .al-ur,.al-high .al-ur{color:var(--red)}.al-med .al-ur{color:var(--amber)}.al-temp .al-ur{color:#ff6600}
+.al-sub{font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:1px}
+
+/* MAIN */
+.main{position:relative;z-index:5;padding:10px}
+
+/* POWER FLOW CARD */
+.pf-card{background:linear-gradient(135deg,rgba(0,230,118,0.04),rgba(64,196,255,0.04));border:1px solid var(--border);border-radius:20px;padding:14px;margin-bottom:10px;backdrop-filter:blur(10px)}
+.pf-title{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px}
+.pf-line{stroke-width:2.5;fill:none;stroke-dasharray:8,4;animation:flowAnim 1s linear infinite}
+.pf-line-off{opacity:0.1;animation:none}
+@keyframes flowAnim{0%{stroke-dashoffset:24}100%{stroke-dashoffset:0}}
+
+/* BATTERY HOURS */
+.bh-card{border-radius:20px;padding:14px;border:2px solid;transition:all 0.5s;margin-bottom:10px;backdrop-filter:blur(10px)}
+.bh-safe{background:linear-gradient(135deg,rgba(0,51,34,0.8),rgba(0,26,17,0.8));border-color:var(--green)}
+.bh-caution{background:linear-gradient(135deg,rgba(51,34,0,0.8),rgba(26,16,0,0.8));border-color:var(--amber)}
+.bh-danger{background:linear-gradient(135deg,rgba(51,10,0,0.8),rgba(26,5,0,0.8));border-color:#ff6600;animation:af 2s infinite}
+.bh-critical{background:linear-gradient(135deg,rgba(61,0,0,0.8),rgba(34,0,0,0.8));border-color:var(--red);animation:af 0.8s infinite}
 .bh-top{display:flex;justify-content:space-between;align-items:flex-start}
 .bh-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
-.bh-lbl-ur{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:11px;color:var(--muted);margin-bottom:4px;direction:rtl;display:none}
-.bh-val{font-family:"Orbitron",monospace;font-size:34px;font-weight:900;line-height:1}
-.bh-unit{font-size:11px;color:var(--muted);margin-top:2px}
-.bh-icon{font-size:38px;animation:bhAnim 2s ease-in-out infinite}
-@keyframes bhAnim{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
-.bh-bar-bg{margin-top:10px;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}
-.bh-bar-fill{height:100%;border-radius:4px;transition:width 1.5s cubic-bezier(0.4,0,0.2,1)}
+.bh-val{font-family:"Orbitron",monospace;font-size:36px;font-weight:900;line-height:1}
+.bh-unit{font-size:10px;color:var(--muted);margin-top:3px}
+.bh-ic{font-size:40px;animation:bhA 2s ease-in-out infinite}
+@keyframes bhA{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.bh-bar-bg{margin-top:10px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.bh-bar-fill{height:100%;border-radius:3px;transition:width 1.5s cubic-bezier(0.4,0,0.2,1)}
 .bh-safe .bh-bar-fill{background:linear-gradient(90deg,var(--green2),var(--green));box-shadow:0 0 8px var(--green)}
 .bh-caution .bh-bar-fill{background:linear-gradient(90deg,#ff8f00,var(--amber));box-shadow:0 0 8px var(--amber)}
-.bh-danger .bh-bar-fill{background:linear-gradient(90deg,#cc4400,#ff6600);box-shadow:0 0 8px #ff6600}
-.bh-critical .bh-bar-fill{background:linear-gradient(90deg,#cc0000,var(--red));box-shadow:0 0 8px var(--red)}
-.bh-sug{margin-top:10px;padding:8px 12px;border-radius:10px;background:rgba(0,0,0,0.3)}
-.bh-sug-ur{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:13px;direction:rtl;font-weight:600;line-height:1.6}
-.bh-safe .bh-sug-ur{color:var(--green)}
-.bh-caution .bh-sug-ur{color:var(--amber)}
-.bh-danger .bh-sug-ur{color:#ff6600}
-.bh-critical .bh-sug-ur{color:var(--red)}
-.bh-sug-en{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:1px}
+.bh-danger .bh-bar-fill{background:linear-gradient(90deg,#cc4400,#ff6600)}
+.bh-critical .bh-bar-fill{background:linear-gradient(90deg,#cc0000,var(--red))}
+.bh-sug{margin-top:10px;padding:8px 12px;border-radius:10px;background:rgba(0,0,0,0.25)}
+.bh-ur{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:13px;direction:rtl;font-weight:600;line-height:1.6}
+.bh-safe .bh-ur{color:var(--green)}.bh-caution .bh-ur{color:var(--amber)}.bh-danger .bh-ur{color:#ff6600}.bh-critical .bh-ur{color:var(--red)}
+.bh-en{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:1px}
 .bh-note{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:9px;color:var(--muted)}
-/* POPUP */
-.popup-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
-.popup-ov.show{display:flex}
-.popup-box{background:linear-gradient(135deg,#1f0808,#2d0a0a);border:2px solid var(--red);border-radius:20px;padding:24px;max-width:300px;width:90%;text-align:center;animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)}
-@keyframes popIn{0%{transform:scale(0.4) rotate(-10deg);opacity:0}100%{transform:scale(1) rotate(0deg);opacity:1}}
-.popup-icon{font-size:52px;animation:shake 0.5s infinite;display:inline-block;margin-bottom:12px}
-.popup-title{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:20px;color:var(--red);direction:rtl;font-weight:700;margin-bottom:6px;line-height:1.5}
-.popup-hrs{font-family:"Orbitron",monospace;font-size:28px;color:var(--amber);font-weight:900;margin:8px 0}
-.popup-msg{font-size:11px;color:var(--muted);margin-bottom:16px;direction:rtl;font-family:"Noto Nastaliq Urdu","Inter",sans-serif;line-height:1.6}
-.popup-btn{background:linear-gradient(135deg,var(--red),#cc0000);border:none;color:#fff;padding:12px 28px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:"Noto Nastaliq Urdu","Inter",sans-serif}
+
+/* PKR METER */
+.pkr-meter{background:linear-gradient(135deg,rgba(0,26,10,0.9),rgba(0,34,17,0.9));border:2px solid var(--green);border-radius:20px;padding:14px;text-align:center;margin-bottom:10px}
+.pkr-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
+.pkr-val{font-family:"Orbitron",monospace;font-size:34px;font-weight:900;color:var(--green);animation:pkrGlow 1s ease-in-out infinite}
+@keyframes pkrGlow{0%,100%{text-shadow:0 0 10px rgba(0,230,118,0.5)}50%{text-shadow:0 0 25px rgba(0,230,118,1),0 0 50px rgba(0,230,118,0.3)}}
+.pkr-sub{font-size:10px;color:var(--muted);margin-top:4px}
+.pkr-rate{font-size:11px;color:var(--amber);margin-top:6px;font-weight:600}
+.pkr-off{color:var(--muted);animation:none;font-size:20px}
+
 /* MAIN CARDS */
-.main{position:relative;z-index:5;padding:10px}
 .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
-.card{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;padding:12px;position:relative;overflow:hidden;transition:all 0.3s}
+.card{background:var(--card);border:1px solid var(--border);border-top:2px solid transparent;border-radius:18px;padding:12px;position:relative;overflow:hidden;transition:all 0.3s;backdrop-filter:blur(10px)}
 .card:active{transform:scale(0.97)}
-.card-glow{position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:0.12;filter:blur(20px)}
-.card.green .card-glow{background:var(--green)}
-.card.amber .card-glow{background:var(--amber)}
-.card.blue .card-glow{background:var(--blue)}
-.card-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:4px;text-transform:uppercase}
-.card-val{font-family:"Orbitron",monospace;font-size:22px;font-weight:700;line-height:1}
-.card.green .card-val{color:var(--green);text-shadow:0 0 12px rgba(0,230,118,0.4)}
-.card.amber .card-val{color:var(--amber);text-shadow:0 0 12px rgba(255,171,0,0.4)}
-.card.blue .card-val{color:var(--blue);text-shadow:0 0 12px rgba(64,196,255,0.4)}
-body.bmode .card.green .card-val{color:var(--red)}
-.card-unit{font-size:9px;color:var(--muted);margin-top:3px}
-.prog-bg{margin-top:8px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
-.prog-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
-.green .prog-fill{background:linear-gradient(90deg,var(--green2),var(--green));box-shadow:0 0 6px var(--green)}
-.amber .prog-fill{background:linear-gradient(90deg,#ff8f00,var(--amber));box-shadow:0 0 6px var(--amber)}
+.card.green{border-top-color:var(--green)}.card.amber{border-top-color:var(--amber)}.card.blue{border-top-color:var(--blue)}
+.cg{position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:0.1;filter:blur(20px)}
+.card.green .cg{background:var(--green)}.card.amber .cg{background:var(--amber)}.card.blue .cg{background:var(--blue)}
+.cl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:4px;text-transform:uppercase}
+.cv{font-family:"Orbitron",monospace;font-size:22px;font-weight:700;line-height:1}
+.card.green .cv{color:var(--green);text-shadow:0 0 12px rgba(0,230,118,0.3)}
+.card.amber .cv{color:var(--amber);text-shadow:0 0 12px rgba(255,171,0,0.3)}
+.card.blue .cv{color:var(--blue);text-shadow:0 0 12px rgba(64,196,255,0.3)}
+body.bmode .card.green .cv{color:var(--red)}
+.cu{font-size:9px;color:var(--muted);margin-top:3px}
+.pb2{margin-top:8px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
+.pf2{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
+.green .pf2{background:linear-gradient(90deg,var(--green2),var(--green));box-shadow:0 0 6px var(--green)}
+.amber .pf2{background:linear-gradient(90deg,#ff8f00,var(--amber));box-shadow:0 0 6px var(--amber)}
+.chg-ind{font-size:11px;margin-top:4px;font-weight:600}
+.chg-up{color:var(--green)}.chg-dn{color:var(--red)}.chg-fl{color:var(--muted)}
+
 /* ICON ANIMATIONS */
-.i-solar{font-size:26px;margin-bottom:6px;display:inline-block;animation:solarSpin 8s linear infinite;filter:drop-shadow(0 0 6px #ffab00)}
+.is{font-size:26px;margin-bottom:6px;display:inline-block;animation:solarSpin 8s linear infinite;filter:drop-shadow(0 0 6px rgba(255,171,0,0.6))}
 @keyframes solarSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.i-batt{font-size:26px;margin-bottom:6px;display:inline-block;animation:battCharge 1.5s ease-in-out infinite}
-@keyframes battCharge{0%,100%{transform:scale(1);filter:drop-shadow(0 0 3px #ffab00)}50%{transform:scale(1.2);filter:drop-shadow(0 0 14px #ffab00)}}
-.i-volt{font-size:26px;margin-bottom:6px;display:inline-block;animation:voltZap 2s ease-in-out infinite}
-@keyframes voltZap{0%,85%,100%{transform:scale(1);filter:drop-shadow(0 0 3px #40c4ff)}92%{transform:scale(1.4) rotate(-15deg);filter:drop-shadow(0 0 18px #40c4ff) brightness(2.5)}}
-.i-home{font-size:26px;margin-bottom:6px;display:inline-block;animation:homebeat 2s ease-in-out infinite}
-@keyframes homebeat{0%,100%{transform:scale(1)}14%{transform:scale(1.2)}28%{transform:scale(1)}42%{transform:scale(1.12)}70%{transform:scale(1)}}
-.i-grid{font-size:26px;margin-bottom:6px;display:inline-block;animation:gridPlug 3s ease-in-out infinite}
-@keyframes gridPlug{0%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}60%{transform:translateY(-2px)}}
-.i-energy{font-size:26px;margin-bottom:6px;display:inline-block;animation:energyWave 2s ease-in-out infinite}
-@keyframes energyWave{0%,100%{filter:drop-shadow(0 0 2px #ffab00);transform:scale(1)}50%{filter:drop-shadow(0 0 14px #ffab00);transform:scale(1.15)}}
+.ib{font-size:26px;margin-bottom:6px;display:inline-block;animation:bc 1.5s ease-in-out infinite}
+@keyframes bc{0%,100%{transform:scale(1);filter:drop-shadow(0 0 3px #ffab00)}50%{transform:scale(1.2);filter:drop-shadow(0 0 14px #ffab00)}}
+.iv{font-size:26px;margin-bottom:6px;display:inline-block;animation:vz 2s ease-in-out infinite}
+@keyframes vz{0%,85%,100%{transform:scale(1)}92%{transform:scale(1.4) rotate(-15deg);filter:drop-shadow(0 0 18px #40c4ff) brightness(2.5)}}
+.ih{font-size:26px;margin-bottom:6px;display:inline-block;animation:hb 2s ease-in-out infinite}
+@keyframes hb{0%,100%{transform:scale(1)}14%{transform:scale(1.2)}28%{transform:scale(1)}42%{transform:scale(1.12)}70%{transform:scale(1)}}
+.ig{font-size:26px;margin-bottom:6px;display:inline-block;animation:gp 3s ease-in-out infinite}
+@keyframes gp{0%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}60%{transform:translateY(-2px)}}
+.ie{font-size:26px;margin-bottom:6px;display:inline-block;animation:ew 2s ease-in-out infinite}
+@keyframes ew{0%,100%{filter:drop-shadow(0 0 2px #ffab00);transform:scale(1)}50%{filter:drop-shadow(0 0 14px #ffab00);transform:scale(1.15)}}
+
 /* TEMP ROW */
-.temp-row{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-.temp-item{text-align:center}
-.temp-icon{font-size:18px;display:inline-block;animation:tempFloat 3s ease-in-out infinite}
-@keyframes tempFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.temp-val{font-family:"Orbitron",monospace;font-size:14px;color:var(--amber)}
-.temp-lbl{font-size:8px;color:var(--muted);letter-spacing:1px}
-.mode-badge{padding:5px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;background:rgba(0,230,118,0.15);color:var(--green);border:1px solid var(--green);animation:badgePulse 2s infinite}
+.tc{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(10px)}
+.ti{text-align:center}
+.tic{font-size:18px;display:inline-block;animation:tf 3s ease-in-out infinite}
+@keyframes tf{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.tv2{font-family:"Orbitron",monospace;font-size:14px;color:var(--amber)}
+.tl2{font-size:8px;color:var(--muted);letter-spacing:1px}
+.mb2{padding:5px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;background:rgba(0,230,118,0.12);color:var(--green);border:1px solid rgba(0,230,118,0.3);animation:bp 2s infinite}
+
 /* STATS */
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
-.stat{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:12px;padding:10px}
-.stat-icon{font-size:18px;margin-bottom:3px;display:inline-block}
-.i-tspin{animation:solarSpin 10s linear infinite}
-.i-peak{animation:peakShake 2.5s ease-in-out infinite}
-@keyframes peakShake{0%,100%{transform:rotate(0)}8%{transform:rotate(-12deg)}16%{transform:rotate(12deg)}24%{transform:rotate(-6deg)}32%{transform:rotate(6deg)}40%{transform:rotate(0)}}
-.i-wspin{animation:wspin 5s linear infinite}
-@keyframes wspin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.i-money{animation:moneyBounce 1.2s ease-in-out infinite}
-@keyframes moneyBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.i-ratio{animation:ratioGrow 2s ease-in-out infinite}
-@keyframes ratioGrow{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
-.i-recs{animation:recsFlip 4s ease-in-out infinite}
-@keyframes recsFlip{0%,40%,100%{transform:rotateY(0deg)}50%,90%{transform:rotateY(180deg)}}
-.stat-lbl{font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:2px}
-.stat-val{font-family:"Orbitron",monospace;font-size:14px;font-weight:700;color:var(--green)}
-.stat-val.am{color:var(--amber)}.stat-val.bl{color:var(--blue)}.stat-val.pu{color:var(--purple)}
-.stat-unit{font-size:9px;color:var(--muted)}
-.ratio-bg{margin-top:5px;height:3px;background:rgba(255,255,255,0.06);border-radius:2px}
-.ratio-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--green));transition:width 1s}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px;backdrop-filter:blur(10px)}
+.si{font-size:18px;margin-bottom:3px;display:inline-block}
+.its{animation:solarSpin 10s linear infinite}
+.ipk{animation:ps 2.5s ease-in-out infinite}
+@keyframes ps{0%,100%{transform:rotate(0)}8%{transform:rotate(-12deg)}16%{transform:rotate(12deg)}24%{transform:rotate(-6deg)}32%{transform:rotate(6deg)}40%{transform:rotate(0)}}
+.iw{animation:ws 5s linear infinite}
+@keyframes ws{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.im{animation:mb3 1.2s ease-in-out infinite}
+@keyframes mb3{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.ir{animation:rg 2s ease-in-out infinite}
+@keyframes rg{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+.irec{animation:rf 4s ease-in-out infinite}
+@keyframes rf{0%,40%,100%{transform:rotateY(0deg)}50%,90%{transform:rotateY(180deg)}}
+.sl{font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:2px}
+.sv{font-family:"Orbitron",monospace;font-size:14px;font-weight:700;color:var(--green)}
+.sv.am{color:var(--amber)}.sv.bl{color:var(--blue)}.sv.pu{color:var(--purple)}
+.su{font-size:9px;color:var(--muted)}
+.rb2{margin-top:5px;height:3px;background:rgba(255,255,255,0.06);border-radius:2px}
+.rf2{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--green))}
+
+/* DAILY BAR */
+.daily-bar{display:flex;gap:8px;padding:10px;overflow-x:auto;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.1)}
+.daily-item{flex:1;min-width:72px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:6px 8px;text-align:center}
+.daily-lbl{font-size:7px;letter-spacing:1px;color:var(--muted);margin-bottom:2px}
+.daily-val{font-family:"Orbitron",monospace;font-size:12px;font-weight:700}
+.daily-val.g{color:var(--green)}.daily-val.b{color:var(--blue)}.daily-val.p{color:var(--purple)}.daily-val.a{color:var(--amber)}
+
+/* EFFICIENCY BAR */
+.eff-card{background:var(--card);border:1px solid var(--border);border-top:2px solid var(--green);border-radius:14px;padding:12px;margin-bottom:8px}
+.eff-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.eff-lbl{font-size:9px;letter-spacing:2px;color:var(--muted)}
+.eff-pct{font-family:"Orbitron",monospace;font-size:18px;font-weight:700;color:var(--green)}
+.eff-bg{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.eff-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--green));transition:width 1s;box-shadow:0 0 6px var(--green)}
+
+/* FORECAST */
+.fc-card{background:linear-gradient(135deg,rgba(10,22,40,0.9),rgba(13,31,53,0.9));border:1px solid rgba(64,196,255,0.2);border-radius:18px;padding:14px;margin-bottom:10px}
+.fc-title{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px}
+.fc-grid{display:flex;justify-content:space-between;align-items:center}
+.fc-item{text-align:center}
+.fc-lbl{font-size:8px;color:var(--muted)}
+.fc-val{font-family:"Orbitron",monospace;font-size:18px;font-weight:700}
+.fc-msg{margin-top:10px;padding:6px 10px;border-radius:10px;font-size:11px;font-weight:600;text-align:center}
+
+/* APPLIANCE */
+.app-card{background:linear-gradient(135deg,rgba(13,27,10,0.9),rgba(10,31,6,0.9));border:1px solid rgba(0,230,118,0.2);border-radius:18px;padding:14px;margin-bottom:10px}
+.app-title{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px}
+
+/* OUTAGE */
+.outage-card{background:var(--card);border:1px solid var(--border);border-top:2px solid var(--blue);border-radius:14px;padding:12px;margin-bottom:8px}
+.outage-lbl{font-size:9px;letter-spacing:2px;color:var(--muted)}
+.outage-count{font-family:"Orbitron",monospace;font-size:24px;font-weight:700;color:var(--blue)}
+.outage-btn{background:rgba(255,82,82,0.15);border:1px solid var(--red);color:var(--red);padding:6px 14px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer}
+.outage-ur{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:11px;color:var(--muted);direction:rtl;margin-top:4px}
+
+/* BOTTOM NAV */
+.bot-nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(10,22,40,0.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 12px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 12px;border-radius:12px;transition:all 0.2s;text-decoration:none;color:var(--muted)}
+.nav-item.active{color:var(--green)}
+.nav-item.active .nav-icon{filter:drop-shadow(0 0 6px var(--green))}
+.nav-icon{font-size:20px}
+.nav-lbl{font-size:8px;letter-spacing:1px}
+
+/* POPUP */
+.pop-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.pop-ov.show{display:flex}
+.pop-box{background:linear-gradient(135deg,#1a0808,#2a0a0a);border:2px solid var(--red);border-radius:20px;padding:24px;max-width:300px;width:90%;text-align:center;animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes popIn{0%{transform:scale(0.4);opacity:0}100%{transform:scale(1);opacity:1}}
+.pop-ic{font-size:48px;animation:sk 0.5s infinite;display:inline-block;margin-bottom:12px}
+.pop-title{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:20px;color:var(--red);direction:rtl;font-weight:700;margin-bottom:6px;line-height:1.5}
+.pop-sub{font-size:11px;color:var(--muted);margin-bottom:16px;direction:rtl;font-family:"Noto Nastaliq Urdu","Inter",sans-serif;line-height:1.6}
+.pop-btn{background:linear-gradient(135deg,var(--red),#cc0000);border:none;color:#fff;padding:12px 28px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer}
+
+/* SETTINGS */
+#settingsPanel{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+#settingsPanel.show{display:flex}
+.set-box{background:linear-gradient(135deg,#0d1627,#111f35);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:20px;width:90%;max-width:340px}
+.set-title{font-family:"Orbitron",monospace;font-size:13px;color:var(--green);letter-spacing:2px;margin-bottom:16px}
+.set-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:8px 12px;border-radius:10px;font-size:13px;margin-top:4px;font-family:"Orbitron",monospace}
+.set-lbl{font-size:9px;letter-spacing:1px;color:var(--muted);margin-top:10px;display:block}
+.set-save{background:linear-gradient(135deg,var(--green2),var(--green));border:none;color:#000;padding:12px;border-radius:12px;font-weight:700;font-size:12px;cursor:pointer;width:100%;margin-top:14px;letter-spacing:1px}
+
 /* FOOTER */
-footer{position:relative;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-top:1px solid var(--border);background:rgba(0,0,0,0.3)}
-.refresh-btn{background:linear-gradient(135deg,var(--green2),var(--green));border:none;color:#000;padding:10px 18px;border-radius:25px;font-weight:700;font-size:11px;letter-spacing:2px;cursor:pointer;animation:btnPulse 3s ease-in-out infinite}
-@keyframes btnPulse{0%,100%{box-shadow:0 4px 15px rgba(0,230,118,0.3)}50%{box-shadow:0 4px 30px rgba(0,230,118,0.7)}}
-.upd-time{font-size:9px;color:var(--muted)}
-/* URDU MODE */
-.ur{display:none}
-body.urdu-mode .en{display:none!important}
-body.urdu-mode .ur{display:block!important}
-body.urdu-mode{direction:rtl}
-
-.pkr-meter{position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,#001a0a,#002211);border:2px solid var(--green);border-radius:16px;padding:14px;text-align:center}
-.pkr-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
-.pkr-val{font-family:"Orbitron",monospace;font-size:36px;font-weight:900;color:var(--green);animation:pkrGlow 1s ease-in-out infinite}
-@keyframes pkrGlow{0%,100%{text-shadow:0 0 10px rgba(0,230,118,0.5)}50%{text-shadow:0 0 25px rgba(0,230,118,1),0 0 50px rgba(0,230,118,0.3)}}
-.pkr-sub{font-size:10px;color:var(--muted);margin-top:4px}
-.pkr-rate{font-size:11px;color:var(--amber);margin-top:6px;font-weight:600}
-.pkr-off{color:var(--muted);animation:none;font-size:20px}
-
-.pf-card{position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;padding:14px}
-.pf-title{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:14px}
-.pf-grid{display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:1fr auto 1fr;gap:0;align-items:center;justify-items:center;min-height:180px}
-.pf-node{display:flex;flex-direction:column;align-items:center;gap:4px;z-index:2}
-.pf-icon{font-size:32px;filter:drop-shadow(0 0 6px rgba(0,230,118,0.3))}
-.pf-node-lbl{font-size:8px;letter-spacing:1px;color:var(--muted);text-align:center}
-.pf-node-val{font-family:"Orbitron",monospace;font-size:11px;font-weight:700;text-align:center}
-.pf-home{font-size:40px;filter:drop-shadow(0 0 10px rgba(0,230,118,0.5));animation:homeGlow 2s ease-in-out infinite}
-@keyframes homeGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(0,230,118,0.4))}50%{filter:drop-shadow(0 0 20px rgba(0,230,118,0.8))}}
-.pf-line-wrap{position:relative;display:flex;align-items:center;justify-content:center}
-.pf-line{stroke-width:3;fill:none;stroke-dasharray:8,4;animation:flowAnim 1s linear infinite}
-.pf-line-off{stroke-dasharray:none;opacity:0.15}
-@keyframes flowAnim{0%{stroke-dashoffset:24}100%{stroke-dashoffset:0}}
-@keyframes flowAnimRev{0%{stroke-dashoffset:0}100%{stroke-dashoffset:24}}
-</style>
-
-<style>
-.wt-bar{position:relative;z-index:5;padding:10px 14px;background:linear-gradient(135deg,#0a1628,#0d1f35);border-bottom:1px solid rgba(255,255,255,0.08);display:none}
-.wt-top{display:flex;align-items:center;gap:10px}
-.wt-icon{font-size:32px;animation:wtFloat 3s ease-in-out infinite;filter:drop-shadow(0 0 8px rgba(255,200,0,0.5))}
-@keyframes wtFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-4px) rotate(5deg)}}
-.wt-city{font-size:8px;letter-spacing:2px;color:#8892a4}
-.wt-desc{font-size:13px;font-weight:700;color:#f0f4ff}
-.wt-stats{display:flex;gap:10px;margin-left:auto}
-.wt-stat{text-align:center}
-.wt-lbl{font-size:7px;letter-spacing:1px;color:#8892a4}
-.wt-val{font-family:"Orbitron",monospace;font-size:13px;font-weight:700}
-.wt-temp{color:#ff5252;animation:tempPulse 2s ease-in-out infinite}
-@keyframes tempPulse{0%,100%{text-shadow:0 0 4px rgba(255,82,82,0.3)}50%{text-shadow:0 0 12px rgba(255,82,82,0.8)}}
-.wt-hum{color:#40c4ff;animation:humPulse 2.5s ease-in-out infinite}
-@keyframes humPulse{0%,100%{text-shadow:0 0 4px rgba(64,196,255,0.3)}50%{text-shadow:0 0 12px rgba(64,196,255,0.8)}}
-.wt-cld{color:#ffab00;animation:cldSpin 0s}
-.wt-wind{color:#00e676;animation:windMove 1.5s ease-in-out infinite}
-@keyframes windMove{0%,100%{letter-spacing:1px}50%{letter-spacing:3px}}
-.wt-warn{margin-top:6px;padding:4px 10px;border-radius:10px;background:rgba(255,171,0,0.1);border:1px solid rgba(255,171,0,0.3);font-size:10px;color:#ffab00;font-weight:600;animation:warnFlash 1.5s infinite;display:none}
-@keyframes warnFlash{0%,100%{opacity:1}50%{opacity:0.6}}
-.wt-good{margin-top:6px;padding:4px 10px;border-radius:10px;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);font-size:10px;color:#00e676;font-weight:600;display:none}
-
-.pkr-meter{position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,#001a0a,#002211);border:2px solid var(--green);border-radius:16px;padding:14px;text-align:center}
-.pkr-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
-.pkr-val{font-family:"Orbitron",monospace;font-size:36px;font-weight:900;color:var(--green);animation:pkrGlow 1s ease-in-out infinite}
-@keyframes pkrGlow{0%,100%{text-shadow:0 0 10px rgba(0,230,118,0.5)}50%{text-shadow:0 0 25px rgba(0,230,118,1),0 0 50px rgba(0,230,118,0.3)}}
-.pkr-sub{font-size:10px;color:var(--muted);margin-top:4px}
-.pkr-rate{font-size:11px;color:var(--amber);margin-top:6px;font-weight:600}
-.pkr-off{color:var(--muted);animation:none;font-size:20px}
-
-.pf-card{position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;padding:14px}
-.pf-title{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:14px}
-.pf-grid{display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:1fr auto 1fr;gap:0;align-items:center;justify-items:center;min-height:180px}
-.pf-node{display:flex;flex-direction:column;align-items:center;gap:4px;z-index:2}
-.pf-icon{font-size:32px;filter:drop-shadow(0 0 6px rgba(0,230,118,0.3))}
-.pf-node-lbl{font-size:8px;letter-spacing:1px;color:var(--muted);text-align:center}
-.pf-node-val{font-family:"Orbitron",monospace;font-size:11px;font-weight:700;text-align:center}
-.pf-home{font-size:40px;filter:drop-shadow(0 0 10px rgba(0,230,118,0.5));animation:homeGlow 2s ease-in-out infinite}
-@keyframes homeGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(0,230,118,0.4))}50%{filter:drop-shadow(0 0 20px rgba(0,230,118,0.8))}}
-.pf-line-wrap{position:relative;display:flex;align-items:center;justify-content:center}
-.pf-line{stroke-width:3;fill:none;stroke-dasharray:8,4;animation:flowAnim 1s linear infinite}
-.pf-line-off{stroke-dasharray:none;opacity:0.15}
-@keyframes flowAnim{0%{stroke-dashoffset:24}100%{stroke-dashoffset:0}}
-@keyframes flowAnimRev{0%{stroke-dashoffset:0}100%{stroke-dashoffset:24}}
+footer{position:relative;z-index:5;padding:10px 14px;border-top:1px solid var(--border);background:rgba(0,0,0,0.2)}
+.foot-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.foot-bot{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.refresh-btn{background:linear-gradient(135deg,var(--green2),var(--green));border:none;color:#000;padding:10px 18px;border-radius:25px;font-weight:700;font-size:11px;letter-spacing:2px;cursor:pointer;animation:rba 3s ease-in-out infinite}
+@keyframes rba{0%,100%{box-shadow:0 4px 15px rgba(0,230,118,0.3)}50%{box-shadow:0 4px 30px rgba(0,230,118,0.7)}}
+.share-btn{background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:#fff;padding:10px 14px;border-radius:25px;font-size:11px;font-weight:700;cursor:pointer}
+.ts2{font-size:9px;color:var(--muted)}
 </style>
 </head>
 <body id="mainBody">
-
-<div class="particles" id="particles"></div>
+<div class="particles" id="pt"></div>
 
 <!-- POPUP -->
-<div class="popup-ov" id="popup">
-  <div class="popup-box">
-    <div class="popup-icon">🔋</div>
-    <div class="popup-title" id="popTitle">بیٹری ختم ہونے والی ہے!</div>
-    <div class="popup-hrs" id="popHrs">--</div>
-    <div class="popup-msg" id="popMsg">فوری واپڈا لگائیں یا بوجھ کم کریں</div>
-    <button class="popup-btn" onclick="document.getElementById('popup').classList.remove('show')">سمجھ گیا — ٹھیک ہے</button>
+<div class="pop-ov" id="popup">
+  <div class="pop-box">
+    <div class="pop-ic">&#128267;</div>
+    <div class="pop-title" id="popTitle">&#1589;&#1585;&#1601; &#1576;&#1740;&#1657;&#1585;&#1740; &#1670;&#1604; &#1585;&#1729;&#1740; &#1729;&#1746;!</div>
+    <div class="pop-sub" id="popSub">&#1601;&#1608;&#1585;&#1740; &#1608;&#1575;&#1662;&#1688;&#1575; &#1604;&#1711;&#1575;&#1574;&#1740;&#1722;</div>
+    <button class="pop-btn" onclick="document.getElementById('popup').classList.remove('show')">&#1587;&#1605;&#1580;&#1726; &#1711;&#1740;&#1575;</button>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div id="settingsPanel">
+  <div class="set-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div class="set-title">&#9881; SETTINGS</div>
+      <button onclick="toggleSettings()" style="background:rgba(255,82,82,0.15);border:1px solid var(--red);color:var(--red);padding:4px 10px;border-radius:10px;font-size:11px;cursor:pointer">&#10005;</button>
+    </div>
+    <label class="set-lbl">&#128176; PKR PER UNIT</label>
+    <input id="setPKR" class="set-input" type="number" value="22">
+    <label class="set-lbl">&#128267; BATTERY CAPACITY (kWh)</label>
+    <input id="setBattCap" class="set-input" type="number" value="4.8" step="0.1">
+    <label class="set-lbl">&#9888;&#65039; SAFE MINIMUM %</label>
+    <input id="setSafeMin" class="set-input" type="number" value="20">
+    <label class="set-lbl">&#9201; REFRESH INTERVAL (seconds)</label>
+    <input id="setRefresh" class="set-input" type="number" value="30">
+    <label class="set-lbl">&#128300; INVERTER MODEL</label>
+    <input id="setInverter" class="set-input" type="text" value="Aliyar 48V 6200W" style="font-family:Inter,sans-serif;font-size:12px">
+    <button class="set-save" onclick="saveSettings()">&#10003; SAVE SETTINGS</button>
   </div>
 </div>
 
@@ -260,317 +303,222 @@ body.urdu-mode{direction:rtl}
 <header>
   <div class="logo-sec">
     <div class="av-wrap">
-      <img class="av-img" src="https://i.ibb.co/LdW5QKsx/1000544568.jpg" alt="Shahadat" onerror="this.style.display='none'">
+      <img class="av-img" src="https://i.ibb.co/LdW5QKsx/1000544568.jpg" alt="S" onerror="this.style.display='none'">
       <div class="av-ring"></div>
       <div class="av-dot"></div>
     </div>
     <div>
       <div class="logo-main">SUFLY SOLAR</div>
-      <div class="logo-name">Shahadat Sufly ⚡</div>
-      <div class="logo-sub en">ABBOTTABAD PRIME MONITOR</div>
-      <div class="logo-sub ur">ایبٹ آباد پرائم مانیٹر</div>
+      <div class="logo-name">Shahadat Sufly &#9889;</div>
+      <div class="logo-sub">ABBOTTABAD PRIME MONITOR</div>
     </div>
   </div>
   <div class="hdr-right">
-    <button onclick="toggleVoice()" id="voiceBtn" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:20px;font-size:11px;cursor:pointer">&#128263; Voice</button><button onclick="toggleSettings()" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:20px;font-size:11px;cursor:pointer">&#9881;&#65039;</button><button class="lang-btn" onclick="toggleLang()" id="langBtn">اردو</button>
-    <div style="display:flex;align-items:center;gap:5px">
+    <button class="hdr-btn" onclick="toggleVoice()" id="voiceBtn">&#128263;</button>
+    <button class="hdr-btn" onclick="toggleSettings()">&#9881;&#65039;</button>
+    <button class="hdr-btn" onclick="toggleLang()" id="langBtn">&#1575;&#1585;&#1583;&#1608;</button>
+    <div class="live-wrap">
       <div class="live-dot"></div>
-      <div class="live-txt en">LIVE</div>
-      <div class="live-txt ur">لائیو</div>
+      <div class="live-txt">LIVE</div>
     </div>
   </div>
-</header><div class="wt-bar" id="wtBar">
+</header>
+
+<!-- WEATHER -->
+<div class="wt-bar" id="wtBar">
   <div class="wt-top">
-    <div class="wt-icon" id="wtIcon">🌤️</div>
+    <div class="wt-icon" id="wtIcon">&#127780;&#65039;</div>
     <div>
-      <div class="wt-city">📍 ABBOTTABAD, PAKISTAN</div>
-      <div class="wt-desc" id="wtDesc">Loading weather...</div>
+      <div class="wt-city">&#128205; ABBOTTABAD, PAKISTAN</div>
+      <div class="wt-desc" id="wtDesc">Loading...</div>
     </div>
     <div class="wt-stats">
-      <div class="wt-stat"><div class="wt-lbl">🌡️ TEMP</div><div class="wt-val wt-temp" id="wtTemp">--</div></div>
-      <div class="wt-stat"><div class="wt-lbl">💧 HUMID</div><div class="wt-val wt-hum" id="wtHum">--</div></div>
-      <div class="wt-stat"><div class="wt-lbl">☁️ CLOUD</div><div class="wt-val wt-cld" id="wtCloud">--</div></div>
-      <div class="wt-stat"><div class="wt-lbl">💨 WIND</div><div class="wt-val wt-wind" id="wtWind">--</div></div>
+      <div class="wt-stat"><div class="wt-lbl">TEMP</div><div class="wt-val wt-temp" id="wtTemp">--</div></div>
+      <div class="wt-stat"><div class="wt-lbl">HUMID</div><div class="wt-val wt-hum" id="wtHum">--</div></div>
+      <div class="wt-stat"><div class="wt-lbl">CLOUD</div><div class="wt-val wt-cld" id="wtCloud">--</div></div>
+      <div class="wt-stat"><div class="wt-lbl">WIND</div><div class="wt-val wt-wind" id="wtWind">--</div></div>
     </div>
   </div>
-  <div class="wt-warn" id="wtWarn">⚠️ High cloud cover — solar output may be reduced!</div>
-  <div class="wt-good" id="wtGood">✅ Clear sky — excellent solar conditions!</div>
+  <div class="wt-warn" id="wtWarn">&#9888;&#65039; High clouds — solar may be reduced</div>
+  <div class="wt-good" id="wtGood">&#9989; Clear sky — excellent solar!</div>
+</div>
+
+<!-- DAILY STATS -->
+<div class="daily-bar">
+  <div class="daily-item"><div class="daily-lbl">TODAY SOLAR</div><div class="daily-val g" id="todaySolar">--</div><div style="font-size:7px;color:var(--muted)">kWh</div></div>
+  <div class="daily-item"><div class="daily-lbl">TODAY WAPDA</div><div class="daily-val b" id="todayWapda">--</div><div style="font-size:7px;color:var(--muted)">kWh</div></div>
+  <div class="daily-item"><div class="daily-lbl">SAVED TODAY</div><div class="daily-val p" id="todaySaved">--</div><div style="font-size:7px;color:var(--muted)">PKR</div></div>
+  <div class="daily-item"><div class="daily-lbl">EFFICIENCY</div><div class="daily-val a" id="effNow">--</div><div style="font-size:7px;color:var(--muted)">%</div></div>
 </div>
 
 <!-- SOURCE BANNER -->
 <div class="src-ban">
-  <div style="font-size:20px" id="srcIcon">☀️</div>
+  <div style="font-size:20px" id="srcIcon">&#9728;&#65039;</div>
   <div>
-    <div style="font-size:9px;letter-spacing:2px;color:var(--muted)" class="en">POWER SOURCE</div>
-    <div style="font-size:10px;color:var(--muted)" class="ur">بجلی کا ذریعہ</div>
+    <div style="font-size:8px;letter-spacing:2px;color:var(--muted)">POWER SOURCE</div>
     <div style="font-weight:600;font-size:12px" id="srcVal">--</div>
   </div>
-  <div style="margin-left:auto"><span class="src-badge b-solar" id="srcBadge">--</span></div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+    <span class="conn-s c-fresh" id="connStatus">LIVE</span>
+    <span class="src-badge b-solar" id="srcBadge">--</span>
+  </div>
 </div>
 
 <!-- ALERTS -->
 <div class="alerts">
-  <div class="alert al-batt" id="alBatt">
-    <div class="al-inner">
-      <span class="al-icon al-shake">🔴</span>
-      <div>
-        <div class="al-urdu">صرف بیٹری چل رہی ہے! فوری اقدام کریں</div>
-        <div class="al-sub">BATTERY ONLY MODE — CRITICAL</div>
-      </div>
-    </div>
-  </div>
-  <div class="alert al-high" id="alHigh">
-    <div class="al-inner">
-      <span class="al-icon al-shake">⚠️</span>
-      <div>
-        <div class="al-urdu">کیا چل رہا ہے؟! بوجھ بہت زیادہ ہے</div>
-        <div class="al-sub">LOAD ABOVE 1200W — REDUCE NOW</div>
-      </div>
-    </div>
-  </div>
-  <div class="alert al-med" id="alMed">
-    <div class="al-inner">
-      <span class="al-icon">💡</span>
-      <div>
-        <div class="al-urdu">غیر ضروری پنکھے بند کرو</div>
-        <div class="al-sub">LOAD ABOVE 300W — SAVE ENERGY</div>
-      </div>
-    </div>
-  </div>
+  <div class="alert al-temp" id="alTemp"><div class="al-in"><span class="al-ic al-sk">&#127777;&#65039;</span><div><div class="al-ur">&#1575;&#1606;&#1608;&#1585;&#1657;&#1585; &#1576;&#1729;&#1578; &#1711;&#1585;&#1605; &#1729;&#1746;</div><div class="al-sub">INVERTER TEMP &gt; 55&deg;C</div></div></div></div>
+  <div class="alert al-batt" id="alBatt"><div class="al-in"><span class="al-ic al-sk">&#128308;</span><div><div class="al-ur">&#1589;&#1585;&#1601; &#1576;&#1740;&#1657;&#1585;&#1740; &#1670;&#1604; &#1585;&#1729;&#1740; &#1729;&#1746;!</div><div class="al-sub">BATTERY ONLY MODE</div></div></div></div>
+  <div class="alert al-high" id="alHigh"><div class="al-in"><span class="al-ic al-sk">&#9888;&#65039;</span><div><div class="al-ur">&#1705;&#1740;&#1575; &#1670;&#1604; &#1585;&#1729;&#1575; &#1729;&#1746;&#1567; &#1576;&#1608;&#1580;&#1726; &#1576;&#1729;&#1578; &#1586;&#1740;&#1575;&#1583;&#1729;</div><div class="al-sub">LOAD ABOVE 1200W</div></div></div></div>
+  <div class="alert al-med" id="alMed"><div class="al-in"><span class="al-ic">&#128161;</span><div><div class="al-ur">&#1594;&#1740;&#1585; &#1590;&#1585;&#1608;&#1585;&#1740; &#1662;&#1606;&#1705;&#1726;&#1746; &#1576;&#1606;&#1583; &#1705;&#1585;&#1608;</div><div class="al-sub">LOAD ABOVE 300W</div></div></div></div>
 </div>
 
-<!-- BATTERY HOURS CARD -->
+<div class="main">
+
+<!-- POWER FLOW -->
+<div class="pf-card" id="pfCard">
+  <div class="pf-title">&#9889; LIVE POWER FLOW</div>
+  <svg width="100%" height="220" viewBox="0 0 300 220" preserveAspectRatio="xMidYMid meet">
+    <text x="40" y="35" text-anchor="middle" font-size="28" id="pfSolarIcon">&#9728;&#65039;</text>
+    <text x="40" y="52" text-anchor="middle" font-size="8" fill="#8892a4">SOLAR</text>
+    <text x="40" y="64" text-anchor="middle" font-size="9" font-weight="bold" fill="#00e676" id="pfSolarVal">--W</text>
+    <text x="40" y="155" text-anchor="middle" font-size="28" id="pfBattIcon">&#128267;</text>
+    <text x="40" y="172" text-anchor="middle" font-size="8" fill="#8892a4">BATTERY</text>
+    <text x="40" y="184" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffab00" id="pfBattVal">--%</text>
+    <text x="150" y="100" text-anchor="middle" font-size="38" id="pfHomeIcon">&#127968;</text>
+    <text x="150" y="120" text-anchor="middle" font-size="9" fill="#8892a4">HOME</text>
+    <text x="150" y="133" text-anchor="middle" font-size="10" font-weight="bold" fill="#f0f4ff" id="pfHomeLoad">--W</text>
+    <text x="260" y="100" text-anchor="middle" font-size="28" id="pfGridIcon">&#128268;</text>
+    <text x="260" y="117" text-anchor="middle" font-size="8" fill="#8892a4">WAPDA</text>
+    <text x="260" y="129" text-anchor="middle" font-size="9" font-weight="bold" fill="#40c4ff" id="pfGridVal">--W</text>
+    <path id="pfLineSolar" d="M 68 45 Q 110 45 130 90" stroke="#00e676" stroke-width="2.5" fill="none" stroke-dasharray="8,4" class="pf-line pf-line-off"/>
+    <path id="pfLineSolarBatt" d="M 55 65 Q 40 110 55 140" stroke="#00e676" stroke-width="2" fill="none" stroke-dasharray="6,4" class="pf-line pf-line-off"/>
+    <path id="pfLineBatt" d="M 68 155 Q 110 155 130 115" stroke="#ffab00" stroke-width="2.5" fill="none" stroke-dasharray="8,4" class="pf-line pf-line-off"/>
+    <path id="pfLineGrid" d="M 232 105 L 175 105" stroke="#40c4ff" stroke-width="2.5" fill="none" stroke-dasharray="8,4" class="pf-line pf-line-off"/>
+    <path id="pfLineGridBatt" d="M 245 120 Q 180 180 68 170" stroke="#40c4ff" stroke-width="2" fill="none" stroke-dasharray="6,4" class="pf-line pf-line-off"/>
+    <circle id="pfDotSolar" r="5" fill="#00e676" opacity="0"><animateMotion dur="1s" repeatCount="indefinite" path="M 68 45 Q 110 45 130 90"/></circle>
+    <circle id="pfDotSolarBatt" r="4" fill="#00e676" opacity="0"><animateMotion dur="1.5s" repeatCount="indefinite" path="M 55 65 Q 40 110 55 140"/></circle>
+    <circle id="pfDotBatt" r="5" fill="#ffab00" opacity="0"><animateMotion dur="1.2s" repeatCount="indefinite" path="M 68 155 Q 110 155 130 115"/></circle>
+    <circle id="pfDotGrid" r="5" fill="#40c4ff" opacity="0"><animateMotion dur="0.8s" repeatCount="indefinite" path="M 232 105 L 175 105"/></circle>
+    <circle id="pfDotGridBatt" r="4" fill="#40c4ff" opacity="0"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 245 120 Q 180 180 68 170"/></circle>
+  </svg>
+</div>
+
+<!-- BATTERY HOURS -->
 <div class="bh-card bh-safe" id="bhCard">
   <div class="bh-top">
     <div>
-      <div class="bh-lbl en">BATTERY REMAINING</div>
-      <div class="bh-lbl-ur ur">بیٹری کتنے وقت کی؟</div>
-      <div class="bh-val" id="bhVal" style="color:var(--green)">--</div>
-      <div class="bh-unit en" id="bhUnit">hours remaining</div>
-      <div class="bh-unit ur" id="bhUnitUr" style="display:none;direction:rtl">گھنٹے باقی</div>
+      <div class="bh-lbl">BATTERY REMAINING</div>
+      <div class="bh-val" id="bhVal" style="color:var(--green)">&#8734;</div>
+      <div class="bh-unit en" id="bhUnit">Solar active</div>
     </div>
-    <div class="bh-icon" id="bhIcon">🟢</div>
+    <div class="bh-ic" id="bhIcon">&#129001;</div>
   </div>
-  <div class="bh-bar-bg"><div class="bh-bar-fill" id="bhBar" style="width:0%"></div></div>
+  <div class="bh-bar-bg"><div class="bh-bar-fill" id="bhBar" style="width:100%"></div></div>
   <div class="bh-sug">
-    <div class="bh-sug-ur" id="bhSugUr">لوڈ ہو رہی ہے...</div>
-    <div class="bh-sug-en" id="bhSugEn">Calculating...</div>
+    <div class="bh-ur" id="bhSugUr">&#1604;&#1608;&#1672; &#1729;&#1608; &#1585;&#1729;&#1740; &#1729;&#1746;...</div>
+    <div class="bh-en" id="bhSugEn">Calculating...</div>
   </div>
-  <div class="bh-note">⚡ <span id="bhNote">Safe zone: 20% minimum (lithium protection)</span></div>
+  <div class="bh-note">&#9889; <span id="bhNote">Safe zone: 20% minimum</span></div>
 </div>
 
-<!-- MAIN CARDS -->
+<!-- PKR METER -->
 <div class="pkr-meter" id="pkrMeter">
   <div class="pkr-lbl">&#128176; SAVING RIGHT NOW</div>
   <div class="pkr-val" id="pkrVal">PKR 0.00</div>
   <div class="pkr-sub" id="pkrSub">calculating...</div>
   <div class="pkr-rate" id="pkrRate"></div>
 </div>
-<div style="position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,#0a1628,#0d1f35);border:1px solid rgba(64,196,255,0.3);border-radius:16px;padding:14px">
-  <div style="font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">&#127774; TOMORROW'S SOLAR FORECAST — ABBOTTABAD</div>
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div style="text-align:center">
-      <div style="font-size:28px" id="fcIcon">--</div>
-      <div style="font-size:9px;color:var(--muted)">CONDITION</div>
-      <div style="font-size:11px;font-weight:600;color:var(--text)" id="fcDesc">--</div>
-    </div>
-    <div style="text-align:center">
-      <div style="font-size:9px;color:var(--muted)">MAX TEMP</div>
-      <div style="font-family:Orbitron,monospace;font-size:20px;color:#ff5252;font-weight:700" id="fcTemp">--</div>
-    </div>
-    <div style="text-align:center">
-      <div style="font-size:9px;color:var(--muted)">CLOUDS</div>
-      <div style="font-family:Orbitron,monospace;font-size:20px;color:#ffab00;font-weight:700" id="fcCloud">--</div>
-    </div>
-    <div style="text-align:center">
-      <div style="font-size:9px;color:var(--muted)">SOLAR EXP</div>
-      <div style="font-family:Orbitron,monospace;font-size:20px;font-weight:700" id="fcExp" style="color:var(--green)">--</div>
-    </div>
+
+<!-- EFFICIENCY -->
+<div class="eff-card">
+  <div class="eff-top">
+    <span style="font-size:9px;letter-spacing:2px;color:var(--muted)">&#9889; SOLAR COVERAGE</span>
+    <span class="eff-pct" id="effCov">--%</span>
   </div>
-  <div id="fcMsg" style="margin-top:10px;padding:6px 10px;border-radius:10px;font-size:11px;font-weight:600;text-align:center"></div>
+  <div class="eff-bg"><div class="eff-fill" id="effFill" style="width:0%"></div></div>
 </div>
-<div style="position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,#0d1b0a,#0a1f06);border:1px solid rgba(0,230,118,0.3);border-radius:16px;padding:14px">
-  <div style="font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">&#9889; BEST TIME TO RUN APPLIANCES TODAY</div>
+
+<!-- CARDS -->
+<div class="cards">
+  <div class="card green"><div class="cg"></div><div class="is">&#9728;&#65039;</div><div class="cl">SOLAR NOW</div><div class="cv" id="cSolar">--</div><div class="cu">kWh reading</div></div>
+  <div class="card amber"><div class="cg"></div><div class="ib">&#128267;</div><div class="cl">BATTERY</div><div class="cv" id="cBatt">--</div><div class="cu">% charged 4.8kWh</div><div class="pb2"><div class="pf2" id="battP" style="width:0%"></div></div><div class="chg-ind" id="chgInd"></div></div>
+  <div class="card blue"><div class="cg"></div><div class="iv">&#9889;</div><div class="cl">VOLTAGE</div><div class="cv" id="cVolt">--</div><div class="cu">volts 48V lithium</div></div>
+  <div class="card green"><div class="cg"></div><div class="ih">&#127968;</div><div class="cl">HOME LOAD</div><div class="cv" id="cLoad">--</div><div class="cu">watts now</div></div>
+  <div class="card blue"><div class="cg"></div><div class="ig">&#128268;</div><div class="cl">WAPDA/GRID</div><div class="cv" id="cGrid">--</div><div class="cu">kWh from grid</div></div>
+  <div class="card amber"><div class="cg"></div><div class="ie">&#128262;</div><div class="cl">BATT ENERGY</div><div class="cv" id="cBkwh">--</div><div class="cu">of 4.8 kWh</div><div class="pb2"><div class="pf2" id="bkwhP" style="width:0%"></div></div></div>
+</div>
+
+<!-- TEMP ROW -->
+<div class="tc">
+  <div class="ti"><div class="tic">&#127777;&#65039;</div><div class="tv2" id="tempV">--</div><div class="tl2">TEMP</div></div>
+  <div class="ti"><span class="mb2" id="modeB">-- MODE</span></div>
+  <div class="ti"><div class="tic">&#127744;</div><div class="tv2" id="fanV">--</div><div class="tl2">FAN</div></div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="si its">&#9728;&#65039;</div><div class="sl">TOTAL SOLAR</div><div class="sv" id="sTsolar">--</div><div class="su">kWh</div></div>
+  <div class="stat"><div class="si ipk">&#9888;&#65039;</div><div class="sl">PEAK LOAD</div><div class="sv am" id="sPeak">--</div><div class="su">watts</div></div>
+  <div class="stat"><div class="si iw">&#127758;</div><div class="sl">TOTAL WAPDA</div><div class="sv bl" id="sTwapda">--</div><div class="su">kWh</div></div>
+  <div class="stat"><div class="si im">&#128176;</div><div class="sl">PKR SAVED</div><div class="sv pu" id="sSaved">--</div><div class="su">rupees</div></div>
+  <div class="stat"><div class="si ir">&#127807;</div><div class="sl">SOLAR RATIO</div><div class="sv" id="sRatio">--</div><div class="rb2"><div class="rf2" id="ratioF" style="width:0%"></div></div></div>
+  <div class="stat"><div class="si irec">&#128203;</div><div class="sl">READINGS</div><div class="sv bl" id="sCount">--</div><div class="su">logged</div></div>
+</div>
+
+<!-- FORECAST -->
+<div class="fc-card">
+  <div class="fc-title">&#127774; TOMORROW SOLAR FORECAST — ABBOTTABAD</div>
+  <div class="fc-grid">
+    <div class="fc-item"><div style="font-size:28px" id="fcIcon">--</div><div class="fc-lbl">CONDITION</div><div style="font-size:11px;font-weight:600" id="fcDesc">--</div></div>
+    <div class="fc-item"><div class="fc-lbl">MAX TEMP</div><div class="fc-val" style="color:var(--red)" id="fcTemp">--</div></div>
+    <div class="fc-item"><div class="fc-lbl">CLOUDS</div><div class="fc-val" style="color:var(--amber)" id="fcCloud">--</div></div>
+    <div class="fc-item"><div class="fc-lbl">SOLAR EXP</div><div class="fc-val" id="fcExp">--</div></div>
+  </div>
+  <div class="fc-msg" id="fcMsg"></div>
+</div>
+
+<!-- APPLIANCES -->
+<div class="app-card">
+  <div class="app-title">&#9889; BEST TIME FOR APPLIANCES TODAY</div>
   <div id="appList" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px"></div>
 </div>
-<div class="pf-card" id="pfCard">
-  <div class="pf-title">&#9889; LIVE POWER FLOW</div>
-  <svg width="100%" height="200" id="pfSvg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid meet">
-    <!-- Home center -->
-    <text x="150" y="90" text-anchor="middle" font-size="36" id="pfHomeIcon">&#127968;</text>
-    <text x="150" y="108" text-anchor="middle" font-size="9" fill="#8892a4" id="pfHomeLoad">--W</text>
 
-    <!-- Solar top-left -->
-    <text x="40" y="45" text-anchor="middle" font-size="30" id="pfSolarIcon">&#9728;&#65039;</text>
-    <text x="40" y="62" text-anchor="middle" font-size="8" fill="#8892a4">SOLAR</text>
-    <text x="40" y="74" text-anchor="middle" font-size="9" font-family="monospace" fill="#00e676" id="pfSolarVal">--W</text>
-
-    <!-- Battery bottom-left -->
-    <text x="40" y="145" text-anchor="middle" font-size="30" id="pfBattIcon">&#128267;</text>
-    <text x="40" y="162" text-anchor="middle" font-size="8" fill="#8892a4">BATTERY</text>
-    <text x="40" y="174" text-anchor="middle" font-size="9" font-family="monospace" fill="#ffab00" id="pfBattVal">--%</text>
-
-    <!-- Wapda right -->
-    <text x="260" y="95" text-anchor="middle" font-size="30" id="pfGridIcon">&#128268;</text>
-    <text x="260" y="112" text-anchor="middle" font-size="8" fill="#8892a4">WAPDA</text>
-    <text x="260" y="124" text-anchor="middle" font-size="9" font-family="monospace" fill="#40c4ff" id="pfGridVal">--W</text>
-
-    <!-- Solar to Home line -->
-    <path id="pfLineSolar" d="M 75 55 Q 110 55 130 80" class="pf-line pf-line-off" stroke="#00e676"/>
-
-    <!-- Battery to Home line -->
-    <path id="pfLineBatt" d="M 75 150 Q 110 150 130 105" class="pf-line pf-line-off" stroke="#ffab00"/>
-
-    <!-- Wapda to Home line -->
-    <path id="pfLineGrid" d="M 225 100 L 170 95" class="pf-line pf-line-off" stroke="#40c4ff"/>
-    <path id="pfLineSolarBatt" d="M 55 70 Q 40 110 55 140" class="pf-line pf-line-off" stroke="#00e676"/>
-    <path id="pfLineGridBatt" d="M 240 110 Q 180 175 75 155" class="pf-line pf-line-off" stroke="#40c4ff"/>
-
-    <!-- Flow dots -->
-    <circle id="pfDotSolar" r="5" fill="#00e676" opacity="0">
-      <animateMotion dur="1s" repeatCount="indefinite" path="M 75 55 Q 110 55 130 80"/>
-    </circle>
-    <circle id="pfDotBatt" r="5" fill="#ffab00" opacity="0">
-      <animateMotion dur="1.2s" repeatCount="indefinite" path="M 75 150 Q 110 150 130 105"/>
-    </circle>
-    <circle id="pfDotSolarBatt" r="4" fill="#00e676" opacity="0"><animateMotion dur="1.5s" repeatCount="indefinite" path="M 55 70 Q 40 110 55 140"/></circle>
-    <circle id="pfDotGridBatt" r="4" fill="#40c4ff" opacity="0"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 240 110 Q 180 175 75 155"/></circle>
-    <circle id="pfDotGrid" r="5" fill="#40c4ff" opacity="0">
-      <animateMotion dur="0.8s" repeatCount="indefinite" path="M 225 100 L 170 95"/>
-    </circle>
-  </svg>
-</div>
-<div class="main">
-  <div class="cards">
-    <div class="card green">
-      <div class="card-glow"></div>
-      <div class="i-solar">☀️</div>
-      <div class="card-lbl en">SOLAR NOW</div>
-      <div class="card-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">ابھی سولر</div>
-      <div class="card-val" id="cSolar">--</div>
-      <div class="card-unit en">kWh this reading</div>
-      <div class="card-unit ur" style="display:none;direction:rtl">کلو واٹ</div>
+<!-- OUTAGE -->
+<div class="outage-card">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <div class="outage-lbl">&#128268; WAPDA OUTAGES TODAY</div>
+      <div class="outage-ur">&#1570;&#1580; &#1608;&#1575;&#1662;&#1688;&#1575; &#1705;&#1578;&#1606;&#1740; &#1576;&#1575;&#1585; &#1711;&#1574;&#1740;</div>
     </div>
-    <div class="card amber">
-      <div class="card-glow"></div>
-      <div class="i-batt">🔋</div>
-      <div class="card-lbl en">BATTERY</div>
-      <div class="card-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">بیٹری</div>
-      <div class="card-val" id="cBatt">--</div>
-      <div class="card-unit en">% charged (4.8kWh)</div>
-      <div class="card-unit ur" style="display:none;direction:rtl">فیصد چارج</div>
-      <div class="prog-bg"><div class="prog-fill" id="battProg" style="width:0%"></div></div>
-    </div>
-    <div class="card blue">
-      <div class="card-glow"></div>
-      <div class="i-volt">⚡</div>
-      <div class="card-lbl en">VOLTAGE</div>
-      <div class="card-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">وولٹیج</div>
-      <div class="card-val" id="cVolt">--</div>
-      <div class="card-unit en">volts — 48V lithium</div>
-      <div class="card-unit ur" style="display:none;direction:rtl">وولٹ سسٹم</div>
-    </div>
-    <div class="card green">
-      <div class="card-glow"></div>
-      <div class="i-home">🏠</div>
-      <div class="card-lbl en">HOME LOAD</div>
-      <div class="card-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">گھر کا بوجھ</div>
-      <div class="card-val" id="cLoad">--</div>
-      <div class="card-unit en">watts right now</div>
-      <div class="card-unit ur" style="display:none;direction:rtl">واٹ ابھی</div>
-    </div>
-    <div class="card blue">
-      <div class="card-glow"></div>
-      <div class="i-grid">🔌</div>
-      <div class="card-lbl en">WAPDA/GRID</div>
-      <div class="card-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">واپڈا</div>
-      <div class="card-val" id="cGrid">--</div>
-      <div class="card-unit en">kWh from grid</div>
-      <div class="card-unit ur" style="display:none;direction:rtl">کلو واٹ گرڈ سے</div>
-    </div>
-    <div class="card amber">
-      <div class="card-glow"></div>
-      <div class="i-energy">🔆</div>
-      <div class="card-lbl en">BATT ENERGY</div>
-      <div class="card-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">بیٹری توانائی</div>
-      <div class="card-val" id="cBkwh">--</div>
-      <div class="card-unit en">of 4.8 kWh total</div>
-      <div class="card-unit ur" style="display:none;direction:rtl">4.8 میں سے</div>
-      <div class="prog-bg"><div class="prog-fill" id="bkwhProg" style="width:0%"></div></div>
-    </div>
-  </div>
-
-  <!-- TEMP ROW -->
-  <div class="temp-row">
-    <div class="temp-item">
-      <div class="temp-icon">🌡️</div>
-      <div class="temp-val" id="tempVal">--</div>
-      <div class="temp-lbl en">TEMP</div>
-      <div class="temp-lbl ur" style="display:none;direction:rtl">درجہ حرارت</div>
-    </div>
-    <div class="temp-item">
-      <span class="mode-badge" id="modeBadge">-- MODE</span>
-    </div>
-    <div class="temp-item">
-      <div class="temp-icon">🌀</div>
-      <div class="temp-val" id="fanVal">--</div>
-      <div class="temp-lbl en">FAN</div>
-      <div class="temp-lbl ur" style="display:none;direction:rtl">پنکھا</div>
-    </div>
-  </div>
-
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat">
-      <div class="stat-icon i-tspin">☀️</div>
-      <div class="stat-lbl en">TOTAL SOLAR</div>
-      <div class="stat-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">کل سولر</div>
-      <div class="stat-val" id="sTotalSolar">--</div>
-      <div class="stat-unit">kWh</div>
-    </div>
-    <div class="stat">
-      <div class="stat-icon i-peak">⚠️</div>
-      <div class="stat-lbl en">PEAK LOAD</div>
-      <div class="stat-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">زیادہ بوجھ</div>
-      <div class="stat-val am" id="sPeak">--</div>
-      <div class="stat-unit">watts</div>
-    </div>
-    <div class="stat">
-      <div class="stat-icon i-wspin">🌐</div>
-      <div class="stat-lbl en">TOTAL WAPDA</div>
-      <div class="stat-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">کل واپڈا</div>
-      <div class="stat-val bl" id="sTotalWapda">--</div>
-      <div class="stat-unit">kWh</div>
-    </div>
-    <div class="stat">
-      <div class="stat-icon i-money">💰</div>
-      <div class="stat-lbl en">PKR SAVED</div>
-      <div class="stat-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">بچت</div>
-      <div class="stat-val pu" id="sSaved">--</div>
-      <div class="stat-unit en">est. rupees</div>
-    </div>
-    <div class="stat">
-      <div class="stat-icon i-ratio">🌱</div>
-      <div class="stat-lbl en">SOLAR RATIO</div>
-      <div class="stat-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">سولر فیصد</div>
-      <div class="stat-val" id="sRatio">--</div>
-      <div class="ratio-bg"><div class="ratio-fill" id="ratioFill" style="width:0%"></div></div>
-    </div>
-    <div class="stat">
-      <div class="stat-icon i-recs">📋</div>
-      <div class="stat-lbl en">READINGS</div>
-      <div class="stat-lbl ur" style="display:none;font-family:'Noto Nastaliq Urdu',sans-serif;direction:rtl">ریکارڈ</div>
-      <div class="stat-val bl" id="sCount">--</div>
-      <div class="stat-unit en">total logged</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="outage-count" id="outageCount">0</div>
+      <button class="outage-btn" onclick="logOutage()">+ LOG</button>
     </div>
   </div>
 </div>
+
+</div><!-- end main -->
 
 <footer>
-  <div class="upd-time" id="updTime">--</div>
-  <a href="/analytics" style="background:rgba(64,196,255,0.15);border:1px solid #40c4ff;color:#40c4ff;padding:10px 14px;border-radius:25px;font-weight:700;font-size:11px;text-decoration:none">📊 ANALYTICS</a><button class="refresh-btn en" onclick="loadAll()">⟳ REFRESH</button>
-  <button class="refresh-btn ur" style="display:none" onclick="loadAll()">⟳ تازہ کریں</button>
+  <div class="foot-top">
+    <div class="ts2" id="updTime">--</div>
+    <span class="conn-s c-fresh" id="connStatus2">&#9679; CONNECTED</span>
+  </div>
+  <div class="foot-bot">
+    <button class="share-btn" onclick="shareFamily()">&#128241; Share</button>
+    <a href="/analytics" style="background:rgba(64,196,255,0.15);border:1px solid #40c4ff;color:#40c4ff;padding:10px 14px;border-radius:25px;font-weight:700;font-size:11px;text-decoration:none">&#128202; Analytics</a>
+    <button class="refresh-btn" onclick="loadAll()">&#10227; Refresh</button>
+  </div>
 </footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bot-nav">
+  <a class="nav-item active" href="/dashboard"><div class="nav-icon">&#127968;</div><div class="nav-lbl">DASHBOARD</div></a>
+  <a class="nav-item" href="/analytics"><div class="nav-icon">&#128202;</div><div class="nav-lbl">ANALYTICS</div></a>
+  <div class="nav-item" onclick="loadAll()"><div class="nav-icon">&#10227;</div><div class="nav-lbl">REFRESH</div></div>
+  <div class="nav-item" onclick="shareFamily()"><div class="nav-icon">&#128241;</div><div class="nav-lbl">SHARE</div></div>
+  <div class="nav-item" onclick="toggleSettings()"><div class="nav-icon">&#9881;&#65039;</div><div class="nav-lbl">SETTINGS</div></div>
+</nav>
 
 <script>
 const API = '';
@@ -993,24 +941,5 @@ async function loadAll(){
 loadAll();
 setInterval(loadAll, 30000);loadWeather();setInterval(loadWeather,600000);loadForecast();setInterval(loadForecast,1800000);updateApplianceTimes();setInterval(updateApplianceTimes,60000);
 </script>
-<div id="settingsPanel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(5px)">
-<div style="background:linear-gradient(135deg,#111827,#1a2235);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:20px;width:90%;max-width:340px">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-<div style="font-family:Orbitron,monospace;font-size:14px;color:#00e676;letter-spacing:2px">&#9881; SETTINGS</div>
-<button onclick="toggleSettings()" style="background:rgba(255,82,82,0.15);border:1px solid #ff5252;color:#ff5252;padding:4px 10px;border-radius:10px;font-size:11px;cursor:pointer">&#10005; Close</button>
-</div>
-<div style="display:flex;flex-direction:column;gap:12px">
-<div><div style="font-size:9px;letter-spacing:1px;color:#8892a4;margin-bottom:4px">&#128176; PKR PER UNIT (currently 22)</div>
-<input id="setPKR" type="number" value="22" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f0f4ff;padding:8px 12px;border-radius:8px;font-size:14px;font-family:Orbitron,monospace"></div>
-<div><div style="font-size:9px;letter-spacing:1px;color:#8892a4;margin-bottom:4px">&#128267; BATTERY CAPACITY kWh (currently 4.8)</div>
-<input id="setBattCap" type="number" value="4.8" step="0.1" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f0f4ff;padding:8px 12px;border-radius:8px;font-size:14px;font-family:Orbitron,monospace"></div>
-<div><div style="font-size:9px;letter-spacing:1px;color:#8892a4;margin-bottom:4px">&#9888;&#65039; SAFE MINIMUM % (currently 20)</div>
-<input id="setSafeMin" type="number" value="20" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f0f4ff;padding:8px 12px;border-radius:8px;font-size:14px;font-family:Orbitron,monospace"></div>
-<div><div style="font-size:9px;letter-spacing:1px;color:#8892a4;margin-bottom:4px">&#9201; REFRESH INTERVAL seconds (currently 30)</div>
-<input id="setRefresh" type="number" value="30" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f0f4ff;padding:8px 12px;border-radius:8px;font-size:14px;font-family:Orbitron,monospace"></div>
-<div><div style="font-size:9px;letter-spacing:1px;color:#8892a4;margin-bottom:4px">&#128300; INVERTER MODEL</div>
-<input id="setInverter" type="text" value="Aliyar 48V 6200W" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#f0f4ff;padding:8px 12px;border-radius:8px;font-size:12px"></div>
-<button onclick="saveSettings()" style="background:linear-gradient(135deg,#00c853,#00e676);border:none;color:#000;padding:12px;border-radius:12px;font-weight:700;font-size:12px;cursor:pointer;letter-spacing:1px;width:100%">&#10003; SAVE SETTINGS</button>
-</div></div></div>
 </body>
 </html>

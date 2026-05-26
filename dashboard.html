@@ -170,6 +170,14 @@ footer{position:relative;z-index:5;display:flex;justify-content:space-between;al
 body.urdu-mode .en{display:none!important}
 body.urdu-mode .ur{display:block!important}
 body.urdu-mode{direction:rtl}
+
+.pkr-meter{position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,#001a0a,#002211);border:2px solid var(--green);border-radius:16px;padding:14px;text-align:center}
+.pkr-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
+.pkr-val{font-family:"Orbitron",monospace;font-size:36px;font-weight:900;color:var(--green);animation:pkrGlow 1s ease-in-out infinite}
+@keyframes pkrGlow{0%,100%{text-shadow:0 0 10px rgba(0,230,118,0.5)}50%{text-shadow:0 0 25px rgba(0,230,118,1),0 0 50px rgba(0,230,118,0.3)}}
+.pkr-sub{font-size:10px;color:var(--muted);margin-top:4px}
+.pkr-rate{font-size:11px;color:var(--amber);margin-top:6px;font-weight:600}
+.pkr-off{color:var(--muted);animation:none;font-size:20px}
 </style>
 
 <style>
@@ -193,6 +201,14 @@ body.urdu-mode{direction:rtl}
 .wt-warn{margin-top:6px;padding:4px 10px;border-radius:10px;background:rgba(255,171,0,0.1);border:1px solid rgba(255,171,0,0.3);font-size:10px;color:#ffab00;font-weight:600;animation:warnFlash 1.5s infinite;display:none}
 @keyframes warnFlash{0%,100%{opacity:1}50%{opacity:0.6}}
 .wt-good{margin-top:6px;padding:4px 10px;border-radius:10px;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);font-size:10px;color:#00e676;font-weight:600;display:none}
+
+.pkr-meter{position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,#001a0a,#002211);border:2px solid var(--green);border-radius:16px;padding:14px;text-align:center}
+.pkr-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
+.pkr-val{font-family:"Orbitron",monospace;font-size:36px;font-weight:900;color:var(--green);animation:pkrGlow 1s ease-in-out infinite}
+@keyframes pkrGlow{0%,100%{text-shadow:0 0 10px rgba(0,230,118,0.5)}50%{text-shadow:0 0 25px rgba(0,230,118,1),0 0 50px rgba(0,230,118,0.3)}}
+.pkr-sub{font-size:10px;color:var(--muted);margin-top:4px}
+.pkr-rate{font-size:11px;color:var(--amber);margin-top:6px;font-weight:600}
+.pkr-off{color:var(--muted);animation:none;font-size:20px}
 </style>
 </head>
 <body id="mainBody">
@@ -314,6 +330,12 @@ body.urdu-mode{direction:rtl}
 </div>
 
 <!-- MAIN CARDS -->
+<div class="pkr-meter" id="pkrMeter">
+  <div class="pkr-lbl">&#128176; SAVING RIGHT NOW</div>
+  <div class="pkr-val" id="pkrVal">PKR 0.00</div>
+  <div class="pkr-sub" id="pkrSub">calculating...</div>
+  <div class="pkr-rate" id="pkrRate"></div>
+</div>
 <div class="main">
   <div class="cards">
     <div class="card green">
@@ -589,6 +611,35 @@ async function loadWeather(){
     else if(cloud<30&&wc<=2){document.getElementById('wtGood').style.display='block';document.getElementById('wtWarn').style.display='none';}
     else{document.getElementById('wtWarn').style.display='none';document.getElementById('wtGood').style.display='none';}
   }catch(e){console.error('Weather:',e);}
+}
+
+
+let pkrPerSec=0;let pkrTotal=0;let pkrInterval=null;
+function updateMeter(solar,grid,load){
+  const active=solar>0||grid>0;
+  const solarW=solar*1000;
+  const pkrPerHour=solarW/1000*22;
+  pkrPerSec=pkrPerHour/3600;
+  const el=document.getElementById('pkrVal');
+  const sub=document.getElementById('pkrSub');
+  const rate=document.getElementById('pkrRate');
+  if(solar>0&&grid==0){
+    el.className='pkr-val';
+    rate.textContent='Solar: '+solarW.toFixed(0)+'W x PKR 22/kWh = PKR '+pkrPerHour.toFixed(2)+'/hr';
+    sub.textContent='pure solar saving every second!';
+    if(!pkrInterval){pkrInterval=setInterval(()=>{pkrTotal+=pkrPerSec;document.getElementById('pkrVal').textContent='PKR '+pkrTotal.toFixed(2);},1000);}
+  } else if(solar>0&&grid>0){
+    el.className='pkr-val';
+    rate.textContent='Solar saving PKR '+pkrPerHour.toFixed(2)+'/hr';
+    sub.textContent='solar + wapda mixed mode';
+    if(!pkrInterval){pkrInterval=setInterval(()=>{pkrTotal+=pkrPerSec;document.getElementById('pkrVal').textContent='PKR '+pkrTotal.toFixed(2);},1000);}
+  } else {
+    if(pkrInterval){clearInterval(pkrInterval);pkrInterval=null;}
+    el.className='pkr-val pkr-off';
+    el.textContent='PKR 0.00';
+    sub.textContent='no solar active right now';
+    rate.textContent='waiting for solar...';
+  }
 }
 
 async function loadAll(){

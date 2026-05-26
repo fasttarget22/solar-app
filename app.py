@@ -81,3 +81,17 @@ def index():return 'Sufly Solar Running!'
 
 if __name__=='__main__':
     app.run(host='0.0.0.0',port=int(os.environ.get('PORT',5000)))
+
+@app.route('/api/analytics')
+def analytics():
+    from datetime import datetime,timedelta
+    period=request.args.get('period','24h')
+    if period=='24h':hrs=24
+    elif period=='7d':hrs=168
+    elif period=='1m':hrs=720
+    elif period=='6m':hrs=4320
+    else:hrs=24
+    since=(datetime.utcnow()-timedelta(hours=hrs)).strftime('%Y-%m-%dT%H:%M:%S')
+    res=r.get(SU+f'/rest/v1/readings?order=ts.asc&ts=gte.{since}&limit=2000',headers=H)
+    rows=res.json() if res.ok else []
+    return jsonify(rows)

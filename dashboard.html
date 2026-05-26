@@ -388,17 +388,29 @@ footer{position:relative;z-index:5;padding:10px 14px;border-top:1px solid var(--
       <style>
         @keyframes homeFanSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .fan-spin-active { animation: homeFanSpin 1s linear infinite; transform-origin: center; transform-box: fill-box; }
-        .room-shell { fill: rgba(30, 41, 59, 0.75); stroke: #475569; stroke-width: 2; transition: all 0.3s; }
+        .room-space { fill: #111827; stroke: #374151; stroke-width: 1.5; rx: 8; }
+        .tv-screen { fill: #1f2937; stroke: #4b5563; stroke-width: 1.5; rx: 3; transition: all 0.3s; }
       </style>
-      <polygon points="115,65 150,35 185,65" fill="#f43f5e" opacity="0.9" />
-      <rect class="room-shell" x="120" y="65" width="60" height="45" rx="5" />
-      <line x1="120" y1="88" x2="180" y2="88" stroke="#334155" stroke-dasharray="2,2" />
+      <defs>
+        <radialGradient id="tvGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
       
-      <text id="shFan" x="150" y="82" text-anchor="middle" font-size="14" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">🌀</text>
+      <rect class="room-space" x="95" y="45" width="110" height="70" />
       
-      <text id="shLight" x="135" y="102" text-anchor="middle" font-size="12" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">💡</text>
+      <circle cx="110" cy="53" r="2.5" fill="#ffe082" filter="drop-shadow(0 0 3px #ffb300)" />
+      <circle cx="190" cy="53" r="2.5" fill="#ffe082" filter="drop-shadow(0 0 3px #ffb300)" />
+      <rect x="105" y="98" width="45" height="3" fill="#06b6d4" opacity="0.4" filter="drop-shadow(0 0 4px #00e5ff)" />
+      <rect x="105" y="101" width="45" height="6" fill="#374151" rx="1" />
+      <path d="M 165,107 L 192,107 L 192,97 L 187,97 L 187,100 L 170,100 L 170,97 L 165,97 Z" fill="#1f2937" stroke="#4b5563" stroke-width="1" />
       
-      <text id="shTV" x="165" y="102" text-anchor="middle" font-size="12" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">📺</text>
+      <text id="shFan" x="150" y="60" text-anchor="middle" font-size="16" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">🌀</text>
+      <rect id="shTV_Screen" class="tv-screen" x="105" y="66" width="45" height="26" />
+      <rect id="shTV_Glow" x="90" y="50" width="75" height="60" fill="url(#tvGlow)" opacity="0" style="mix-blend-mode: screen; transition: all 0.3s; pointer-events: none;" />
+      <text id="shTV" x="127.5" y="83" text-anchor="middle" font-size="13" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">📺</text>
+      <text id="shLight" x="127.5" y="55" text-anchor="middle" font-size="11" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">💡</text>
     </g>
     <text x="150" y="120" text-anchor="middle" font-size="9" fill="#8892a4">HOME</text>
     <text x="150" y="133" text-anchor="middle" font-size="10" font-weight="bold" fill="#f0f4ff" id="pfHomeLoad">--W</text>
@@ -732,8 +744,16 @@ function updatePowerFlow(solar,grid,load,batt){
     else { sLight.style.opacity = '0.2'; sLight.style.filter = 'grayscale(1)'; }
   }
   if(sTV) {
-    if(load > 120) { sTV.style.opacity = '1'; sTV.style.filter = 'drop-shadow(0 0 5px #29b6f6)'; }
-    else { sTV.style.opacity = '0.2'; sTV.style.filter = 'grayscale(1)'; }
+    if(load > 120) { 
+      sTV.style.opacity = '1'; 
+      sTV.style.filter = 'drop-shadow(0 0 5px #29b6f6)';
+      var tg = document.getElementById('shTV_Glow'); if(tg) tg.style.opacity = '1';
+    }
+    else { 
+      sTV.style.opacity = '0.2'; 
+      sTV.style.filter = 'grayscale(1)'; 
+      var tg = document.getElementById('shTV_Glow'); if(tg) tg.style.opacity = '0';
+    }
   }
   if(sFan) {
     if(load > 300) { sFan.style.opacity = '1'; sFan.style.filter = 'none'; sFan.classList.add('fan-spin-active'); }

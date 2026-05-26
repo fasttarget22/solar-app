@@ -13,7 +13,6 @@ H = {
     'Prefer': 'return=representation'
 }
 
-# Direct endpoint to pull the raw text stream safely without browser scripts
 DATA_URL = "https://smartsolar.net.pk/index-data.php?dev_id=D8BC38AD6637&dev_dm=0"
 
 def scrape_smartsolar():
@@ -23,31 +22,30 @@ def scrape_smartsolar():
             return None
         html = res.text
         
-        # Strip code formatting down to single-line spaces for seamless text-matching
+        # Collapse all whitespaces to make targeting clear
         clean = re.sub(r'\s+', ' ', html)
 
-        # 1. Parse PV Watt (Solar Power)
+        # 1. Parse PV Watt (Solar Power) - Explicitly skipping the header text
         solar_w = 0.0
-        sol_match = re.search(r'PV Watt.*?class="data_value[^"]*".*?>\s*(\d+)\s*W', clean, re.IGNORECASE)
+        sol_match = re.search(r'PV Watt.*?data_value[^>]*>\s*(\d+)\s*W', clean, re.IGNORECASE)
         if sol_match:
             solar_w = float(sol_match.group(1))
 
         # 2. Parse Output Load (W) (Home Load)
         load_w = 0.0
-        load_match = re.search(r'Output Load \(W\).*?class="data_value[^"]*".*?>\s*(\d+)\s*W', clean, re.IGNORECASE)
+        load_match = re.search(r'Output Load \(W\).*?data_value[^>]*>\s*(\d+)\s*W', clean, re.IGNORECASE)
         if load_match:
             load_w = float(load_match.group(1))
 
         # 3. Parse Battery Volt
         voltage = 48.0
-        volt_match = re.search(r'Battery Volt.*?class="data_value[^"]*".*?>\s*([\d.]+)\s*V', clean, re.IGNORECASE)
+        volt_match = re.search(r'Battery Volt.*?data_value[^>]*>\s*([\d.]+)\s*V', clean, re.IGNORECASE)
         if volt_match:
             voltage = float(volt_match.group(1))
 
         # 4. Parse Battery Capacity Percentage (%)
         batt_pct = 100.0
-        # Finds the first percentage value inside a data_value container directly following the Battery Volt block
-        pct_match = re.search(r'Battery Volt.*?class="data_value[^"]*".*?>.*?class="data_value[^"]*".*?>\s*(\d+)\s*%', clean, re.IGNORECASE)
+        pct_match = re.search(r'Battery Volt.*?data_value[^>]*>.*?data_value[^>]*>\s*(\d+)\s*%', clean, re.IGNORECASE)
         if pct_match:
             batt_pct = float(pct_match.group(1))
 

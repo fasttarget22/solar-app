@@ -45,7 +45,8 @@ def history():
 
 @app.route('/dashboard')
 def dashboard():
-    return open('dashboard.html', encoding='utf-8').read()
+    # یہاں ہم نے فائل کا نام تبدیل کر دیا تاکہ پرانا کیشے ختم ہو جائے
+    return open('panel.html', encoding='utf-8').read()
 
 @app.route('/')
 def index():

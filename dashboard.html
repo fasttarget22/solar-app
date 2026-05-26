@@ -1079,11 +1079,7 @@ async function loadAll(){
     if(typeof updateStreak === 'function' && typeof hr !== 'undefined') updateStreak(hr);
     if(typeof updateBadges === 'function' && typeof sr !== 'undefined') updateBadges(sr.total_solar, sr.record_count, 0);
     if(typeof updateBillComparison === 'function' && typeof sr !== 'undefined') updateBillComparison(sr.total_solar, sr.total_utility);
-  } catch(e){ alert("DASHBOARD CRASH DETECTED:
-
-" + e.message + "
-
-" + e.stack); }
+  } catch(e){ alert("DASHBOARD CRASH DETECTED:\n\n" + e.message + "\n\n" + e.stack); }
 }
 
 loadAll();

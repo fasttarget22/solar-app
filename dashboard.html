@@ -1066,21 +1066,24 @@ async function loadAll(){
       document.getElementById('bkwhP').style.width = (bk/BATT_CAP*100) + '%';
       setSrc(l.solar_kwh||0, l.utility_kwh||0);updateMeter(l.solar_kwh||0,l.utility_kwh||0,lw);analyzeLoad(lw,l.solar_kwh||0,l.utility_kwh||0);checkVoiceAlerts(l.solar_kwh||0,l.utility_kwh||0,lw,bp);updatePowerFlow(l.solar_kwh||0,l.utility_kwh||0,lw,bp);
       setAlerts(l.solar_kwh||0, l.utility_kwh||0, lw);
-      updateBattHours(bp, lw, solar, grid);
+      updateBattHours(bp, lw, l.solar_kwh||0, l.utility_kwh||0);
       var tempRaw=l.temp||'';
       var tempNum=tempRaw.match(/([0-9]+)/);
-      updateEfficiencyScore(solar,load,bp,tempNum?parseInt(tempNum[1]):40);
+      updateEfficiencyScore(l.solar_kwh||0,lw,bp,tempNum?parseInt(tempNum[1]):40);
       document.getElementById('tempV').textContent=tempNum?tempNum[1]+'°C':'--';
       document.getElementById('fanV').textContent=l.fan||'--';
       var mode=l.notes||'';
-      document.getElementById('modeB').textContent=mode?mode+' MODE':solar>0?'☀️ SOLAR':'🔌 GRID';
+      document.getElementById('modeB').textContent=mode?mode+' MODE':(l.solar_kwh||0)>0?'☀️ SOLAR':'🔌 GRID';
     }
     document.getElementById('updTime').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+    if(typeof updateStreak === 'function' && typeof hr !== 'undefined') updateStreak(hr);
+    if(typeof updateBadges === 'function' && typeof sr !== 'undefined') updateBadges(sr.total_solar, sr.record_count, 0);
+    if(typeof updateBillComparison === 'function' && typeof sr !== 'undefined') updateBillComparison(sr.total_solar, sr.total_utility);
   } catch(e){ console.error(e); }
 }
 
 loadAll();
-setInterval(loadAll, 30000);loadWeather();setInterval(loadWeather,600000);loadForecast();setInterval(loadForecast,1800000);updateApplianceTimes();updateStreak(hr);updateBadges(sr.total_solar,sr.record_count,0);updateBillComparison(sr.total_solar,sr.total_utility);setInterval(updateApplianceTimes,60000);
+setInterval(loadAll, 30000);loadWeather();setInterval(loadWeather,600000);loadForecast();setInterval(loadForecast,1800000);updateApplianceTimes();setInterval(updateApplianceTimes,60000);
 </script>
 </body>
 </html>

@@ -756,7 +756,8 @@ function calcBattHours(bp, lw){
   return {h, lvl, uk, up, finishTime};
 }
 
-function updateBattHours(bp, lw){
+function updateBattHours(bp, lw, solar=0, grid=0){
+  if(solar>0||grid>0){document.getElementById("bhCard").className="bh-card bh-safe";document.getElementById("bhVal").textContent="inf";document.getElementById("bhVal").style.color="var(--green)";document.getElementById("bhIcon").textContent="G";document.getElementById("bhUnit").textContent="Solar/Grid active - battery safe";document.getElementById("bhBar").style.width="100%";return;}
   const {h, lvl, uk, up, finishTime} = calcBattHours(bp, lw);
   const card = document.getElementById('bhCard');
   card.className = 'bh-card bh-' + lvl;
@@ -929,7 +930,7 @@ async function loadAll(){
       document.getElementById('bkwhProg').style.width = (bk/BATT_CAP*100) + '%';
       setSrc(l.solar_kwh||0, l.utility_kwh||0);updateMeter(l.solar_kwh||0,l.utility_kwh||0,lw);analyzeLoad(lw,l.solar_kwh||0,l.utility_kwh||0);checkVoiceAlerts(l.solar_kwh||0,l.utility_kwh||0,lw,bp);updatePowerFlow(l.solar_kwh||0,l.utility_kwh||0,lw,bp);
       setAlerts(l.solar_kwh||0, l.utility_kwh||0, lw);
-      updateBattHours(bp, lw);
+      updateBattHours(bp, lw, solar, grid);
       const tempRaw=l.temp||'';
       const tempNum=tempRaw.match(/([0-9]+)/);
       document.getElementById('tempV').textContent=tempNum?tempNum[1]+'°C':'--';

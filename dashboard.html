@@ -359,6 +359,10 @@ body.urdu-mode{direction:rtl}
   </div>
   <div id="fcMsg" style="margin-top:10px;padding:6px 10px;border-radius:10px;font-size:11px;font-weight:600;text-align:center"></div>
 </div>
+<div style="position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,#0d1b0a,#0a1f06);border:1px solid rgba(0,230,118,0.3);border-radius:16px;padding:14px">
+  <div style="font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">&#9889; BEST TIME TO RUN APPLIANCES TODAY</div>
+  <div id="appList" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px"></div>
+</div>
 <div class="main">
   <div class="cards">
     <div class="card green">
@@ -595,6 +599,29 @@ async function loadForecast(){
   }catch(e){console.error('Forecast:',e);}
 }
 
+
+function updateApplianceTimes(){
+  const now=new Date();
+  const hr=now.getHours();
+  const appliances=[
+    {name:'&#129529; Washing Machine',best:'10:00-13:00',bestHr:[10,13],icon:'&#129529;'},
+    {name:'&#9749; Iron',best:'11:00-14:00',bestHr:[11,14],icon:'&#9749;'},
+    {name:'&#10052; AC',best:'12:00-15:00',bestHr:[12,15],icon:'&#10052;'},
+    {name:'&#127861; Oven',best:'11:00-13:00',bestHr:[11,13],icon:'&#127861;'},
+    {name:'&#128187; Computer',best:'09:00-16:00',bestHr:[9,16],icon:'&#128187;'},
+    {name:'&#128268; Chargers',best:'09:00-17:00',bestHr:[9,17],icon:'&#128268;'}
+  ];
+  const list=document.getElementById('appList');
+  list.innerHTML=appliances.map(a=>{
+    const active=hr>=a.bestHr[0]&&hr<a.bestHr[1];
+    const bg=active?'rgba(0,230,118,0.15)':'rgba(255,255,255,0.04)';
+    const border=active?'1px solid var(--green)':'1px solid rgba(255,255,255,0.08)';
+    const status=active?'&#9989; NOW':'&#128336; '+a.best;
+    const color=active?'var(--green)':'var(--muted)';
+    return '<div style="background:'+bg+';border:'+border+';border-radius:10px;padding:8px;text-align:center"><div style="font-size:16px">'+a.icon+'</div><div style="font-size:9px;color:var(--muted);letter-spacing:1px">'+a.name.replace(/&#\d+;/g,'')+'</div><div style="font-size:10px;font-weight:700;color:'+color+'">'+status+'</div></div>';
+  }).join('');
+}
+
 function toggleLang(){
   isUrdu = !isUrdu;
   document.body.classList.toggle('urdu-mode', isUrdu);
@@ -792,7 +819,7 @@ async function loadAll(){
 }
 
 loadAll();
-setInterval(loadAll, 30000);loadWeather();setInterval(loadWeather,600000);loadForecast();setInterval(loadForecast,1800000);
+setInterval(loadAll, 30000);loadWeather();setInterval(loadWeather,600000);loadForecast();setInterval(loadForecast,1800000);updateApplianceTimes();setInterval(updateApplianceTimes,60000);
 </script>
 </body>
 </html>

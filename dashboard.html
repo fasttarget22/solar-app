@@ -646,7 +646,7 @@ function checkVoiceAlerts(solar,grid,load,batt){
 }
 
 
-async function loadForecast(){
+async async function loadForecast(){
   try{
     var res=await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.1688&longitude=73.2215&daily=weather_code,temperature_2m_max,cloud_cover_mean,sunshine_duration&timezone=Asia/Karachi&forecast_days=2');
     var d=await res.json();
@@ -979,7 +979,7 @@ function setAlerts(solar, grid, load){
 }
 
 
-async function loadWeather(){
+async async function loadWeather(){
   try{
     var res=await fetch('https://wttr.in/Abbottabad?format=j1');
     var d=await res.json();

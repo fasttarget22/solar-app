@@ -171,6 +171,29 @@ body.urdu-mode .en{display:none!important}
 body.urdu-mode .ur{display:block!important}
 body.urdu-mode{direction:rtl}
 </style>
+
+<style>
+.wt-bar{position:relative;z-index:5;padding:10px 14px;background:linear-gradient(135deg,#0a1628,#0d1f35);border-bottom:1px solid rgba(255,255,255,0.08);display:none}
+.wt-top{display:flex;align-items:center;gap:10px}
+.wt-icon{font-size:32px;animation:wtFloat 3s ease-in-out infinite;filter:drop-shadow(0 0 8px rgba(255,200,0,0.5))}
+@keyframes wtFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-4px) rotate(5deg)}}
+.wt-city{font-size:8px;letter-spacing:2px;color:#8892a4}
+.wt-desc{font-size:13px;font-weight:700;color:#f0f4ff}
+.wt-stats{display:flex;gap:10px;margin-left:auto}
+.wt-stat{text-align:center}
+.wt-lbl{font-size:7px;letter-spacing:1px;color:#8892a4}
+.wt-val{font-family:"Orbitron",monospace;font-size:13px;font-weight:700}
+.wt-temp{color:#ff5252;animation:tempPulse 2s ease-in-out infinite}
+@keyframes tempPulse{0%,100%{text-shadow:0 0 4px rgba(255,82,82,0.3)}50%{text-shadow:0 0 12px rgba(255,82,82,0.8)}}
+.wt-hum{color:#40c4ff;animation:humPulse 2.5s ease-in-out infinite}
+@keyframes humPulse{0%,100%{text-shadow:0 0 4px rgba(64,196,255,0.3)}50%{text-shadow:0 0 12px rgba(64,196,255,0.8)}}
+.wt-cld{color:#ffab00;animation:cldSpin 0s}
+.wt-wind{color:#00e676;animation:windMove 1.5s ease-in-out infinite}
+@keyframes windMove{0%,100%{letter-spacing:1px}50%{letter-spacing:3px}}
+.wt-warn{margin-top:6px;padding:4px 10px;border-radius:10px;background:rgba(255,171,0,0.1);border:1px solid rgba(255,171,0,0.3);font-size:10px;color:#ffab00;font-weight:600;animation:warnFlash 1.5s infinite;display:none}
+@keyframes warnFlash{0%,100%{opacity:1}50%{opacity:0.6}}
+.wt-good{margin-top:6px;padding:4px 10px;border-radius:10px;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);font-size:10px;color:#00e676;font-weight:600;display:none}
+</style>
 </head>
 <body id="mainBody">
 
@@ -210,7 +233,23 @@ body.urdu-mode{direction:rtl}
       <div class="live-txt ur">لائیو</div>
     </div>
   </div>
-</header>
+</header><div class="wt-bar" id="wtBar">
+  <div class="wt-top">
+    <div class="wt-icon" id="wtIcon">🌤️</div>
+    <div>
+      <div class="wt-city">📍 ABBOTTABAD, PAKISTAN</div>
+      <div class="wt-desc" id="wtDesc">Loading weather...</div>
+    </div>
+    <div class="wt-stats">
+      <div class="wt-stat"><div class="wt-lbl">🌡️ TEMP</div><div class="wt-val wt-temp" id="wtTemp">--</div></div>
+      <div class="wt-stat"><div class="wt-lbl">💧 HUMID</div><div class="wt-val wt-hum" id="wtHum">--</div></div>
+      <div class="wt-stat"><div class="wt-lbl">☁️ CLOUD</div><div class="wt-val wt-cld" id="wtCloud">--</div></div>
+      <div class="wt-stat"><div class="wt-lbl">💨 WIND</div><div class="wt-val wt-wind" id="wtWind">--</div></div>
+    </div>
+  </div>
+  <div class="wt-warn" id="wtWarn">⚠️ High cloud cover — solar output may be reduced!</div>
+  <div class="wt-good" id="wtGood">✅ Clear sky — excellent solar conditions!</div>
+</div>
 
 <!-- SOURCE BANNER -->
 <div class="src-ban">
@@ -523,6 +562,33 @@ function setAlerts(solar, grid, load){
   document.getElementById('alBatt').style.display = battOnly ? 'block' : 'none';
   document.getElementById('alHigh').style.display = (load>1200 && !battOnly) ? 'block' : 'none';
   document.getElementById('alMed').style.display = (load>300 && load<=1200 && !battOnly) ? 'block' : 'none';
+}
+
+
+async function loadWeather(){
+  try{
+    const res=await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.1688&longitude=73.2215&current=temperature_2m,relative_humidity_2m,weather_code,cloud_cover,wind_speed_10m&timezone=Asia/Karachi');
+    const d=await res.json();
+    const c=d.current;
+    const icons={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
+    const descs={0:'Clear Sky ✨',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Foggy',48:'Icy Fog',51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',61:'Light Rain',63:'Rain',65:'Heavy Rain',71:'Light Snow',73:'Snow',75:'Heavy Snow',80:'Rain Showers',81:'Heavy Showers',82:'Violent Showers',95:'Thunderstorm',96:'Thunderstorm+Hail',99:'Heavy Thunderstorm'};
+    const wc=c.weather_code;
+    const cloud=c.cloud_cover;
+    document.getElementById('wtBar').style.display='block';
+    document.getElementById('wtIcon').textContent=icons[wc]||'🌤️';
+    document.getElementById('wtDesc').textContent=descs[wc]||'Clear';
+    document.getElementById('wtTemp').textContent=c.temperature_2m+'°C';
+    document.getElementById('wtHum').textContent=c.relative_humidity_2m+'%';
+    document.getElementById('wtCloud').textContent=cloud+'%';
+    document.getElementById('wtWind').textContent=c.wind_speed_10m+' km/h';
+    const icon=document.getElementById('wtIcon');
+    if(wc===0){icon.style.animation='wtFloat 3s ease-in-out infinite';icon.style.filter='drop-shadow(0 0 10px rgba(255,200,0,0.8))';}
+    else if(wc<=2){icon.style.animation='wtFloat 4s ease-in-out infinite';icon.style.filter='drop-shadow(0 0 8px rgba(255,200,0,0.5))';}
+    else{icon.style.animation='wtFloat 6s ease-in-out infinite';icon.style.filter='drop-shadow(0 0 6px rgba(100,150,255,0.5))';}
+    if(cloud>70){document.getElementById('wtWarn').style.display='block';document.getElementById('wtGood').style.display='none';}
+    else if(cloud<30&&wc<=2){document.getElementById('wtGood').style.display='block';document.getElementById('wtWarn').style.display='none';}
+    else{document.getElementById('wtWarn').style.display='none';document.getElementById('wtGood').style.display='none';}
+  }catch(e){console.error('Weather:',e);}
 }
 
 async function loadAll(){

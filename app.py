@@ -13,61 +13,53 @@ H = {
     'Prefer': 'return=representation'
 }
 
-SMARTSOLAR_URL = "https://smartsolar.net.pk/D8BC38AD6637"
+# Direct endpoint to pull the raw text stream safely without browser scripts
+DATA_URL = "https://smartsolar.net.pk/index-data.php?dev_id=D8BC38AD6637&dev_dm=0"
 
 def scrape_smartsolar():
     try:
-        res = r.get(SMARTSOLAR_URL, headers={'User-Agent': 'Mozilla/5.0 (Linux; Android 10)'}, timeout=10)
+        res = r.get(DATA_URL, headers={'User-Agent': 'Mozilla/5.0'}, timeout=10)
         if not res.ok:
             return None
         html = res.text
         
-        # Strip all dense spaces/newlines to make regex matching flawless
-        clean_html = re.sub(r'\s+', ' ', html)
+        # Strip code formatting down to single-line spaces for seamless text-matching
+        clean = re.sub(r'\s+', ' ', html)
 
-        # 1. Parse Solar Power (Looks for digits right before W or near "Solar Power")
+        # 1. Parse PV Watt (Solar Power)
         solar_w = 0.0
-        sol_match = re.search(r"(\d+)\s*W.*?Solar", clean_html, re.IGNORECASE)
-        if not sol_match:
-            sol_match = re.search(r"Solar.*?(\d+)\s*W", clean_html, re.IGNORECASE)
+        sol_match = re.search(r'PV Watt.*?class="data_value[^"]*".*?>\s*(\d+)\s*W', clean, re.IGNORECASE)
         if sol_match:
             solar_w = float(sol_match.group(1))
 
-        # 2. Parse Home Load
+        # 2. Parse Output Load (W) (Home Load)
         load_w = 0.0
-        load_match = re.search(r"(\d+)\s*W.*?Load", clean_html, re.IGNORECASE)
-        if not load_match:
-            load_match = re.search(r"Load.*?(\d+)\s*W", clean_html, re.IGNORECASE)
+        load_match = re.search(r'Output Load \(W\).*?class="data_value[^"]*".*?>\s*(\d+)\s*W', clean, re.IGNORECASE)
         if load_match:
             load_w = float(load_match.group(1))
 
-        # 3. Parse Battery Capacity (%)
-        batt_pct = 100.0
-        pct_match = re.search(r"(\d+(?:\.\d+)?)\s*%.*?Battery", clean_html, re.IGNORECASE)
-        if not pct_match:
-            pct_match = re.search(r"Battery.*?(\d+(?:\.\d+)?)\s*%", clean_html, re.IGNORECASE)
-        if pct_match:
-            batt_pct = float(pct_match.group(1))
-
-        # 4. Parse Battery Voltage
+        # 3. Parse Battery Volt
         voltage = 48.0
-        volt_match = re.search(r"(\d+(?:\.\d+)?)\s*V.*?Battery", clean_html, re.IGNORECASE)
-        if not volt_match:
-            volt_match = re.search(r"Battery.*?(\d+(?:\.\d+)?)\s*V", clean_html, re.IGNORECASE)
+        volt_match = re.search(r'Battery Volt.*?class="data_value[^"]*".*?>\s*([\d.]+)\s*V', clean, re.IGNORECASE)
         if volt_match:
             voltage = float(volt_match.group(1))
 
+        # 4. Parse Battery Capacity Percentage (%)
+        batt_pct = 100.0
+        # Finds the first percentage value inside a data_value container directly following the Battery Volt block
+        pct_match = re.search(r'Battery Volt.*?class="data_value[^"]*".*?>.*?class="data_value[^"]*".*?>\s*(\d+)\s*%', clean, re.IGNORECASE)
+        if pct_match:
+            batt_pct = float(pct_match.group(1))
+
         # 5. Parse Temperatures and Fan Speed
-        temp_matches = re.findall(r"(\d+)\s*°C", clean_html)
-        fan_match = re.search(r"(\d+)\s*%.*?Fan", clean_html, re.IGNORECASE)
-        if not fan_match:
-            fan_match = re.search(r"Fan.*?(\d+)\s*%", clean_html, re.IGNORECASE)
+        temp_matches = re.findall(r"(\d+)\s*°C", clean)
+        fan_match = re.search(r"(\d+)\s*%.*?Fan", clean, re.IGNORECASE) or re.search(r"Fan.*?(\d+)\s*%", clean, re.IGNORECASE)
             
         t_val = temp_matches[0] if temp_matches else "36"
         f_val = fan_match.group(1) if fan_match else "30"
         notes_json = f'{{"temp":"{t_val}","fan":"{f_val}"}}'
 
-        # Format calculation parameters cleanly for display metrics
+        # Convert continuous raw watts to simulated data-slice logs
         solar_kwh = solar_w / 1000.0 if solar_w > 0 else 0.0
         utility_kwh = 0.0
         battery_kwh = 0.0
@@ -82,7 +74,7 @@ def scrape_smartsolar():
             'notes': notes_json
         }
     except Exception as e:
-        print("Scraper Failed:", e)
+        print("Data extraction process hit a snag:", e)
         return None
 
 @app.route('/health')

@@ -3,118 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solar Pro - Shahadat Sufly</title>
+    <title>Solar Pro - Abbottabad Prime Monitor</title>
     <style>
-        body { background-color: #0d1117; color: #c9d1d9; font-family: sans-serif; margin: 0; padding: 12px; }
-        .header { background: #161b22; padding: 15px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { margin: 0; font-size: 20px; color: #58a6ff; }
-        .header p { margin: 4px 0 0 0; font-size: 11px; color: #8b949e; }
-        .btn-urdu { background: #21262d; border: 1px solid #30363d; color: #c9d1d9; padding: 4px 12px; border-radius: 6px; font-size: 12px; }
-        .live-tag { background: rgba(46,164,79,0.2); color: #56d364; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; }
-        .source-bar { background: #161b22; border: 1px solid #30363d; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 14px; font-weight: bold; }
-        .alarm-zone { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
-        .alert-panel { padding: 14px; border-radius: 8px; font-size: 14px; font-weight: bold; display: none; }
-        .load-alert { background: rgba(218,54,51,0.15); border: 1px solid #da3633; color: #ff7b72; }
-        .batt-alert { background: rgba(240,136,62,0.15); border: 1px solid #f0883e; color: #ffa657; direction: rtl; text-align: right; }
-        .main-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .metric-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; }
-        .card-label { font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 6px; }
-        .card-num { font-size: 24px; font-weight: bold; color: #fff; }
-        .card-meta { font-size: 11px; color: #8b949e; margin-top: 4px; }
-        .bar-bg { background: #21262d; border-radius: 10px; height: 6px; margin-top: 10px; overflow: hidden; }
-        .bar-fill { background: #2ea44f; height: 100%; width: 0%; transition: width 0.5s ease; }
+        :root {
+            --bg-dark: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --accent-green: #56d364;
+            --accent-blue: #58a6ff;
+            --accent-orange: #f0883e;
+            --accent-red: #ff7b72;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+        }
+        .header {
+            background: linear-gradient(135deg, #1f2937, #111827);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-title h1 { margin: 0; font-size: 20px; color: #fff; }
+        .header-title p { margin: 5px 0 0 0; font-size: 11px; color: #8b949e; text-transform: uppercase; }
+        
+        /* گرین لائیو ڈاٹ اینیمیشن */
+        .live-tag {
+            background-color: rgba(46, 164, 79, 0.2);
+            color: var(--accent-green);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse-green 1.8s infinite ease-in-out;
+        }
+        @keyframes pulse-green {
+            0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(86, 211, 100, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(86, 211, 100, 0); }
+            100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(86, 211, 100, 0); }
+        }
+
+        .btn-urdu {
+            background: #21262d;
+            border: 1px solid #30363d;
+            color: #c9d1d9;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .mode-box {
+            background-color: var(--card-bg);
+            border: 1px solid #30363d;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .alarm-zone { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .alert-card { padding: 15px; border-radius: 8px; font-weight: bold; display: none; }
+        .alert-load { background-color: rgba(218, 54, 51, 0.15); border: 1px solid var(--accent-red); color: var(--accent-red); }
+        .alert-battery { background-color: rgba(240, 136, 62, 0.15); border: 1px solid var(--accent-orange); color: var(--accent-orange); direction: rtl; text-align: right; }
+        
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        
+        /* خوبصورت کارڈز اور آئیکن سٹائلنگ */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .card-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+        /* سورج گھومنے کی اینیمیشن */
+        .spin-solar {
+            animation: spin 8s infinite linear;
+        }
+        @keyframes spin { 100% { transform: rotate(30deg); } }
+
+        .card-title { font-size: 12px; color: #8b949e; text-transform: uppercase; margin-bottom: 4px; }
+        .card-value { font-size: 24px; font-weight: bold; color: #fff; }
+        .card-sub { font-size: 11px; color: #8b949e; margin-top: 5px; }
+        
+        /* چارجنگ پروگریس بار اینیمیشن */
+        .progress-bar {
+            background-color: #21262d;
+            border-radius: 10px;
+            height: 8px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #f0883e, #ffaa44);
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            box-shadow: 0 0 8px var(--accent-orange);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <div>
+        <div class="header-title">
             <h1>SOLAR PRO ⚡</h1>
             <p>Shahadat Sufly — Abbottabad Prime Monitor</p>
         </div>
-        <div style="display:flex; align-items:center; gap:8px;">
+        <div style="display:flex; align-items:center; gap:10px;">
             <button class="btn-urdu">اردو</button>
-            <div class="live-tag">● LIVE</div>
+            <div class="live-tag"><span class="live-dot"></span> LIVE</div>
         </div>
     </div>
-    <div class="source-bar">
-        POWER SOURCE: <span id="current-mode-text" style="color:#56d364;">Pure solar energy ☀️</span>
+
+    <div class="mode-box">
+        POWER SOURCE: <span id="power-text" style="color:var(--accent-green);">Pure solar energy ☀️</span>
     </div>
+
     <div class="alarm-zone">
-        <div id="panel-load-alarm" class="alert-panel load-alert">
+        <div id="load-alarm-card" class="alert-card alert-load">
             ⚠️ کیا چل رہا ہے؟! بوجھ بہت زیادہ ہے<br>
-            <span style="font-size:11px; font-weight:normal; color:#c9d1d9;">LOAD ABOVE 1200W — REDUCE NOW</span>
+            <span style="font-size:12px; font-weight:normal; color:#c9d1d9;">LOAD ABOVE 1200W — REDUCE NOW</span>
         </div>
-        <div id="panel-batt-alarm" class="alert-panel batt-alert">
-            ⚠️ صرف <span id="runtime-hours">2.5</span> گھنٹے باقی! واپڈا کے لیے تیار رہیں<br>
-            <span style="font-size:11px; font-weight:normal; color:#c9d1d9; direction:ltr; display:block; text-align:left;">Battery runtime limited! Prepare to switch to grid</span>
-        </div>
-    </div>
-    <div class="main-grid">
-        <div class="metric-card" style="border-bottom: 3px solid #2ea44f;">
-            <span class="card-label">Solar Now</span>
-            <span class="card-num" id="ui-solar">0.000</span>
-            <span class="card-meta">kW this reading</span>
-        </div>
-        <div class="metric-card" style="border-bottom: 3px solid #f0883e;">
-            <span class="card-label">Battery Capacity</span>
-            <span class="card-num" id="ui-pct">0%</span>
-            <div class="bar-bg"><div id="ui-bar" class="bar-fill"></div></div>
-        </div>
-        <div class="metric-card" style="border-bottom: 3px solid #58a6ff;">
-            <span class="card-label">Voltage</span>
-            <span class="card-num" id="ui-volt">0.0V</span>
-            <span class="card-meta">volts — 48V lithium</span>
-        </div>
-        <div class="metric-card" style="border-bottom: 3px solid #ff7b72;">
-            <span class="card-label">Home Load</span>
-            <span class="card-num" id="ui-load" style="color:#56d364;">0W</span>
-            <span class="card-meta">watts right now</span>
+
+        <div id="battery-alarm-card" class="alert-card alert-battery">
+            ⚠️ صرف <span id="hours-left">2.5</span> گھنٹے باقی! واپڈا کے لیے تیار رہیں<br>
+            <span style="font-size:12px; font-weight:normal; color:#c9d1d9; direction:ltr; display:block; text-align:left;">Battery runtime limited! Prepare to switch to grid</span>
         </div>
     </div>
+
+    <div class="grid">
+        <div class="card" style="border-bottom: 3px solid var(--accent-green);">
+            <span class="card-icon spin-solar">☀️</span>
+            <span class="card-title">Solar Now</span>
+            <span class="card-value" id="val-solar">0.000</span>
+            <span class="card-sub">kW this reading</span>
+        </div>
+        <div class="card" style="border-bottom: 3px solid var(--accent-orange);">
+            <span class="card-icon">🔋</span>
+            <span class="card-title">Battery</span>
+            <span class="card-value" id="val-pct">0%</span>
+            <div class="progress-bar"><div id="fill-pct" class="progress-fill"></div></div>
+            <span class="card-sub">% charged (4.8kWh)</span>
+        </div>
+        <div class="card" style="border-bottom: 3px solid var(--accent-blue);">
+            <span class="card-icon">⚡</span>
+            <span class="card-title">Voltage</span>
+            <span class="card-value" id="val-volt">0.0V</span>
+            <span class="card-sub">volts — 48V lithium</span>
+        </div>
+        <div class="card" style="border-bottom: 3px solid var(--accent-green);" id="load-card-border">
+            <span class="card-icon">🏠</span>
+            <span class="card-title">Home Load</span>
+            <span class="card-value" id="val-load" style="color:var(--accent-green);">0W</span>
+            <span class="card-sub">watts right now</span>
+        </div>
+    </div>
+
     <script>
-        function updateUI() {
+        function updateDashboard() {
             fetch('/api/history')
                 .then(res => res.json())
                 .then(data => {
-                    if(!data || data.length === 0) return;
-                    const row = data[0];
-                    const wLoad = row.load_w || 0;
-                    const kwhSolar = row.solar_kwh || 0;
-                    const wSolar = kwhSolar * 1000;
-                    const pct = row.battery_pct || 100;
-                    const volt = row.voltage || 48.0;
+                    if (!data || data.length === 0) return;
+                    const live = data[0];
+                    
+                    const loadWatts = live.load_w || 0;
+                    const solarKwh = live.solar_kwh || 0; 
+                    const solarWatts = solarKwh * 1000;
+                    const battPct = live.battery_pct || 100;
+                    const volt = live.voltage || 48.0;
 
-                    document.getElementById('ui-solar').innerText = kwhSolar.toFixed(3);
-                    document.getElementById('ui-pct').innerText = pct + '%';
-                    document.getElementById('ui-bar').style.width = pct + '%';
-                    document.getElementById('ui-volt').innerText = volt + 'V';
-                    document.getElementById('ui-load').innerText = wLoad + 'W';
+                    document.getElementById('val-solar').innerText = solarKwh.toFixed(3);
+                    document.getElementById('val-pct').innerText = battPct + '%';
+                    document.getElementById('fill-pct').style.width = battPct + '%';
+                    document.getElementById('val-volt').innerText = volt + 'V';
+                    document.getElementById('val-load').innerText = loadWatts + 'W';
 
-                    // 1. بوجھ کا الرٹ الگ چیک
-                    if(wLoad >= 1200) {
-                        document.getElementById('panel-load-alarm').style.display = 'block';
+                    // لوڈ کی وارننگ اور کلر چینج لاجک
+                    if (loadWatts >= 1200) {
+                        document.getElementById('load-alarm-card').style.display = 'block';
+                        document.getElementById('val-load').style.color = 'var(--accent-red)';
+                        document.getElementById('load-card-border').style.borderBottomColor = 'var(--accent-red)';
                     } else {
-                        document.getElementById('panel-load-alarm').style.display = 'none';
+                        document.getElementById('load-alarm-card').style.display = 'none';
+                        document.getElementById('val-load').style.color = 'var(--accent-green)';
+                        document.getElementById('load-card-border').style.borderBottomColor = 'var(--accent-green)';
                     }
 
-                    // 2. بیٹری کا الرٹ الگ چیک
-                    if(wSolar === 0 && wLoad > 50) {
-                        document.getElementById('current-mode-text').innerText = "Running on Battery Mode 🔋";
-                        document.getElementById('current-mode-text').style.color = "#f0883e";
-                        const amps = wLoad / volt;
-                        const hrs = amps > 0 ? ((pct/100 * 100) / amps) : 24;
-                        document.getElementById('runtime-hours').innerText = hrs.toFixed(1);
-                        document.getElementById('panel-batt-alarm').style.display = 'block';
+                    // بیٹری الرٹ لاجک
+                    if (solarWatts === 0 && loadWatts > 50) {
+                        document.getElementById('power-text').innerText = "Running on Battery Mode 🔋";
+                        document.getElementById('power-text').style.color = "var(--accent-orange)";
+                        
+                        const totalAmpsAvailable = (battPct / 100) * 100;
+                        const currentAmpsDrawn = loadWatts / volt;
+                        const hoursRemaining = currentAmpsDrawn > 0 ? (totalAmpsAvailable / currentAmpsDrawn) : 24;
+                        
+                        document.getElementById('hours-left').innerText = hoursRemaining.toFixed(1);
+                        document.getElementById('battery-alarm-card').style.display = 'block';
                     } else {
-                        document.getElementById('current-mode-text').innerText = "Pure solar energy ☀️";
-                        document.getElementById('current-mode-text').style.color = "#56d364";
-                        document.getElementById('panel-batt-alarm').style.display = 'none';
+                        document.getElementById('power-text').innerText = "Pure solar energy ☀️";
+                        document.getElementById('power-text').style.color = "var(--accent-green)";
+                        document.getElementById('battery-alarm-card').style.display = 'none';
                     }
-                });
+                })
+                .catch(err => console.error("Error updates:", err));
         }
-        updateUI();
-        setInterval(updateUI, 4000);
+
+        updateDashboard();
+        setInterval(updateDashboard, 4000);
     </script>
 </body>
 </html>
-

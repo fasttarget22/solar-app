@@ -529,7 +529,7 @@ async function loadAll(){
   try{
     const [sr, hr] = await Promise.all([
       fetch(API + '/api/summary').then(r=>r.json()),
-      fetch(API + '/api/history').then(r=>r.json())
+      fetch(API + '/api/live').then(r=>r.json())
     ]);
     document.getElementById('sTotalSolar').textContent = sr.total_solar.toFixed(2);
     document.getElementById('sTotalWapda').textContent = sr.total_utility.toFixed(2);

@@ -916,7 +916,7 @@ async function loadAll(){
       const bk = (bp/100) * BATT_CAP;
       document.getElementById('cBkwh').textContent = bk.toFixed(2);
       document.getElementById('bkwhProg').style.width = (bk/BATT_CAP*100) + '%';
-      setSrc(l.solar_kwh||0, l.utility_kwh||0);
+      setSrc(l.solar_kwh||0, l.utility_kwh||0);updateMeter(l.solar_kwh||0,l.utility_kwh||0,lw);analyzeLoad(lw,l.solar_kwh||0,l.utility_kwh||0);checkVoiceAlerts(l.solar_kwh||0,l.utility_kwh||0,lw,bp);updatePowerFlow(l.solar_kwh||0,l.utility_kwh||0,lw,bp);
       setAlerts(l.solar_kwh||0, l.utility_kwh||0, lw);
       updateBattHours(bp, lw);
       document.getElementById('tempVal').textContent = '49°C';

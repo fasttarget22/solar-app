@@ -178,6 +178,21 @@ body.urdu-mode{direction:rtl}
 .pkr-sub{font-size:10px;color:var(--muted);margin-top:4px}
 .pkr-rate{font-size:11px;color:var(--amber);margin-top:6px;font-weight:600}
 .pkr-off{color:var(--muted);animation:none;font-size:20px}
+
+.pf-card{position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;padding:14px}
+.pf-title{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:14px}
+.pf-grid{display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:1fr auto 1fr;gap:0;align-items:center;justify-items:center;min-height:180px}
+.pf-node{display:flex;flex-direction:column;align-items:center;gap:4px;z-index:2}
+.pf-icon{font-size:32px;filter:drop-shadow(0 0 6px rgba(0,230,118,0.3))}
+.pf-node-lbl{font-size:8px;letter-spacing:1px;color:var(--muted);text-align:center}
+.pf-node-val{font-family:"Orbitron",monospace;font-size:11px;font-weight:700;text-align:center}
+.pf-home{font-size:40px;filter:drop-shadow(0 0 10px rgba(0,230,118,0.5));animation:homeGlow 2s ease-in-out infinite}
+@keyframes homeGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(0,230,118,0.4))}50%{filter:drop-shadow(0 0 20px rgba(0,230,118,0.8))}}
+.pf-line-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+.pf-line{stroke-width:3;fill:none;stroke-dasharray:8,4;animation:flowAnim 1s linear infinite}
+.pf-line-off{stroke-dasharray:none;opacity:0.15}
+@keyframes flowAnim{0%{stroke-dashoffset:24}100%{stroke-dashoffset:0}}
+@keyframes flowAnimRev{0%{stroke-dashoffset:0}100%{stroke-dashoffset:24}}
 </style>
 
 <style>
@@ -209,6 +224,21 @@ body.urdu-mode{direction:rtl}
 .pkr-sub{font-size:10px;color:var(--muted);margin-top:4px}
 .pkr-rate{font-size:11px;color:var(--amber);margin-top:6px;font-weight:600}
 .pkr-off{color:var(--muted);animation:none;font-size:20px}
+
+.pf-card{position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;padding:14px}
+.pf-title{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:14px}
+.pf-grid{display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:1fr auto 1fr;gap:0;align-items:center;justify-items:center;min-height:180px}
+.pf-node{display:flex;flex-direction:column;align-items:center;gap:4px;z-index:2}
+.pf-icon{font-size:32px;filter:drop-shadow(0 0 6px rgba(0,230,118,0.3))}
+.pf-node-lbl{font-size:8px;letter-spacing:1px;color:var(--muted);text-align:center}
+.pf-node-val{font-family:"Orbitron",monospace;font-size:11px;font-weight:700;text-align:center}
+.pf-home{font-size:40px;filter:drop-shadow(0 0 10px rgba(0,230,118,0.5));animation:homeGlow 2s ease-in-out infinite}
+@keyframes homeGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(0,230,118,0.4))}50%{filter:drop-shadow(0 0 20px rgba(0,230,118,0.8))}}
+.pf-line-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+.pf-line{stroke-width:3;fill:none;stroke-dasharray:8,4;animation:flowAnim 1s linear infinite}
+.pf-line-off{stroke-dasharray:none;opacity:0.15}
+@keyframes flowAnim{0%{stroke-dashoffset:24}100%{stroke-dashoffset:0}}
+@keyframes flowAnimRev{0%{stroke-dashoffset:0}100%{stroke-dashoffset:24}}
 </style>
 </head>
 <body id="mainBody">
@@ -362,6 +392,49 @@ body.urdu-mode{direction:rtl}
 <div style="position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,#0d1b0a,#0a1f06);border:1px solid rgba(0,230,118,0.3);border-radius:16px;padding:14px">
   <div style="font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">&#9889; BEST TIME TO RUN APPLIANCES TODAY</div>
   <div id="appList" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px"></div>
+</div>
+<div class="pf-card" id="pfCard">
+  <div class="pf-title">&#9889; LIVE POWER FLOW</div>
+  <svg width="100%" height="200" id="pfSvg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid meet">
+    <!-- Home center -->
+    <text x="150" y="90" text-anchor="middle" font-size="36" id="pfHomeIcon">&#127968;</text>
+    <text x="150" y="108" text-anchor="middle" font-size="9" fill="#8892a4" id="pfHomeLoad">--W</text>
+
+    <!-- Solar top-left -->
+    <text x="40" y="45" text-anchor="middle" font-size="30" id="pfSolarIcon">&#9728;&#65039;</text>
+    <text x="40" y="62" text-anchor="middle" font-size="8" fill="#8892a4">SOLAR</text>
+    <text x="40" y="74" text-anchor="middle" font-size="9" font-family="monospace" fill="#00e676" id="pfSolarVal">--W</text>
+
+    <!-- Battery bottom-left -->
+    <text x="40" y="145" text-anchor="middle" font-size="30" id="pfBattIcon">&#128267;</text>
+    <text x="40" y="162" text-anchor="middle" font-size="8" fill="#8892a4">BATTERY</text>
+    <text x="40" y="174" text-anchor="middle" font-size="9" font-family="monospace" fill="#ffab00" id="pfBattVal">--%</text>
+
+    <!-- Wapda right -->
+    <text x="260" y="95" text-anchor="middle" font-size="30" id="pfGridIcon">&#128268;</text>
+    <text x="260" y="112" text-anchor="middle" font-size="8" fill="#8892a4">WAPDA</text>
+    <text x="260" y="124" text-anchor="middle" font-size="9" font-family="monospace" fill="#40c4ff" id="pfGridVal">--W</text>
+
+    <!-- Solar to Home line -->
+    <path id="pfLineSolar" d="M 75 55 Q 110 55 130 80" class="pf-line pf-line-off" stroke="#00e676"/>
+
+    <!-- Battery to Home line -->
+    <path id="pfLineBatt" d="M 75 150 Q 110 150 130 105" class="pf-line pf-line-off" stroke="#ffab00"/>
+
+    <!-- Wapda to Home line -->
+    <path id="pfLineGrid" d="M 225 100 L 170 95" class="pf-line pf-line-off" stroke="#40c4ff"/>
+
+    <!-- Flow dots -->
+    <circle id="pfDotSolar" r="5" fill="#00e676" opacity="0">
+      <animateMotion dur="1s" repeatCount="indefinite" path="M 75 55 Q 110 55 130 80"/>
+    </circle>
+    <circle id="pfDotBatt" r="5" fill="#ffab00" opacity="0">
+      <animateMotion dur="1.2s" repeatCount="indefinite" path="M 75 150 Q 110 150 130 105"/>
+    </circle>
+    <circle id="pfDotGrid" r="5" fill="#40c4ff" opacity="0">
+      <animateMotion dur="0.8s" repeatCount="indefinite" path="M 225 100 L 170 95"/>
+    </circle>
+  </svg>
 </div>
 <div class="main">
   <div class="cards">
@@ -620,6 +693,42 @@ function updateApplianceTimes(){
     const color=active?'var(--green)':'var(--muted)';
     return '<div style="background:'+bg+';border:'+border+';border-radius:10px;padding:8px;text-align:center"><div style="font-size:16px">'+a.icon+'</div><div style="font-size:9px;color:var(--muted);letter-spacing:1px">'+a.name.replace(/&#\d+;/g,'')+'</div><div style="font-size:10px;font-weight:700;color:'+color+'">'+status+'</div></div>';
   }).join('');
+}
+
+
+function updatePowerFlow(solar,grid,load,batt){
+  const solarW=(solar*1000).toFixed(0);
+  const gridW=(grid*1000).toFixed(0);
+  const battOnly=solar==0&&grid==0;
+
+  document.getElementById('pfSolarVal').textContent=solarW+'W';
+  document.getElementById('pfBattVal').textContent=batt.toFixed(0)+'%';
+  document.getElementById('pfGridVal').textContent=gridW+'W';
+  document.getElementById('pfHomeLoad').textContent=load.toFixed(0)+'W';
+
+  // Solar line
+  const sl=document.getElementById('pfLineSolar');
+  const sd=document.getElementById('pfDotSolar');
+  if(solar>0){sl.classList.remove('pf-line-off');sd.setAttribute('opacity','0.8');}
+  else{sl.classList.add('pf-line-off');sd.setAttribute('opacity','0');}
+
+  // Battery line
+  const bl=document.getElementById('pfLineBatt');
+  const bd=document.getElementById('pfDotBatt');
+  if(battOnly){bl.classList.remove('pf-line-off');bd.setAttribute('opacity','0.8');}
+  else{bl.classList.add('pf-line-off');bd.setAttribute('opacity','0');}
+
+  // Grid line
+  const gl=document.getElementById('pfLineGrid');
+  const gd=document.getElementById('pfDotGrid');
+  if(grid>0){gl.classList.remove('pf-line-off');gd.setAttribute('opacity','0.8');}
+  else{gl.classList.add('pf-line-off');gd.setAttribute('opacity','0');}
+
+  // Home glow color
+  const homeEl=document.getElementById('pfHomeIcon');
+  if(solar>0&&grid==0)homeEl.style.filter='drop-shadow(0 0 15px rgba(0,230,118,0.9))';
+  else if(grid>0)homeEl.style.filter='drop-shadow(0 0 15px rgba(64,196,255,0.9))';
+  else homeEl.style.filter='drop-shadow(0 0 15px rgba(255,171,0,0.9))';
 }
 
 function toggleLang(){

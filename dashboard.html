@@ -836,26 +836,29 @@ function setAlerts(solar, grid, load){
 
 async function loadWeather(){
   try{
-    const res=await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.1688&longitude=73.2215&current=temperature_2m,relative_humidity_2m,weather_code,cloud_cover,wind_speed_10m&timezone=Asia/Karachi');
+    const res=await fetch('https://wttr.in/Abbottabad?format=j1');
     const d=await res.json();
-    const c=d.current;
-    const icons={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
-    const descs={0:'Clear Sky ✨',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Foggy',48:'Icy Fog',51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',61:'Light Rain',63:'Rain',65:'Heavy Rain',71:'Light Snow',73:'Snow',75:'Heavy Snow',80:'Rain Showers',81:'Heavy Showers',82:'Violent Showers',95:'Thunderstorm',96:'Thunderstorm+Hail',99:'Heavy Thunderstorm'};
-    const wc=c.weather_code;
-    const cloud=c.cloud_cover;
+    const cc=d.current_condition[0];
+    const temp=cc.temp_C;
+    const hum=cc.humidity;
+    const wind=cc.windspeedKmph;
+    const cloud=cc.cloudcover;
+    const desc=cc.weatherDesc[0].value;
+    const wcode=parseInt(cc.weatherCode);
+    const icons={113:'☀️',116:'⛅',119:'☁️',122:'☁️',143:'🌫️',176:'🌦️',179:'❄️',182:'🌧️',185:'🌧️',200:'⛈️',227:'❄️',230:'❄️',248:'🌫️',260:'🌫️',263:'🌦️',266:'🌦️',281:'🌧️',284:'🌧️',293:'🌧️',296:'🌧️',299:'🌧️',302:'🌧️',305:'🌧️',308:'🌧️',311:'🌧️',314:'🌧️',317:'🌨️',320:'🌨️',323:'❄️',326:'❄️',329:'❄️',332:'❄️',335:'❄️',338:'❄️',350:'🌧️',353:'🌦️',356:'🌧️',359:'🌧️',362:'🌨️',365:'🌨️',368:'🌨️',371:'❄️',374:'🌨️',377:'🌨️',386:'⛈️',389:'⛈️',392:'⛈️',395:'⛈️'};
+    const icon=icons[wcode]||'🌤️';
     document.getElementById('wtBar').style.display='block';
-    document.getElementById('wtIcon').textContent=icons[wc]||'🌤️';
-    document.getElementById('wtDesc').textContent=descs[wc]||'Clear';
-    document.getElementById('wtTemp').textContent=c.temperature_2m+'°C';
-    document.getElementById('wtHum').textContent=c.relative_humidity_2m+'%';
+    document.getElementById('wtIcon').textContent=icon;
+    document.getElementById('wtDesc').textContent=desc;
+    document.getElementById('wtTemp').textContent=temp+'°C';
+    document.getElementById('wtHum').textContent=hum+'%';
     document.getElementById('wtCloud').textContent=cloud+'%';
-    document.getElementById('wtWind').textContent=c.wind_speed_10m+' km/h';
-    const icon=document.getElementById('wtIcon');
-    if(wc===0){icon.style.animation='wtFloat 3s ease-in-out infinite';icon.style.filter='drop-shadow(0 0 10px rgba(255,200,0,0.8))';}
-    else if(wc<=2){icon.style.animation='wtFloat 4s ease-in-out infinite';icon.style.filter='drop-shadow(0 0 8px rgba(255,200,0,0.5))';}
-    else{icon.style.animation='wtFloat 6s ease-in-out infinite';icon.style.filter='drop-shadow(0 0 6px rgba(100,150,255,0.5))';}
-    if(cloud>70){document.getElementById('wtWarn').style.display='block';document.getElementById('wtGood').style.display='none';}
-    else if(cloud<30&&wc<=2){document.getElementById('wtGood').style.display='block';document.getElementById('wtWarn').style.display='none';}
+    document.getElementById('wtWind').textContent=wind+' km/h';
+    const ic=document.getElementById('wtIcon');
+    if(wcode===113){ic.style.filter='drop-shadow(0 0 10px rgba(255,200,0,0.9))';}
+    else{ic.style.filter='drop-shadow(0 0 6px rgba(100,150,255,0.5))';}
+    if(parseInt(cloud)>70){document.getElementById('wtWarn').style.display='block';document.getElementById('wtGood').style.display='none';}
+    else if(parseInt(cloud)<30&&wcode===113){document.getElementById('wtGood').style.display='block';document.getElementById('wtWarn').style.display='none';}
     else{document.getElementById('wtWarn').style.display='none';document.getElementById('wtGood').style.display='none';}
   }catch(e){console.error('Weather:',e);}
 }

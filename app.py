@@ -91,7 +91,8 @@ if __name__=='__main__':
 def analytics():
     from datetime import datetime,timedelta
     period=request.args.get('period','24h')
-    if period=='24h':hrs=24
+    if period=='today':hrs=24
+    elif period=='24h':hrs=24
     elif period=='7d':hrs=168
     elif period=='1m':hrs=720
     elif period=='6m':hrs=4320

@@ -601,7 +601,7 @@ async function loadAll(){
     document.getElementById('sTotalWapda').textContent = sr.total_utility.toFixed(2);
     document.getElementById('sPeak').textContent = sr.peak_load.toFixed(0) + 'W';
     document.getElementById('sCount').textContent = sr.record_count;
-    document.getElementById('sSaved').textContent = 'PKR ' + Math.round(sr.total_solar*50).toLocaleString();
+    document.getElementById('sSaved').textContent = 'PKR ' + Math.round(sr.total_solar*22).toLocaleString();
     const rt = sr.total_solar>0 ? Math.min(100, Math.round(sr.total_solar/(sr.total_solar+sr.total_utility)*100)) : 0;
     document.getElementById('sRatio').textContent = rt + '%';
     document.getElementById('ratioFill').style.width = rt + '%';

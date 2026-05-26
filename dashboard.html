@@ -242,7 +242,7 @@ body.urdu-mode{direction:rtl}
     </div>
   </div>
   <div class="hdr-right">
-    <button class="lang-btn" onclick="toggleLang()" id="langBtn">اردو</button>
+    <button onclick="toggleVoice()" id="voiceBtn" style="background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:20px;font-size:11px;cursor:pointer">&#128263; Voice</button><button class="lang-btn" onclick="toggleLang()" id="langBtn">اردو</button>
     <div style="display:flex;align-items:center;gap:5px">
       <div class="live-dot"></div>
       <div class="live-txt en">LIVE</div>
@@ -485,6 +485,15 @@ for(let i=0;i<15;i++){
 }
 
 
+
+let voiceOn=false;
+function toggleVoice(){
+  voiceOn=!voiceOn;
+  const btn=document.getElementById('voiceBtn');
+  if(voiceOn){btn.style.color='var(--green)';btn.style.borderColor='var(--green)';btn.textContent='\ud83d\udd0a Voice ON';speakUrdu('وائس الرٹ آن ہے');}
+  else{btn.style.color='var(--muted)';btn.style.borderColor='var(--border)';btn.textContent='\ud83d\udd07 Voice';}
+}
+
 function shareFamily(){
   const url='https://solar-app-yrm6.onrender.com/dashboard';
   const solar=document.getElementById('sTsolar').textContent;
@@ -508,6 +517,31 @@ function analyzeLoad(load,solar,grid){
     setTimeout(()=>{if(load<=1200)el.style.display='none';},10000);
   }
   prevLoad=load;
+}
+
+
+let lastVoiceAlert='';
+function speakUrdu(text){
+  if(!window.speechSynthesis)return;
+  if(lastVoiceAlert===text)return;
+  lastVoiceAlert=text;
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='ur-PK';u.rate=0.9;u.pitch=1;u.volume=1;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+  setTimeout(()=>{lastVoiceAlert='';},60000);
+}
+function checkVoiceAlerts(solar,grid,load,batt){
+  const battOnly=solar==0&&grid==0;
+  if(battOnly&&batt<30){
+    speakUrdu('خبردار! بیٹری تیس فیصد سے کم ہے۔ فوری واپڈا لگائیں۔');
+  } else if(battOnly&&batt<50){
+    speakUrdu('بیٹری پچاس فیصد سے کم ہے۔ بوجھ کم کریں۔');
+  } else if(load>1200){
+    speakUrdu('خبردار! گھر کا بوجھ بہت زیادہ ہے۔ کچھ آلات بند کریں۔');
+  } else if(solar>0&&grid==0&&batt==100){
+    speakUrdu('بہترین! سولر چل رہا ہے اور بیٹری مکمل چارج ہے۔');
+  }
 }
 
 function toggleLang(){

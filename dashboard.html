@@ -495,6 +495,21 @@ function shareFamily(){
   window.open('https://wa.me/?text='+encodeURIComponent(msg));
 }
 
+
+let prevLoad=0;
+function analyzeLoad(load,solar,grid){
+  const spike=load-prevLoad;
+  const al=document.getElementById('alHigh');
+  if(spike>300&&prevLoad>0){
+    const el=document.getElementById('alHigh');
+    el.style.display='block';
+    el.querySelector('.al-ur').textContent='\u06a9\u0686\u06be \u0646\u06cc\u0627 \u0686\u0644\u0627 \u062f\u06cc\u0627 \u06af\u06cc\u0627! +'+spike.toFixed(0)+'W \u0627\u0636\u0627\u0641\u06c1';
+    el.querySelector('.al-sub').textContent='LOAD SPIKE DETECTED: +'+spike.toFixed(0)+'W increase!';
+    setTimeout(()=>{if(load<=1200)el.style.display='none';},10000);
+  }
+  prevLoad=load;
+}
+
 function toggleLang(){
   isUrdu = !isUrdu;
   document.body.classList.toggle('urdu-mode', isUrdu);

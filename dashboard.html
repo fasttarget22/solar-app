@@ -423,6 +423,8 @@ body.urdu-mode{direction:rtl}
 
     <!-- Wapda to Home line -->
     <path id="pfLineGrid" d="M 225 100 L 170 95" class="pf-line pf-line-off" stroke="#40c4ff"/>
+    <path id="pfLineSolarBatt" d="M 55 70 Q 40 110 55 140" class="pf-line pf-line-off" stroke="#00e676"/>
+    <path id="pfLineGridBatt" d="M 240 110 Q 180 175 75 155" class="pf-line pf-line-off" stroke="#40c4ff"/>
 
     <!-- Flow dots -->
     <circle id="pfDotSolar" r="5" fill="#00e676" opacity="0">
@@ -431,6 +433,8 @@ body.urdu-mode{direction:rtl}
     <circle id="pfDotBatt" r="5" fill="#ffab00" opacity="0">
       <animateMotion dur="1.2s" repeatCount="indefinite" path="M 75 150 Q 110 150 130 105"/>
     </circle>
+    <circle id="pfDotSolarBatt" r="4" fill="#00e676" opacity="0"><animateMotion dur="1.5s" repeatCount="indefinite" path="M 55 70 Q 40 110 55 140"/></circle>
+    <circle id="pfDotGridBatt" r="4" fill="#40c4ff" opacity="0"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 240 110 Q 180 175 75 155"/></circle>
     <circle id="pfDotGrid" r="5" fill="#40c4ff" opacity="0">
       <animateMotion dur="0.8s" repeatCount="indefinite" path="M 225 100 L 170 95"/>
     </circle>
@@ -712,23 +716,33 @@ function updatePowerFlow(solar,grid,load,batt){
   if(solar>0){sl.classList.remove('pf-line-off');sd.setAttribute('opacity','0.8');}
   else{sl.classList.add('pf-line-off');sd.setAttribute('opacity','0');}
 
-  // Battery line
-  const bl=document.getElementById('pfLineBatt');
-  const bd=document.getElementById('pfDotBatt');
-  if(battOnly){bl.classList.remove('pf-line-off');bd.setAttribute('opacity','0.8');}
-  else{bl.classList.add('pf-line-off');bd.setAttribute('opacity','0');}
+  const solarExcess=Math.round(solar*1000)>load&&batt<100;
+  const wapdaChargingBatt=grid>0&&batt<100&&solar==0;
 
-  // Grid line
-  const gl=document.getElementById('pfLineGrid');
-  const gd=document.getElementById('pfDotGrid');
-  if(grid>0){gl.classList.remove('pf-line-off');gd.setAttribute('opacity','0.8');}
-  else{gl.classList.add('pf-line-off');gd.setAttribute('opacity','0');}
+  function setLine(lid,did,on){
+    const l=document.getElementById(lid);const d=document.getElementById(did);
+    if(!l||!d)return;
+    if(on){l.classList.remove('pf-line-off');d.setAttribute('opacity','0.9');}
+    else{l.classList.add('pf-line-off');d.setAttribute('opacity','0');}
+  }
 
-  // Home glow color
+  setLine('pfLineBatt','pfDotBatt',battOnly);
+  setLine('pfLineGrid','pfDotGrid',grid>0);
+  setLine('pfLineSolarBatt','pfDotSolarBatt',solarExcess);
+  setLine('pfLineGridBatt','pfDotGridBatt',wapdaChargingBatt);
+
+  document.getElementById('pfBattVal').textContent=batt.toFixed(0)+'%'+(solarExcess||wapdaChargingBatt?' ↑':battOnly?' ↓':'');
+
   const homeEl=document.getElementById('pfHomeIcon');
   if(solar>0&&grid==0)homeEl.style.filter='drop-shadow(0 0 15px rgba(0,230,118,0.9))';
-  else if(grid>0)homeEl.style.filter='drop-shadow(0 0 15px rgba(64,196,255,0.9))';
-  else homeEl.style.filter='drop-shadow(0 0 15px rgba(255,171,0,0.9))';
+  else if(grid>0&&solar==0)homeEl.style.filter='drop-shadow(0 0 15px rgba(64,196,255,0.9))';
+  else if(grid>0&&solar>0)homeEl.style.filter='drop-shadow(0 0 15px rgba(255,171,0,0.9))';
+  else homeEl.style.filter='drop-shadow(0 0 15px rgba(255,82,82,0.9))';
+
+  const battEl=document.getElementById('pfBattIcon');
+  if(solarExcess||wapdaChargingBatt)battEl.style.filter='drop-shadow(0 0 12px rgba(0,230,118,0.9))';
+  else if(battOnly)battEl.style.filter='drop-shadow(0 0 12px rgba(255,82,82,0.9))';
+  else battEl.style.filter='drop-shadow(0 0 6px rgba(255,171,0,0.4))';
 }
 
 function toggleLang(){

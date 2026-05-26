@@ -336,6 +336,29 @@ body.urdu-mode{direction:rtl}
   <div class="pkr-sub" id="pkrSub">calculating...</div>
   <div class="pkr-rate" id="pkrRate"></div>
 </div>
+<div style="position:relative;z-index:5;margin:10px 10px 0;background:linear-gradient(135deg,#0a1628,#0d1f35);border:1px solid rgba(64,196,255,0.3);border-radius:16px;padding:14px">
+  <div style="font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">&#127774; TOMORROW'S SOLAR FORECAST — ABBOTTABAD</div>
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div style="text-align:center">
+      <div style="font-size:28px" id="fcIcon">--</div>
+      <div style="font-size:9px;color:var(--muted)">CONDITION</div>
+      <div style="font-size:11px;font-weight:600;color:var(--text)" id="fcDesc">--</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-size:9px;color:var(--muted)">MAX TEMP</div>
+      <div style="font-family:Orbitron,monospace;font-size:20px;color:#ff5252;font-weight:700" id="fcTemp">--</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-size:9px;color:var(--muted)">CLOUDS</div>
+      <div style="font-family:Orbitron,monospace;font-size:20px;color:#ffab00;font-weight:700" id="fcCloud">--</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-size:9px;color:var(--muted)">SOLAR EXP</div>
+      <div style="font-family:Orbitron,monospace;font-size:20px;font-weight:700" id="fcExp" style="color:var(--green)">--</div>
+    </div>
+  </div>
+  <div id="fcMsg" style="margin-top:10px;padding:6px 10px;border-radius:10px;font-size:11px;font-weight:600;text-align:center"></div>
+</div>
 <div class="main">
   <div class="cards">
     <div class="card green">
@@ -544,6 +567,34 @@ function checkVoiceAlerts(solar,grid,load,batt){
   }
 }
 
+
+async function loadForecast(){
+  try{
+    const res=await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.1688&longitude=73.2215&daily=weather_code,temperature_2m_max,cloud_cover_mean,sunshine_duration&timezone=Asia/Karachi&forecast_days=2');
+    const d=await res.json();
+    const icons={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',51:'🌦️',61:'🌧️',71:'❄️',80:'🌦️',95:'⛈️'};
+    const descs={0:'Clear Sky',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Foggy',51:'Drizzle',61:'Rain',71:'Snow',80:'Showers',95:'Thunderstorm'};
+    const wc=d.daily.weather_code[1];
+    const temp=d.daily.temperature_2m_max[1];
+    const cloud=d.daily.cloud_cover_mean[1];
+    const sunshine=d.daily.sunshine_duration[1];
+    const solarExp=cloud<20?'HIGH':cloud<50?'MEDIUM':cloud<70?'LOW':'POOR';
+    const expColor=cloud<20?'var(--green)':cloud<50?'var(--amber)':cloud<70?'#ff6600':'var(--red)';
+    document.getElementById('fcIcon').textContent=icons[wc]||'🌤️';
+    document.getElementById('fcDesc').textContent=descs[wc]||'Clear';
+    document.getElementById('fcTemp').textContent=temp+'°C';
+    document.getElementById('fcCloud').textContent=cloud+'%';
+    document.getElementById('fcExp').textContent=solarExp;
+    document.getElementById('fcExp').style.color=expColor;
+    const sunHrs=(sunshine/3600).toFixed(1);
+    const msg=cloud<30?'✅ Excellent solar day tomorrow! Expected '+sunHrs+' hrs sunshine':cloud<60?'⚡ Good solar expected. '+sunHrs+' hrs sunshine':'⚠️ Cloudy tomorrow. Charge battery today!';
+    const msgEl=document.getElementById('fcMsg');
+    msgEl.textContent=msg;
+    msgEl.style.background=cloud<30?'rgba(0,230,118,0.1)':cloud<60?'rgba(255,171,0,0.1)':'rgba(255,82,82,0.1)';
+    msgEl.style.color=cloud<30?'var(--green)':cloud<60?'var(--amber)':'var(--red)';
+  }catch(e){console.error('Forecast:',e);}
+}
+
 function toggleLang(){
   isUrdu = !isUrdu;
   document.body.classList.toggle('urdu-mode', isUrdu);
@@ -741,7 +792,7 @@ async function loadAll(){
 }
 
 loadAll();
-setInterval(loadAll, 30000);loadWeather();setInterval(loadWeather,600000);
+setInterval(loadAll, 30000);loadWeather();setInterval(loadWeather,600000);loadForecast();setInterval(loadForecast,1800000);
 </script>
 </body>
 </html>

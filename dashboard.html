@@ -600,8 +600,8 @@ function shareFamily(){
   const solar=document.getElementById('sTsolar').textContent;
   const batt=document.getElementById('cBatt').textContent;
   const load=document.getElementById('cLoad').textContent;
-  const saved=document.getElementById('sSaved').textContent;
-  const msg='\u2600\ufe0f *Sufly Solar - Abbottabad Prime*\n\n\ud83d\udd0b Battery: '+batt+'\n\ud83c\udfe0 Load: '+load+'\n\u2600\ufe0f Total Solar: '+solar+' kWh\n\ud83d\udcb0 Saved: '+saved+'\n\n\ud83d\udcf1 Live: '+url;
+  var saved=document.getElementById('sSaved').textContent;
+  var msg='\u2600\ufe0f *Sufly Solar - Abbottabad Prime*\n\n\ud83d\udd0b Battery: '+batt+'\n\ud83c\udfe0 Load: '+load+'\n\u2600\ufe0f Total Solar: '+solar+' kWh\n\ud83d\udcb0 Saved: '+saved+'\n\n\ud83d\udcf1 Live: '+url;
   window.open('https://wa.me/?text='+encodeURIComponent(msg));
 }
 
@@ -633,7 +633,7 @@ function speakUrdu(text){
   setTimeout(()=>{lastVoiceAlert='';},60000);
 }
 function checkVoiceAlerts(solar,grid,load,batt){
-  const battOnly=solar==0&&grid==0;
+  var battOnly=solar==0&&grid==0;
   if(battOnly&&batt<30){
     speakUrdu('خبردار! بیٹری تیس فیصد سے کم ہے۔ فوری واپڈا لگائیں۔');
   } else if(battOnly&&batt<50){
@@ -648,13 +648,13 @@ function checkVoiceAlerts(solar,grid,load,batt){
 
 async function loadForecast(){
   try{
-    const res=await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.1688&longitude=73.2215&daily=weather_code,temperature_2m_max,cloud_cover_mean,sunshine_duration&timezone=Asia/Karachi&forecast_days=2');
+    var res=await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.1688&longitude=73.2215&daily=weather_code,temperature_2m_max,cloud_cover_mean,sunshine_duration&timezone=Asia/Karachi&forecast_days=2');
     const d=await res.json();
-    const icons={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',51:'🌦️',61:'🌧️',71:'❄️',80:'🌦️',95:'⛈️'};
+    var icons={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',51:'🌦️',61:'🌧️',71:'❄️',80:'🌦️',95:'⛈️'};
     const descs={0:'Clear Sky',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Foggy',51:'Drizzle',61:'Rain',71:'Snow',80:'Showers',95:'Thunderstorm'};
     const wc=d.daily.weather_code[1];
-    const temp=d.daily.temperature_2m_max[1];
-    const cloud=d.daily.cloud_cover_mean[1];
+    var temp=d.daily.temperature_2m_max[1];
+    var cloud=d.daily.cloud_cover_mean[1];
     const sunshine=d.daily.sunshine_duration[1];
     const solarExp=cloud<20?'HIGH':cloud<50?'MEDIUM':cloud<70?'LOW':'POOR';
     const expColor=cloud<20?'var(--green)':cloud<50?'var(--amber)':cloud<70?'#ff6600':'var(--red)';
@@ -665,8 +665,8 @@ async function loadForecast(){
     document.getElementById('fcExp').textContent=solarExp;
     document.getElementById('fcExp').style.color=expColor;
     const sunHrs=(sunshine/3600).toFixed(1);
-    const msg=cloud<30?'✅ Excellent solar day tomorrow! Expected '+sunHrs+' hrs sunshine':cloud<60?'⚡ Good solar expected. '+sunHrs+' hrs sunshine':'⚠️ Cloudy tomorrow. Charge battery today!';
-    const msgEl=document.getElementById('fcMsg');
+    var msg=cloud<30?'✅ Excellent solar day tomorrow! Expected '+sunHrs+' hrs sunshine':cloud<60?'⚡ Good solar expected. '+sunHrs+' hrs sunshine':'⚠️ Cloudy tomorrow. Charge battery today!';
+    var msgEl=document.getElementById('fcMsg');
     msgEl.textContent=msg;
     msgEl.style.background=cloud<30?'rgba(0,230,118,0.1)':cloud<60?'rgba(255,171,0,0.1)':'rgba(255,82,82,0.1)';
     msgEl.style.color=cloud<30?'var(--green)':cloud<60?'var(--amber)':'var(--red)';
@@ -675,7 +675,7 @@ async function loadForecast(){
 
 
 function updateApplianceTimes(){
-  const now=new Date();
+  var now=new Date();
   const hr=now.getHours();
   const appliances=[
     {name:'&#129529; Washing Machine',best:'10:00-13:00',bestHr:[10,13],icon:'&#129529;'},
@@ -687,7 +687,7 @@ function updateApplianceTimes(){
   ];
   const list=document.getElementById('appList');
   list.innerHTML=appliances.map(a=>{
-    const active=hr>=a.bestHr[0]&&hr<a.bestHr[1];
+    var active=hr>=a.bestHr[0]&&hr<a.bestHr[1];
     const bg=active?'rgba(0,230,118,0.15)':'rgba(255,255,255,0.04)';
     const border=active?'1px solid var(--green)':'1px solid rgba(255,255,255,0.08)';
     const status=active?'&#9989; NOW':'&#128336; '+a.best;
@@ -698,9 +698,9 @@ function updateApplianceTimes(){
 
 
 function updatePowerFlow(solar,grid,load,batt){
-  const solarW=(solar*1000).toFixed(0);
+  var solarW=(solar*1000).toFixed(0);
   const gridW=(grid*1000).toFixed(0);
-  const battOnly=solar==0&&grid==0;
+  var battOnly=solar==0&&grid==0;
 
   document.getElementById('pfSolarVal').textContent=solarW+'W';
   document.getElementById('pfBattVal').textContent=batt.toFixed(0)+'%';
@@ -795,7 +795,7 @@ function updateStreak(rows){
   const el=document.getElementById('streakVal');
   if(el){
     el.textContent=streak;
-    const msg=document.getElementById('streakMsg');
+    var msg=document.getElementById('streakMsg');
     if(streak>=7)msg.textContent='Amazing! '+streak+' days pure solar!';
     else if(streak>=3)msg.textContent=streak+' days on pure solar!';
     else if(streak===1)msg.textContent='1 day pure solar today!';
@@ -826,10 +826,10 @@ function updateBillComparison(totalSolar, totalWapda){
   const solarCost = 0;
   const wapdaCost = totalWapda * pkr;
   const fullWapdaCost = (totalSolar + totalWapda) * pkr;
-  const saved = fullWapdaCost - wapdaCost;
-  const el = document.getElementById('billSaved');
-  const el2 = document.getElementById('billWapda');
-  const el3 = document.getElementById('billFull');
+  var saved = fullWapdaCost - wapdaCost;
+  var el = document.getElementById('billSaved');
+  var el2 = document.getElementById('billWapda');
+  var el3 = document.getElementById('billFull');
   if(el) el.textContent = 'PKR ' + Math.round(saved).toLocaleString();
   if(el2) el2.textContent = 'PKR ' + Math.round(wapdaCost).toLocaleString();
   if(el3) el3.textContent = 'PKR ' + Math.round(fullWapdaCost).toLocaleString();
@@ -843,7 +843,7 @@ function updateEfficiencyScore(solar, load, batt, temp){
   else if(temp > 45) score -= 5;
   if(batt < 20) score -= 20;
   else if(batt < 50) score -= 10;
-  const solarW = solar * 1000;
+  var solarW = solar * 1000;
   if(solarW > 0 && load > 0){
     const eff = Math.min(100, (solarW / load) * 100);
     if(eff < 50) score -= 10;
@@ -856,9 +856,9 @@ function updateEfficiencyScore(solar, load, batt, temp){
   else if(score >= 60){grade='C';color='var(--amber)';}
   else if(score >= 50){grade='D';color:'#ff6600';}
   else{grade='F';color='var(--red)';}
-  const el = document.getElementById('effGrade');
-  const el2 = document.getElementById('effScore');
-  const el3 = document.getElementById('effBar2');
+  var el = document.getElementById('effGrade');
+  var el2 = document.getElementById('effScore');
+  var el3 = document.getElementById('effBar2');
   if(el){el.textContent = grade; el.style.color = color;}
   if(el2) el2.textContent = score + '/100';
   if(el3){el3.style.width = score + '%'; el3.style.background = color;}
@@ -882,7 +882,7 @@ function calcBattHours(bp, lw){
   else if(h < 3) lvl = 'danger';
   else if(h < 8) lvl = 'caution';
   // Pakistan finish time PKT (UTC+5)
-  const now = new Date();
+  var now = new Date();
   const pkt = new Date(now.getTime() + (5*60*60*1000) - (now.getTimezoneOffset()*60*1000));
   const finishMs = pkt.getTime() + (h * 3600 * 1000);
   const finish = new Date(finishMs);
@@ -898,7 +898,7 @@ function updateBattHours(bp, lw, solar=0, grid=0){
   const card = document.getElementById('bhCard');
   card.className = 'bh-card bh-' + lvl;
   const valEl = document.getElementById('bhVal');
-  const iconEl = document.getElementById('bhIcon');
+  var iconEl = document.getElementById('bhIcon');
   const sugUr = document.getElementById('bhSugUr');
   const sugEn = document.getElementById('bhSugEn');
   const bar = document.getElementById('bhBar');
@@ -950,8 +950,8 @@ function updateBattHours(bp, lw, solar=0, grid=0){
 function setSrc(solar, grid){
   const badge = document.getElementById('srcBadge');
   const val = document.getElementById('srcVal');
-  const icon = document.getElementById('srcIcon');
-  const battOnly = solar==0 && grid==0;
+  var icon = document.getElementById('srcIcon');
+  var battOnly = solar==0 && grid==0;
   if(battOnly){
     badge.className='src-badge b-batt'; badge.textContent='BATTERY ONLY';
     val.style.color='var(--red)'; val.textContent='صرف بیٹری 🔋'; icon.textContent='🔋';
@@ -972,7 +972,7 @@ function setSrc(solar, grid){
 }
 
 function setAlerts(solar, grid, load){
-  const battOnly = solar==0 && grid==0;
+  var battOnly = solar==0 && grid==0;
   document.getElementById('alBatt').style.display = battOnly ? 'block' : 'none';
   document.getElementById('alHigh').style.display = (load>1200 && !battOnly) ? 'block' : 'none';
   document.getElementById('alMed').style.display = (load>300 && load<=1200 && !battOnly) ? 'block' : 'none';
@@ -981,17 +981,17 @@ function setAlerts(solar, grid, load){
 
 async function loadWeather(){
   try{
-    const res=await fetch('https://wttr.in/Abbottabad?format=j1');
+    var res=await fetch('https://wttr.in/Abbottabad?format=j1');
     const d=await res.json();
     const cc=d.current_condition[0];
-    const temp=cc.temp_C;
+    var temp=cc.temp_C;
     const hum=cc.humidity;
     const wind=cc.windspeedKmph;
-    const cloud=cc.cloudcover;
+    var cloud=cc.cloudcover;
     const desc=cc.weatherDesc[0].value;
     const wcode=parseInt(cc.weatherCode);
-    const icons={113:'☀️',116:'⛅',119:'☁️',122:'☁️',143:'🌫️',176:'🌦️',179:'❄️',182:'🌧️',185:'🌧️',200:'⛈️',227:'❄️',230:'❄️',248:'🌫️',260:'🌫️',263:'🌦️',266:'🌦️',281:'🌧️',284:'🌧️',293:'🌧️',296:'🌧️',299:'🌧️',302:'🌧️',305:'🌧️',308:'🌧️',311:'🌧️',314:'🌧️',317:'🌨️',320:'🌨️',323:'❄️',326:'❄️',329:'❄️',332:'❄️',335:'❄️',338:'❄️',350:'🌧️',353:'🌦️',356:'🌧️',359:'🌧️',362:'🌨️',365:'🌨️',368:'🌨️',371:'❄️',374:'🌨️',377:'🌨️',386:'⛈️',389:'⛈️',392:'⛈️',395:'⛈️'};
-    const icon=icons[wcode]||'🌤️';
+    var icons={113:'☀️',116:'⛅',119:'☁️',122:'☁️',143:'🌫️',176:'🌦️',179:'❄️',182:'🌧️',185:'🌧️',200:'⛈️',227:'❄️',230:'❄️',248:'🌫️',260:'🌫️',263:'🌦️',266:'🌦️',281:'🌧️',284:'🌧️',293:'🌧️',296:'🌧️',299:'🌧️',302:'🌧️',305:'🌧️',308:'🌧️',311:'🌧️',314:'🌧️',317:'🌨️',320:'🌨️',323:'❄️',326:'❄️',329:'❄️',332:'❄️',335:'❄️',338:'❄️',350:'🌧️',353:'🌦️',356:'🌧️',359:'🌧️',362:'🌨️',365:'🌨️',368:'🌨️',371:'❄️',374:'🌨️',377:'🌨️',386:'⛈️',389:'⛈️',392:'⛈️',395:'⛈️'};
+    var icon=icons[wcode]||'🌤️';
     document.getElementById('wtBar').style.display='block';
     document.getElementById('wtIcon').textContent=icon;
     document.getElementById('wtDesc').textContent=desc;
@@ -1011,8 +1011,8 @@ async function loadWeather(){
 
 let pkrPerSec=0;let pkrTotal=0;let pkrInterval=null;
 function updateMeter(solar,grid,load){
-  const active=solar>0||grid>0;
-  const solarW=solar*1000;
+  var active=solar>0||grid>0;
+  var solarW=solar*1000;
   const pkrPerHour=solarW/1000*22;
   pkrPerSec=pkrPerHour/3600;
   const el=document.getElementById('pkrVal');
@@ -1052,7 +1052,7 @@ async function loadAll(){
     document.getElementById('sRatio').textContent = rt + '%';
     document.getElementById('ratioF').style.width = rt + '%';
     if(hr.length){
-      const l = hr[0];
+      var l = hr[0];
       document.getElementById('cSolar').textContent = (l.solar_kwh||0).toFixed(3);
       const bp = l.battery_pct||0;
       document.getElementById('cBatt').textContent = bp.toFixed(1) + '%';
@@ -1067,8 +1067,8 @@ async function loadAll(){
       setSrc(l.solar_kwh||0, l.utility_kwh||0);updateMeter(l.solar_kwh||0,l.utility_kwh||0,lw);analyzeLoad(lw,l.solar_kwh||0,l.utility_kwh||0);checkVoiceAlerts(l.solar_kwh||0,l.utility_kwh||0,lw,bp);updatePowerFlow(l.solar_kwh||0,l.utility_kwh||0,lw,bp);
       setAlerts(l.solar_kwh||0, l.utility_kwh||0, lw);
       updateBattHours(bp, lw, solar, grid);
-      const tempRaw=l.temp||'';
-      const tempNum=tempRaw.match(/([0-9]+)/);
+      var tempRaw=l.temp||'';
+      var tempNum=tempRaw.match(/([0-9]+)/);
       updateEfficiencyScore(solar,load,bp,tempNum?parseInt(tempNum[1]):40);
       document.getElementById('tempV').textContent=tempNum?tempNum[1]+'°C':'--';
       document.getElementById('fanV').textContent=l.fan||'--';

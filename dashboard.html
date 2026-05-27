@@ -109,7 +109,7 @@
 
   <div id="peakLoadTrackerCard" class="main-card">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-      <span style="font-size: 13px; font-weight: 600; color: #9ca3af; letter-spacing: 0.5px;">📊 24-HOUR PEAK LOAD PROFILE</span>
+      <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 13px; font-weight: 600; color: #9ca3af; letter-spacing: 0.5px;">📊 24-HOUR PEAK LOAD PROFILE</span><button onclick="resetHourlyData()" style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.2); color: #f43f5e; font-size: 9px; font-weight: bold; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: all 0.2s; outline: none;">🔄 Clear Data</button></div>
       <span id="peakTimeBadge" style="font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; color: #38bdf8; background: rgba(56,189,248,0.15); font-family: monospace;">PROFILING TIME</span>
     </div>
     
@@ -271,6 +271,21 @@
     }
   }
 
+  function resetHourlyData() {
+    if(confirm("Wipe out all stored 24-hour peak consumption graph history?")) {
+      localStorage.removeItem("solar_hourly_load");
+      localStorage.removeItem("solar_hourly_counts");
+      renderHourlyChart(Array(24).fill(0));
+      var insightEl = document.getElementById("peakInsights");
+      if(insightEl) insightEl.innerHTML = "📊 Profile history cleared. Collecting fresh hourly metrics...";
+      var badgeEl = document.getElementById("peakTimeBadge");
+      if(badgeEl) { 
+        badgeEl.innerText = "RESET"; 
+        badgeEl.style.color = "#9ca3af"; 
+        badgeEl.style.background = "rgba(156,163,175,0.15)"; 
+      }
+    }
+  }
   function trackHourlyLoad() {
     var loadEl = document.getElementById("pfHomeLoad");
     if(!loadEl) return;

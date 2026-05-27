@@ -216,3 +216,4 @@ def smart_power_manager(d):
         if can_alert('mode_recovery',2):
             set_priority('Solar','Solar Only')
             send_whatsapp('✅ AUTO: Battery '+str(batt)+'% - Back to Solar Only!')
+

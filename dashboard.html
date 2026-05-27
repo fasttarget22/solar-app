@@ -723,7 +723,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;heigh
 <!-- ═══ BILLING ENGINE ═══ -->
 <div class="bill-card">
   <div class="sec-ttl">⚡ WAPDA BILLING &amp; TAX ENGINE</div>
-  <div class="cd-pill">
+  <div class="date-filter-row" style="display:flex;gap:6px;margin-bottom:10px;"><div style="flex:1"><div style="font-size:.6rem;color:var(--dim);letter-spacing:.1em;margin-bottom:4px;">FROM DATE</div><input type="date" id="dateFrom" style="width:100%;background:#0a0015;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 8px;color:var(--text);font-family:Rajdhani,sans-serif;font-size:.75rem;outline:none;"></div><div style="flex:1"><div style="font-size:.6rem;color:var(--dim);letter-spacing:.1em;margin-bottom:4px;">TO DATE</div><input type="date" id="dateTo" style="width:100%;background:#0a0015;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 8px;color:var(--text);font-family:Rajdhani,sans-serif;font-size:.75rem;outline:none;"></div><button onclick="loadDateRange()" style="align-self:flex-end;padding:6px 12px;background:rgba(0,229,255,.1);border:1px solid var(--cyan);color:var(--cyan);font-family:Rajdhani,sans-serif;font-size:.7rem;font-weight:700;border-radius:8px;cursor:pointer;">LOAD</button></div><div class="cd-pill">
     <span class="cd-lbl">📅 Next meter reading (Jun 7)</span>
     <span class="cd-days" id="cdDays">-- days</span>
   </div>
@@ -743,7 +743,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;heigh
       <span class="slbl">📊 Units Accumulated This Cycle</span>
       <span class="sval"><span id="unitsDisp">150</span> units</span>
     </div>
-    <input type="range" id="unitsSlider" min="0" max="800" value="150" oninput="calcBill()">
+    <input type="range" id="unitsSlider" min="0" max="800" value="0" oninput="calcBill()">
   </div>
   <div class="sw" id="slabWarn"></div>
   <div class="rbox">
@@ -1179,3 +1179,29 @@ setInterval(fetchWeather, 300000);
 </script>
 </body>
 </html>
+<script>
+function loadDateRange(){
+  var from=document.getElementById("dateFrom").value;
+  var to=document.getElementById("dateTo").value;
+  if(!from||!to){alert("Select both dates");return;}
+  fetch("/api/analytics?period=all")
+    .then(function(r){return r.json();})
+    .then(function(rows){
+      var days={};
+      rows.forEach(function(x){
+        var d=x.ts.substring(0,10);
+        if(d>=from&&d<=to){
+          if(!days[d])days[d]=0;
+          if(x.utility_kwh>days[d])days[d]=x.utility_kwh;
+        }
+      });
+      var u=0;
+      Object.keys(days).forEach(function(d){u+=days[d];});
+      u=Math.round(u);
+      document.getElementById("unitsSlider").value=Math.min(u,800);
+      document.getElementById("unitsDisp").textContent=Math.min(u,800);
+      calcBill();
+    })
+    .catch(function(){alert("Failed");});
+}
+</script>

@@ -55,6 +55,7 @@ def live():
     if not d:return jsonify({'error':'scrape failed'}),500
     r.post(SU+'/rest/v1/readings',headers=H,json={k:d[k] for k in ['solar_kwh','utility_kwh','battery_kwh','battery_pct','load_w','voltage','notes']})
     check_alerts(d)
+    smart_power_manager(d)
     return jsonify(d)
 
 @app.route('/api/log',methods=['POST'])
@@ -149,8 +150,7 @@ def send_whatsapp(msg):
     except:
         pass
 
-def check_alerts(d):
-    global _last_batt_alert,_last_temp_alert
+def check_alerts(d)
     import time
     now=time.time()
     batt=d.get('battery_pct',100)

@@ -54,6 +54,7 @@ def live():
     d=scrape()
     if not d:return jsonify({'error':'scrape failed'}),500
     r.post(SU+'/rest/v1/readings',headers=H,json={k:d[k] for k in ['solar_kwh','utility_kwh','battery_kwh','battery_pct','load_w','voltage','notes']})
+    check_alerts(d)
     return jsonify(d)
 
 @app.route('/api/log',methods=['POST'])
@@ -140,3 +141,22 @@ def faults():
 def chart():
     res=r.get('https://smartsolar.net.pk/api/inverter/chart.php?duration=60',headers={'X-API-KEY':'6637103e47ce38c4f5b4f2fad69474642b67d8bc-0'},timeout=10)
     return jsonify(res.json().get('data',[]) if res.ok else [])
+
+def send_whatsapp(msg):
+    try:
+        url='https://api.callmebot.com/whatsapp.php?phone=971566468525&text='+msg.replace(' ','+')+'&apikey=6556738'
+        r.get(url,timeout=10)
+    except:
+        pass
+
+def check_alerts(d):
+    batt=d.get('battery_pct',100)
+    temp_str=d.get('temp','0')
+    import re
+    temps=re.findall(r'[\d.]+',temp_str)
+    temp=float(temps[0]) if temps else 0
+    notes=(d.get('notes','').lower())
+    if batt<30 and 'line' not in notes and 'solar' not in notes:
+        send_whatsapp('🔴 SUFLY SOLAR ALERT: Battery low '+str(batt)+'% - Connect Wapda immediately!')
+    if temp>55:
+        send_whatsapp('🌡️ SUFLY SOLAR ALERT: Inverter temperature high '+str(temp)+'C - Check ventilation!')

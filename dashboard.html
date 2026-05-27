@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Solar Management Dashboard</title>
+  <title>Premium Smart Solar Dashboard</title>
   <style>
     body {
       background-color: #0b0f19;
       color: #f0f4ff;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       padding: 16px;
       margin: 0;
       display: flex;
@@ -21,95 +21,169 @@
       max-width: 480px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     .main-card {
       background: #111827;
       border: 1px solid #374151;
       border-radius: 16px;
-      padding: 16px;
+      padding: 20px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
     }
 
-    /* Core Dynamic Animations CSS Engine */
-    @keyframes homeFanSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .fan-spin-active { animation: homeFanSpin 1.2s linear infinite; transform-origin: center; transform-box: fill-box; }
-    
-    @keyframes heartPulse {
-      0% { transform: scale(1); opacity: 0.5; }
-      50% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 5px #ef4444); }
-      100% { transform: scale(1); opacity: 0.5; }
+    /* Weather Component Layout */
+    .weather-badge {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 10px 14px;
     }
-    .heart-blink { animation: heartPulse 1.5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
 
-    @keyframes flowParticleMove {
-      from { stroke-dashoffset: 24; }
-      to { stroke-dashoffset: 0; }
+    /* Grid Display Matrix Layout */
+    .power-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
     }
-    .wire-flow-running { animation: flowParticleMove 1.2s linear infinite; }
+
+    .power-box {
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      position: relative;
+    }
+
+    .power-box.full-width {
+      grid-column: span 2;
+      background: linear-gradient(145deg, #1f2937, #111827);
+      border-color: #4b5563;
+    }
+
+    .metric-value {
+      font-size: 26px;
+      font-weight: bold;
+      font-family: monospace;
+      margin: 4px 0;
+    }
+
+    .metric-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Horizontal Appliance Control Track Layout */
+    .appliance-row {
+      display: flex;
+      justify-content: space-between;
+      background: rgba(31, 41, 55, 0.6);
+      border: 1px solid #374151;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .appliance-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 30%;
+    }
+
+    .appliance-status {
+      font-size: 9px;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(156,163,175,0.1);
+      color: #9ca3af;
+    }
+
+    @keyframes fanRotation { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .spin-active { animation: fanRotation 1s linear infinite; display: inline-block; transform-origin: center; }
   </style>
 </head>
 <body>
 
 <div class="container">
 
+  <div class="weather-badge">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 24px;" id="weatherIcon">🌤️</span>
+      <div>
+        <div style="font-size: 13px; font-weight: bold; color: #fff;">Abbottabad, PK</div>
+        <div style="font-size: 10px; color: #94a3b8;" id="weatherCondition">Partly Cloudy Forecast</div>
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <div style="font-size: 16px; font-weight: bold; color: #38bdf8;" id="weatherTemp">24°C</div>
+      <div style="font-size: 8px; font-weight: bold; background: rgba(16,185,129,0.15); color: #10b981; padding: 2px 6px; border-radius: 20px; text-transform: uppercase; margin-top: 2px;">● System Online</div>
+    </div>
+  </div>
+
   <div class="main-card">
-    <svg width="100%" height="220" viewBox="0 0 360 220" style="background: transparent;">
+    <div class="power-grid">
       
-      <path d="M 65,55 L 180,115" stroke="#1f2937" stroke-width="4" stroke-linecap="round" fill="none" />
-      <path class="wire-flow-running" d="M 65,55 L 180,115" stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,6" stroke-linecap="round" fill="none" id="flowSolarToHome" />
+      <div class="power-box" style="border-left: 3px solid #10b981;">
+        <div class="metric-label">☀️ Solar Power</div>
+        <div class="metric-value" style="color: #10b981;" id="valSolarNode">1250 W</div>
+        <div style="font-size: 9px; color: #6b7280;">Generating Live</div>
+      </div>
 
-      <path d="M 295,55 L 180,115" stroke="#1f2937" stroke-width="4" stroke-linecap="round" fill="none" />
-      <path class="wire-flow-running" d="M 295,55 L 180,115" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="6,6" stroke-linecap="round" fill="none" id="flowGridToHome" style="display: none;" />
+      <div class="power-box" style="border-left: 3px solid #38bdf8;">
+        <div class="metric-label">🔌 WAPDA Grid</div>
+        <div class="metric-value" style="color: #38bdf8;" id="valGridNode">0 W</div>
+        <div style="font-size: 9px; color: #6b7280;" id="gridStatusText">Disconnected</div>
+      </div>
 
-      <path d="M 65,175 L 180,115" stroke="#1f2937" stroke-width="4" stroke-linecap="round" fill="none" />
-      <path class="wire-flow-running" d="M 65,175 L 180,115" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="6,6" stroke-linecap="round" fill="none" id="flowBatteryToHome" />
+      <div class="power-box" style="border-left: 3px solid #f59e0b;">
+        <div class="metric-label">🔋 Battery Bank</div>
+        <div class="metric-value" style="color: #f59e0b;" id="valBatteryNode">92%</div>
+        <div style="font-size: 9px; color: #d97706;">Discharging Load</div>
+      </div>
 
-      <g transform="translate(65, 55)">
-        <circle r="22" fill="#064e3b" stroke="#10b981" stroke-width="1.5" style="filter: drop-shadow(0 0 6px rgba(16,185,129,0.2));" />
-        <text y="4" text-anchor="middle" font-size="20">☀️</text>
-        <text y="34" text-anchor="middle" font-size="9" fill="#9ca3af" font-weight="600" style="letter-spacing: 0.3px;">SOLAR</text>
-        <text y="46" text-anchor="middle" font-size="11" fill="#10b981" font-weight="bold" font-family: monospace;" id="valSolarNode">1250W</text>
-      </g>
+      <div class="power-box full-width" style="border-top: 2px solid #6366f1;">
+        <div class="metric-label" style="color: #a5b4fc;">🏠 Current Home Load</div>
+        <div class="metric-value" style="color: #fff; font-size: 32px;" id="pfHomeLoad">450 W</div>
+        <div style="font-size: 10px; color: #9ca3af;">System Heartbeat Active ❤️</div>
+      </div>
+    </div>
 
-      <g transform="translate(295, 55)">
-        <circle r="22" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1.5" style="filter: drop-shadow(0 0 6px rgba(56,189,248,0.2));" />
-        <text y="4" text-anchor="middle" font-size="18">🔌</text>
-        <text y="34" text-anchor="middle" font-size="9" fill="#9ca3af" font-weight="600" style="letter-spacing: 0.3px;">WAPDA</text>
-        <text y="46" text-anchor="middle" font-size="11" fill="#38bdf8" font-weight="bold" font-family: monospace;" id="valGridNode">0W</text>
-      </g>
-
-      <g transform="translate(65, 175)">
-        <circle r="22" fill="#78350f" stroke="#f59e0b" stroke-width="1.5" style="filter: drop-shadow(0 0 6px rgba(245,158,11,0.2));" />
-        <text y="4" text-anchor="middle" font-size="18">🔋</text>
-        <text y="34" text-anchor="middle" font-size="9" fill="#9ca3af" font-weight="600" style="letter-spacing: 0.3px;">BATTERY</text>
-        <text y="46" text-anchor="middle" font-size="10" fill="#f59e0b" font-weight="bold" font-family: monospace;" id="valBatteryNode">92%</text>
-      </g>
-
-      <g id="pfHomeIcon" transform="translate(180, 115)">
-        <circle r="28" fill="#1f2937" stroke="#4b5563" stroke-width="1.5" style="filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));" />
-        
-        <text y="12" text-anchor="middle" font-size="34">🏠</text>
-        <text class="heart-blink" y="1" text-anchor="middle" font-size="11">❤️</text>
-        
-        <text id="shFan" x="0" y="-38" text-anchor="middle" font-size="15" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">🌀</text>
-        
-        <text id="shLight" x="-38" y="5" text-anchor="middle" font-size="13" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">💡</text>
-        
-        <text id="shTV" x="38" y="5" text-anchor="middle" font-size="13" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">📺</text>
-        
-        <g id="shTV_Glow" style="display:none;"></g>
-      </g>
-
-      <text x="180" y="162" text-anchor="middle" font-size="9" fill="#9ca3af" font-weight="bold" style="letter-spacing: 0.5px;">HOME LOAD</text>
-      <text x="180" y="178" text-anchor="middle" font-size="14" font-weight="bold" fill="#f0f4ff" font-family: monospace;" id="pfHomeLoad">450W</text>
-    </svg>
+    <div class="appliance-row">
+      <div class="appliance-item">
+        <span id="appFanIcon" style="font-size: 18px;">🌀</span>
+        <span style="font-size: 10px; font-weight: 500;">Ceiling Fan</span>
+        <span class="appliance-status" id="appFanStatus">OFF</span>
+      </div>
+      <div class="appliance-item">
+        <span id="appLightIcon" style="font-size: 18px;">💡</span>
+        <span style="font-size: 10px; font-weight: 500;">Home Lights</span>
+        <span class="appliance-status" id="appLightStatus">OFF</span>
+      </div>
+      <div class="appliance-item">
+        <span id="appTvIcon" style="font-size: 18px;">📺</span>
+        <span style="font-size: 10px; font-weight: 500;">Smart TV</span>
+        <span class="appliance-status" id="appTvStatus">OFF</span>
+      </div>
+    </div>
   </div>
 
   <div id="peakLoadTrackerCard" class="main-card">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-      <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 13px; font-weight: 600; color: #9ca3af; letter-spacing: 0.5px;">📊 24-HOUR PEAK LOAD PROFILE</span><button onclick="resetHourlyData()" style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.2); color: #f43f5e; font-size: 9px; font-weight: bold; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: all 0.2s; outline: none;">🔄 Clear Data</button></div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 13px; font-weight: 600; color: #9ca3af; letter-spacing: 0.5px;">📊 24-HOUR PEAK LOAD PROFILE</span>
+        <button onclick="resetHourlyData()" style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.2); color: #f43f5e; font-size: 9px; font-weight: bold; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: all 0.2s; outline: none;">🔄 Clear Data</button>
+      </div>
       <span id="peakTimeBadge" style="font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; color: #38bdf8; background: rgba(56,189,248,0.15); font-family: monospace;">PROFILING TIME</span>
     </div>
     
@@ -205,72 +279,75 @@
 </div>
 
 <script>
+  // 1. ORIGINAL ABBOTTABAD SIMULATED WEATHER BADGE CONTROLLER
+  function updateWeatherMetrics() {
+    var icons = ["☀️", "🌤️", "⛅", "☁️"];
+    var conditions = ["Clear Sky Conditions", "Partly Cloudy Horizons", "Scattered Cloud Formations", "Overcast Sky Blanket"];
+    var hr = new Date().getHours();
+    
+    var baseTemp = (hr > 6 && hr < 18) ? 26 : 17;
+    var currentTemp = baseTemp + Math.floor(Math.random() * 4);
+    var index = Math.floor(Math.random() * icons.length);
+    
+    document.getElementById("weatherIcon").innerText = icons[index];
+    document.getElementById("weatherCondition").innerText = conditions[index];
+    document.getElementById("weatherTemp").innerText = currentTemp + "°C";
+  }
+
+  // 2. TRUE BOX MATRIX REAL-TIME SYNCHRONIZER
   function syncSmartAppliances() {
     var loadEl = document.getElementById("pfHomeLoad");
     if(!loadEl) return;
     
     var loadVal = parseInt(loadEl.innerText) || 0;
     
-    var fan = document.getElementById("shFan");
-    var light = document.getElementById("shLight");
-    var tv = document.getElementById("shTV");
-    
-    // Dynamic Orbit Visual Controls
-    if(loadVal > 300) {
-      fan.classList.add("fan-spin-active");
-      fan.style.opacity = "1";
-      fan.style.filter = "drop-shadow(0 0 4px #00e5ff)";
-    } else {
-      fan.classList.remove("fan-spin-active");
-      fan.style.opacity = "0.2";
-      fan.style.filter = "grayscale(1)";
-    }
-    
-    if(loadVal > 50) {
-      light.style.opacity = "1";
-      light.style.filter = "drop-shadow(0 0 5px #ffe082)";
-    } else {
-      light.style.opacity = "0.2";
-      light.style.filter = "grayscale(1)";
-    }
-    
-    if(loadVal > 120) {
-      tv.style.opacity = "1";
-      tv.style.filter = "drop-shadow(0 0 5px #29b6f6)";
-    } else {
-      tv.style.opacity = "0.2";
-      tv.style.filter = "grayscale(1)";
-    }
-    
-    // Dynamic Symmetrical Flow Line Vectors
-    var solFlow = document.getElementById("flowSolarToHome");
-    var gridFlow = document.getElementById("flowGridToHome");
-    var batFlow = document.getElementById("flowBatteryToHome");
+    var fanIcon = document.getElementById("appFanIcon");
+    var fanStatus = document.getElementById("appFanStatus");
+    var lightStatus = document.getElementById("appLightStatus");
+    var tvStatus = document.getElementById("appTvStatus");
     
     var nodeSol = document.getElementById("valSolarNode");
     var nodeGrid = document.getElementById("valGridNode");
     var nodeBat = document.getElementById("valBatteryNode");
+    var gridTxt = document.getElementById("gridStatusText");
     
-    if(loadVal > 800) {
-      // Complement home requirement using WAPDA grid infusion
-      var wUnits = loadVal - 800;
-      if(nodeSol) nodeSol.innerText = "800W";
-      if(nodeGrid) nodeGrid.innerText = wUnits + "W";
-      if(nodeBat) nodeBat.innerText = "100W";
-      if(solFlow) solFlow.style.display = "block";
-      if(gridFlow) gridFlow.style.display = "block";
-      if(batFlow) batFlow.style.display = "block";
+    // Process Device CSS states & strings precisely matching your layout
+    if(loadVal > 300) {
+      if(fanIcon) fanIcon.className = "spin-active";
+      if(fanStatus) { fanStatus.innerText = "RUNNING"; fanStatus.style.color = "#00e5ff"; fanStatus.style.background = "rgba(0,229,255,0.1)"; }
     } else {
-      // System functions smoothly entirely isolated off clean storage arrays
-      if(nodeSol) nodeSol.innerText = Math.round(loadVal * 0.7) + "W";
-      if(nodeGrid) nodeGrid.innerText = "0W";
-      if(nodeBat) nodeBat.innerText = Math.round(loadVal * 0.3) + "W";
-      if(solFlow) solFlow.style.display = "block";
-      if(gridFlow) gridFlow.style.display = "none";
-      if(batFlow) batFlow.style.display = "block";
+      if(fanIcon) fanIcon.className = "";
+      if(fanStatus) { fanStatus.innerText = "OFF"; fanStatus.style.color = "#9ca3af"; fanStatus.style.background = "rgba(156,163,175,0.1)"; }
+    }
+    
+    if(loadVal > 50) {
+      if(lightStatus) { lightStatus.innerText = "ON"; lightStatus.style.color = "#fbbf24"; lightStatus.style.background = "rgba(251,191,36,0.1)"; }
+    } else {
+      if(lightStatus) { lightStatus.innerText = "OFF"; lightStatus.style.color = "#9ca3af"; lightStatus.style.background = "rgba(156,163,175,0.1)"; }
+    }
+    
+    if(loadVal > 120) {
+      if(tvStatus) { tvStatus.innerText = "ACTIVE"; tvStatus.style.color = "#a855f7"; tvStatus.style.background = "rgba(168,85,247,0.1)"; }
+    } else {
+      if(tvStatus) { tvStatus.innerText = "OFF"; tvStatus.style.color = "#9ca3af"; tvStatus.style.background = "rgba(156,163,175,0.1)"; }
+    }
+    
+    // Symmetrical Grid Numeric Allocator Logic
+    if(loadVal > 800) {
+      var gridPull = loadVal - 800;
+      if(nodeSol) nodeSol.innerText = "800 W";
+      if(nodeGrid) nodeGrid.innerText = gridPull + " W";
+      if(nodeBat) nodeBat.innerText = "90%";
+      if(gridTxt) { gridTxt.innerText = "Drawing Power"; gridTxt.style.color = "#f43f5e"; }
+    } else {
+      if(nodeSol) nodeSol.innerText = Math.round(loadVal * 0.75) + " W";
+      if(nodeGrid) nodeGrid.innerText = "0 W";
+      if(nodeBat) nodeBat.innerText = "94%";
+      if(gridTxt) { gridTxt.innerText = "Standby Ready"; gridTxt.style.color = "#10b981"; }
     }
   }
 
+  // 3. GRAPHING CONTROLS
   function resetHourlyData() {
     if(confirm("Wipe out all stored 24-hour peak consumption graph history?")) {
       localStorage.removeItem("solar_hourly_load");
@@ -278,14 +355,9 @@
       renderHourlyChart(Array(24).fill(0));
       var insightEl = document.getElementById("peakInsights");
       if(insightEl) insightEl.innerHTML = "📊 Profile history cleared. Collecting fresh hourly metrics...";
-      var badgeEl = document.getElementById("peakTimeBadge");
-      if(badgeEl) { 
-        badgeEl.innerText = "RESET"; 
-        badgeEl.style.color = "#9ca3af"; 
-        badgeEl.style.background = "rgba(156,163,175,0.15)"; 
-      }
     }
   }
+
   function trackHourlyLoad() {
     var loadEl = document.getElementById("pfHomeLoad");
     if(!loadEl) return;
@@ -345,17 +417,14 @@
     if(insightEl) {
       if(data[peakHour] > 0) {
         insightEl.innerHTML = "⚡ Max peak consumption today occurred at <strong>" + peakHour + ":00</strong> with an average load of <strong>" + data[peakHour] + "W</strong>.";
-        if(badgeEl) {
-          badgeEl.innerText = "PEAK: " + peakHour + ":00";
-          badgeEl.style.color = "#ef4444";
-          badgeEl.style.background = "rgba(239,68,68,0.15)";
-        }
+        if(badgeEl) { badgeEl.innerText = "PEAK: " + peakHour + ":00"; badgeEl.style.color = "#ef4444"; badgeEl.style.background = "rgba(239,68,68,0.15)"; }
       } else {
         insightEl.innerHTML = "📊 Monitoring system timelines to log and display daily maximum peak load hours...";
       }
     }
   }
 
+  // 4. REGULATORY METRIC CALCULATIONS
   function calculateWapdaBill() {
     var slider = document.getElementById("unitsSliderInput");
     var filter = document.getElementById("billingMonthFilter");
@@ -375,7 +444,6 @@
     
     var baseCost = 0; var fixedCharge = 0; var nextSlabTarget = 0; var unitRate = 22.00;
     
-    // Process step-up cumulative structures matching your exact parameters
     if(units <= 100) {
       baseCost = units * 22.00; fixedCharge = 275; nextSlabTarget = 100; unitRate = 22.00;
     } else if(units <= 200) {
@@ -481,23 +549,26 @@
     trackHourlyLoad();
   }
 
-  // Live fluctuating loops to view appliance network parameters react instantly
+  // Simulated live load fluctuations loops
   setInterval(function() {
     var loadEl = document.getElementById("pfHomeLoad");
     if(loadEl) {
-      var mockLoads = [450, 920, 140, 680, 240, 35];
+      var mockLoads = [450, 960, 120, 710, 220, 45];
       var randomLoad = mockLoads[Math.floor(Math.random() * mockLoads.length)];
-      loadEl.innerText = randomLoad + "W";
+      loadEl.innerText = randomLoad + " W";
       syncSmartAppliances();
     }
   }, 5000);
 
+  setInterval(updateWeatherMetrics, 900000);
   setInterval(runDashboardCorePipeline, 6000);
+  
   setTimeout(function() {
     var initialData = JSON.parse(localStorage.getItem("solar_hourly_load")) || Array(24).fill(0);
     renderHourlyChart(initialData);
     calculateWapdaBill();
     syncSmartAppliances();
+    updateWeatherMetrics();
   }, 1000);
 </script>
 </body>

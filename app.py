@@ -101,3 +101,25 @@ def analytics():
     res=r.get(SU+f'/rest/v1/readings?order=ts.asc&ts=gte.{since}&limit=2000',headers=H)
     rows=res.json() if res.ok else []
     return jsonify(rows)
+
+@app.route('/api/savetotals', methods=['POST'])
+def savetotals():
+    d = request.json or {}
+    date = d.get('date','')
+    saved = d.get('saved_pkr', 0)
+    consumed = d.get('consumed_pkr', 0)
+    existing = r.get(SU+'/rest/v1/totals?date=eq.'+date, headers=H)
+    if existing.ok and len(existing.json()) > 0:
+        r.patch(SU+'/rest/v1/totals?date=eq.'+date, headers=H, json={'saved_pkr':saved,'consumed_pkr':consumed})
+    else:
+        r.post(SU+'/rest/v1/totals', headers=H, json={'date':date,'saved_pkr':saved,'consumed_pkr':consumed})
+    return jsonify({'ok':True})
+
+@app.route('/api/gettotals')
+def gettotals():
+    date = request.args.get('date','')
+    res = r.get(SU+'/rest/v1/totals?date=eq.'+date, headers=H)
+    rows = res.json() if res.ok else []
+    if rows:
+        return jsonify(rows[0])
+    return jsonify({'saved_pkr':0,'consumed_pkr':0})

@@ -1352,3 +1352,20 @@ setInterval(function(){
   localStorage.setItem(_ck, costTick.toFixed(4));
 }, 10000);
 </script>
+<script>
+var _tdate = new Date().toISOString().substring(0,10);
+function saveTotalsDB() {
+  var body = JSON.stringify({date:_tdate, saved_pkr:saveTick, consumed_pkr:costTick});
+  fetch('/api/savetotals', {method:'POST', headers:{'Content-Type':'application/json'}, body:body});
+}
+function loadTotalsDB() {
+  fetch('/api/gettotals?date=' + _tdate)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d && d.saved_pkr) saveTick = d.saved_pkr;
+      if(d && d.consumed_pkr) costTick = d.consumed_pkr;
+    }).catch(function(){});
+}
+loadTotalsDB();
+setInterval(saveTotalsDB, 60000);
+</script>

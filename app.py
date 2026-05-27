@@ -150,13 +150,30 @@ def send_whatsapp(msg):
         pass
 
 def check_alerts(d):
+    global _last_batt_alert,_last_temp_alert
+    import time
+    now=time.time()
     batt=d.get('battery_pct',100)
     temp_str=d.get('temp','0')
     import re
     temps=re.findall(r'[\d.]+',temp_str)
     temp=float(temps[0]) if temps else 0
     notes=(d.get('notes','').lower())
-    if batt<30 and 'line' not in notes and 'solar' not in notes:
-        send_whatsapp('🔴 SUFLY SOLAR ALERT: Battery low '+str(batt)+'% - Connect Wapda immediately!')
+    if batt<30 and now-_last_batt_alert>3600 and 'line' not in notes and 'solar' not in notes:
+        
+        _last_batt_alert=now
+        if can_alert("batt"): send_whatsapp('🔴 SUFLY SOLAR ALERT: Battery low '+str(batt)+'% - Connect Wapda immediately!')
     if temp>55:
-        send_whatsapp('🌡️ SUFLY SOLAR ALERT: Inverter temperature high '+str(temp)+'C - Check ventilation!')
+        if can_alert("temp"): send_whatsapp('🌡️ SUFLY SOLAR ALERT: Inverter temperature high '+str(temp)+'C - Check ventilation!')
+
+_last_batt_alert = 0
+_last_temp_alert = 0
+
+import time
+_alert_cooldown = {}
+def can_alert(key, hours=1):
+    now = time.time()
+    if key not in _alert_cooldown or now - _alert_cooldown[key] > hours*3600:
+        _alert_cooldown[key] = now
+        return True
+    return False

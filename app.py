@@ -4,32 +4,28 @@ app=Flask(__name__)
 SU=os.environ.get('SUPABASE_URL','')
 SK=os.environ.get('SUPABASE_KEY','')
 H={'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json','Prefer':'return=representation'}
-DATA_URL="https://smartsolar.net.pk/index-data.php?dev_id=D8BC38AD6637&dev_dm=0&msp=4680"
+SS_KEY='6637103e47ce38c4f5b4f2fad69474642b67d8bc-0'
+SS_URL='https://smartsolar.net.pk/api/inverter/status.php'
 
-def gv(t,field):
-    m=re.search(field+r'.*?data_value[^>]*>(.*?)</div>',t,re.IGNORECASE|re.DOTALL)
-    if m:
-        nums=re.findall(r'[\d.]+',m.group(1))
-        return float(nums[0]) if nums else 0.0
-    return 0.0
-
-def gs(t,field):
-    m=re.search(field+r'.*?data_value[^>]*>(.*?)</div>',t,re.IGNORECASE|re.DOTALL)
-    return m.group(1).strip() if m else ''
+def gn(val):
+    m=re.findall(r'[\d.]+',str(val))
+    return float(m[0]) if m else 0.0
 
 def scrape():
     try:
-        res=r.get(DATA_URL,headers={'User-Agent':'Mozilla/5.0'},timeout=10)
+        res=r.get(SS_URL,headers={'X-API-KEY':SS_KEY},timeout=10)
         if not res.ok:return None
-        t=re.sub(r'\s+',' ',res.text)
-        solar_w=gv(t,r'PV Watt')
-        load_w=gv(t,r'Output Load \(W\)')
-        voltage=gv(t,r'Battery Volt')
-        batt_pct=gv(t,r'Battery Status')
-        grid_w=gv(t,r'Grid Load \(W\)')
-        mode=gs(t,r'Inverter Mode')
-        temp=gs(t,r'Inverter Temperature')
-        fan=gs(t,r'Inverter Fan')
+        d=res.json().get('data',{})
+        solar_w=gn(d.get('PV_Watt',0))
+        load_w=gn(d.get('Output_Load_W',0))
+        voltage=gn(d.get('Batt_Volt',48))
+        batt_pct=gn(d.get('Batt_Status',0))
+        grid_w=gn(d.get('AC_Watt',0))
+        mode=d.get('In_Mode','')
+        temp=d.get('Inv_Temp','')
+        fan=d.get('Inv_Fan','')
+        batt_charge_w=gn(d.get('Batt_Charge_W',0))
+        batt_discharge_w=gn(d.get('Batt_Discharge_W',0))
         return {
             'solar_kwh':round(solar_w/1000,3),
             'utility_kwh':round(grid_w/1000,3),
@@ -37,10 +33,16 @@ def scrape():
             'battery_pct':batt_pct,
             'load_w':load_w,
             'voltage':voltage,
-            'notes':mode,'solar_w':solar_w,'grid_w':grid_w,
+            'notes':mode,
             'temp':temp,
-            'fan':fan
+            'fan':fan,
+            'solar_w':solar_w,
+            'grid_w':grid_w,
+            'batt_charge_w':batt_charge_w,
+            'batt_discharge_w':batt_discharge_w
         }
+    except Exception as e:
+        return None
     except Exception as e:
         return None
 

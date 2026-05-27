@@ -894,7 +894,7 @@ function fetchLive() {
 function updateAll(d) {
   var notes    = (d.notes || '').toLowerCase();
   var hasSolar = notes.indexOf('solar') !== -1 || (d.solar_w && d.solar_w > 0);
-  var hasWapda = notes.indexOf('line') !== -1;
+  var hasWapda = notes.indexOf('line') !== -1 || notes.indexOf('hybrid') !== -1 || gridW > 0;
   var battOnly = !hasSolar && !hasWapda;
   var solarW   = d.solar_w !== undefined ? d.solar_w : 0;
   var gridW    = d.grid_w  !== undefined ? d.grid_w  : 0;

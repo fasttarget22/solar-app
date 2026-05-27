@@ -500,7 +500,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;heigh
   </div>
 </div>
 
-<div class="main">
+<div class="main"><div class="top-tickers"><div class="tt-save"><div class="tt-lbl" style="color:#00e676">💚 SAVING</div><div class="tt-val" style="color:#00e676" id="topSaveTicker">Rs.0.0000</div><div class="tt-rate" style="color:#00e676" id="topSaveRate">Rs.0/sec</div><div id="coinBox" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div></div><div class="tt-cost"><div class="tt-lbl" style="color:#ff4444">🔴 CONSUMING</div><div class="tt-val" style="color:#ff4444" id="topCostTicker">Rs.0.0000</div><div class="tt-rate" style="color:#ff4444" id="topCostRate">Rs.0/sec</div><div id="cashBox" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div></div></div>
 
 <!-- ═══ STATS BAR ═══ -->
 <div class="stats-bar">
@@ -1294,4 +1294,50 @@ function startDualTicker(solarW, gridW) {
     if(cr) cr.textContent = 'Rs.' + costRate.toFixed(6) + '/sec wapda';
   }, 1000);
 }
+</script>
+<style>
+.top-tickers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.tt-save{background:linear-gradient(135deg,#031a0a,#0a1628);border:1px solid rgba(0,230,118,.3);border-radius:12px;padding:14px;text-align:center;position:relative;overflow:hidden;}
+.tt-cost{background:linear-gradient(135deg,#1a0303,#1a0808);border:1px solid rgba(255,68,68,.3);border-radius:12px;padding:14px;text-align:center;position:relative;overflow:hidden;}
+.tt-lbl{font-size:.6rem;font-weight:700;letter-spacing:.1em;margin-bottom:6px;}
+.tt-val{font-family:'Orbitron',monospace;font-size:1.15rem;font-weight:700;line-height:1;}
+.tt-rate{font-size:.54rem;margin-top:3px;opacity:.8;}
+.coin{position:absolute;font-size:1rem;animation:coinUp 1.5s ease-out forwards;}
+@keyframes coinUp{0%{bottom:-10px;opacity:1;}100%{bottom:100%;opacity:0;}}
+.cash{position:absolute;font-size:1rem;animation:cashOut 1.5s ease-out forwards;}
+@keyframes cashOut{0%{top:50%;opacity:1;transform:scale(1);}100%{top:100%;opacity:0;transform:scale(0.3);}}
+</style>
+<script>
+function spawnCoin(containerId, emoji) {
+  var c = document.getElementById(containerId);
+  if (!c) return;
+  var el = document.createElement('span');
+  el.className = containerId === 'coinBox' ? 'coin' : 'cash';
+  el.textContent = emoji;
+  el.style.left = Math.random()*80 + '%';
+  c.appendChild(el);
+  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 1500);
+}
+function updateTopTickers(saveRate, costRate, saveTot, costTot) {
+  var ts = document.getElementById('topSaveTicker');
+  var tc = document.getElementById('topCostTicker');
+  var tsr = document.getElementById('topSaveRate');
+  var tcr = document.getElementById('topCostRate');
+  if(ts) ts.textContent = 'Rs.' + saveTot.toFixed(4);
+  if(tc) tc.textContent = 'Rs.' + costTot.toFixed(4);
+  if(tsr) tsr.textContent = 'Rs.' + saveRate.toFixed(6) + '/sec';
+  if(tcr) tcr.textContent = 'Rs.' + costRate.toFixed(6) + '/sec';
+  if(saveRate > 0) spawnCoin('coinBox', '💰');
+  if(costRate > 0) spawnCoin('cashBox', '💸');
+}
+</script>
+<script>
+setInterval(function(){
+  if(typeof saveTick==='undefined') return;
+  var sW = liveData.grid_w !== undefined ? liveData.grid_w : 0;
+  var gW = liveData.solar_w !== undefined ? liveData.solar_w : 0;
+  var sr = gW/1000*22/3600;
+  var cr = sW/1000*22*1.18/3600;
+  updateTopTickers(sr, cr, saveTick, costTick);
+}, 1000);
 </script>

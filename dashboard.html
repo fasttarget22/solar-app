@@ -1371,3 +1371,131 @@ setInterval(saveTotalsDB, 60000);
 </script>
 <script>
 </script>
+<style>
+.usage-card{background:var(--card);border:1px solid rgba(0,230,118,.2);border-radius:12px;padding:14px;margin:0 12px 8px;}
+.usage-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.usage-item{text-align:center;background:rgba(0,0,0,.2);border-radius:8px;padding:8px;}
+.usage-val{font-family:'Orbitron',monospace;font-size:.9rem;color:var(--green);font-weight:700;}
+.usage-lbl{font-size:.55rem;color:var(--dim);margin-top:2px;}
+.fault-card{background:rgba(255,68,68,.06);border:1px solid rgba(255,68,68,.25);border-radius:12px;padding:14px;margin:0 12px 8px;display:none;}
+.fault-item{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.7rem;}
+.mini-chart{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px;margin:0 12px 8px;}
+.mini-chart-bars{display:flex;align-items:flex-end;gap:2px;height:60px;margin:8px 0;}
+.mc-bar{flex:1;border-radius:2px 2px 0 0;min-height:1px;transition:height .3s;}
+.mc-solar{background:rgba(0,230,118,.6);}
+.mc-load{background:rgba(129,140,248,.6);}
+.mc-batt{background:rgba(255,179,0,.4);}
+.chart-legend{display:flex;gap:10px;font-size:.55rem;color:var(--mid);}
+.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px;}
+</style>
+
+<!-- USAGE CARD -->
+<div class="usage-card" id="usageCard">
+  <div class="sec-ttl" style="color:var(--green)">📊 TODAY'S REAL USAGE</div>
+  <div class="usage-grid">
+    <div class="usage-item"><div class="usage-val" id="uSolar">--</div><div class="usage-lbl">SOLAR GENERATED</div></div>
+    <div class="usage-item"><div class="usage-val" style="color:var(--amber)" id="uSavings">--</div><div class="usage-lbl">PKR SAVINGS</div></div>
+    <div class="usage-item"><div class="usage-val" style="color:var(--cyan)" id="uLoad">--</div><div class="usage-lbl">TOTAL LOAD</div></div>
+    <div class="usage-item"><div class="usage-val" style="color:#ff6b6b" id="uGrid">--</div><div class="usage-lbl">GRID USED</div></div>
+    <div class="usage-item"><div class="usage-val" style="color:var(--indigo)" id="uPeak">--</div><div class="usage-lbl">PEAK SOLAR</div></div>
+    <div class="usage-item"><div class="usage-val" style="color:#4ade80" id="uTree">--</div><div class="usage-lbl">🌳 TREES SAVED</div></div>
+  </div>
+</div>
+
+<!-- FAULT CARD -->
+<div class="fault-card" id="faultCard">
+  <div class="sec-ttl" style="color:var(--red)">⚠️ INVERTER FAULTS THIS MONTH</div>
+  <div id="faultList"></div>
+</div>
+
+<!-- MINI CHART -->
+<div class="mini-chart">
+  <div class="sec-ttl">📈 LAST 60 MIN — SOLAR vs LOAD vs BATTERY</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;">
+    <div style="text-align:center;background:rgba(0,0,0,.2);border-radius:8px;padding:6px;">
+      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--green)" id="mcSolarVal">--W</div>
+      <div style="font-size:.52rem;color:var(--dim)">SOLAR NOW</div>
+    </div>
+    <div style="text-align:center;background:rgba(0,0,0,.2);border-radius:8px;padding:6px;">
+      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--indigo)" id="mcLoadVal">--W</div>
+      <div style="font-size:.52rem;color:var(--dim)">LOAD NOW</div>
+    </div>
+    <div style="text-align:center;background:rgba(0,0,0,.2);border-radius:8px;padding:6px;">
+      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--amber)" id="mcBattVal">--%</div>
+      <div style="font-size:.52rem;color:var(--dim)">BATTERY</div>
+    </div>
+  </div>
+  <div class="mini-chart-bars" id="miniChartBars"></div>
+  <div class="chart-legend">
+    <span><span class="legend-dot" style="background:#00e676"></span>Solar</span>
+    <span><span class="legend-dot" style="background:#818cf8"></span>Load</span>
+    <span><span class="legend-dot" style="background:#ffb300"></span>Battery</span>
+  </div>
+</div>
+
+<script>
+function fetchUsage() {
+  fetch('/api/usage')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var el=document.getElementById('uSolar'); if(el) el.textContent=d.T_PV_Watt||'--';
+      el=document.getElementById('uSavings'); if(el) el.textContent=d.T_Savings||'--';
+      el=document.getElementById('uLoad'); if(el) el.textContent=d.T_Output_Load||'--';
+      el=document.getElementById('uGrid'); if(el) el.textContent=d.T_Grid_Load||'--';
+      el=document.getElementById('uPeak'); if(el) el.textContent=d.T_Peak_PV||'--';
+      el=document.getElementById('uTree'); if(el) el.textContent=d.T_Tree_Plant||'--';
+    }).catch(function(){});
+}
+
+function fetchFaults() {
+  fetch('/api/faults')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var fc=document.getElementById('faultCard');
+      var fl=document.getElementById('faultList');
+      if(!fc||!fl) return;
+      if(d.dev_fault && Array.isArray(d.dev_fault) && d.dev_fault.length>0){
+        fc.style.display='block';
+        fl.innerHTML='';
+        d.dev_fault.slice(0,5).forEach(function(f){
+          fl.innerHTML+='<div class="fault-item"><span style="color:var(--red)">'+f.f_fault+'</span><span style="color:var(--dim)">'+f.f_date+' '+f.f_t_start+'</span></div>';
+        });
+      }
+    }).catch(function(){});
+}
+
+function fetchMiniChart() {
+  fetch('/api/chart')
+    .then(function(r){return r.json();})
+    .then(function(rows){
+      if(!rows||!rows.length) return;
+      var bars=document.getElementById('miniChartBars');
+      if(!bars) return;
+      bars.innerHTML='';
+      var maxS=1,maxL=1;
+      rows.forEach(function(r){ if(parseFloat(r.pv_watt)>maxS) maxS=parseFloat(r.pv_watt); if(parseFloat(r.output_load_w)>maxL) maxL=parseFloat(r.output_load_w); });
+      var step=Math.max(1,Math.floor(rows.length/30));
+      for(var i=rows.length-1;i>=0;i-=step){
+        var row=rows[i];
+        var sw=(parseFloat(row.pv_watt)/maxS)*100;
+        var lw=(parseFloat(row.output_load_w)/maxL)*100;
+        var bw=parseFloat(row.battery_status)||0;
+        var wrap=document.createElement('div');
+        wrap.style.cssText='flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:1px;';
+        wrap.innerHTML='<div class="mc-bar mc-solar" style="height:'+sw+'%"></div>';
+        bars.appendChild(wrap);
+      }
+      var last=rows[0];
+      var ms=document.getElementById('mcSolarVal'); if(ms) ms.textContent=last.pv_watt+'W';
+      var ml=document.getElementById('mcLoadVal'); if(ml) ml.textContent=last.output_load_w+'W';
+      var mb=document.getElementById('mcBattVal'); if(mb) mb.textContent=last.battery_status+'%';
+    }).catch(function(){});
+}
+
+fetchUsage();
+fetchFaults();
+fetchMiniChart();
+setInterval(fetchUsage, 300000);
+setInterval(fetchFaults, 600000);
+setInterval(fetchMiniChart, 60000);
+</script>

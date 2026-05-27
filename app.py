@@ -125,3 +125,18 @@ def gettotals():
     if rows:
         return jsonify(rows[0])
     return jsonify({'saved_pkr':0,'consumed_pkr':0})
+
+@app.route('/api/usage')
+def usage():
+    res=r.get('https://smartsolar.net.pk/api/inverter/usage.php?period=today',headers={'X-API-KEY':'6637103e47ce38c4f5b4f2fad69474642b67d8bc-0'},timeout=10)
+    return jsonify(res.json().get('data',{}) if res.ok else {})
+
+@app.route('/api/faults')
+def faults():
+    res=r.get('https://smartsolar.net.pk/api/inverter/faults.php?period=this_month&hide_grid=true',headers={'X-API-KEY':'6637103e47ce38c4f5b4f2fad69474642b67d8bc-0'},timeout=10)
+    return jsonify(res.json().get('data',{}) if res.ok else {})
+
+@app.route('/api/chart')
+def chart():
+    res=r.get('https://smartsolar.net.pk/api/inverter/chart.php?duration=60',headers={'X-API-KEY':'6637103e47ce38c4f5b4f2fad69474642b67d8bc-0'},timeout=10)
+    return jsonify(res.json().get('data',[]) if res.ok else [])

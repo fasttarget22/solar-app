@@ -997,6 +997,7 @@ function updateAll(d) {
 
   // ─ Chart ─
   logHourly(loadW);
+  updateRealTimeCosts(solarW, gridW, battPct);
 }
 
 // ─── PKR TICKER ───
@@ -1205,3 +1206,49 @@ function loadDateRange(){
     .catch(function(){alert("Failed");});
 }
 </script>
+<script>
+function updateRealTimeCosts(solarW, gridW, battPct) {
+  var solarPKR = (solarW / 1000) * CFG.pkr;
+  var wapdaPKR = (gridW / 1000) * CFG.pkr * 1.18;
+  var battVal  = (battPct / 100) * 4.8 * CFG.pkr;
+  var el = document.getElementById('rtSolar');
+  if (el) el.textContent = solarW + 'W';
+  el = document.getElementById('rtSolarPKR');
+  if (el) el.textContent = 'Rs.' + solarPKR.toFixed(2) + '/hr';
+  el = document.getElementById('rtBatt');
+  if (el) el.textContent = battPct.toFixed(0) + '%';
+  el = document.getElementById('rtBattPKR');
+  if (el) el.textContent = 'Rs.' + battVal.toFixed(0) + ' stored';
+  el = document.getElementById('rtWapda');
+  if (el) el.textContent = gridW + 'W';
+  el = document.getElementById('rtWapdaPKR');
+  if (el) el.textContent = 'Rs.' + wapdaPKR.toFixed(2) + '/hr';
+}
+</script>
+<style>
+.rt-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:0 12px;margin-bottom:8px;}
+.rt-card{border-radius:10px;padding:10px 6px;text-align:center;}
+.rt-solar{background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);}
+.rt-batt{background:rgba(255,179,0,.08);border:1px solid rgba(255,179,0,.2);}
+.rt-wapda{background:rgba(255,68,68,.08);border:1px solid rgba(0,229,255,.2);}
+.rt-lbl{font-size:.55rem;color:#7a8fa8;margin-bottom:4px;}
+.rt-val{font-family:'Orbitron',monospace;font-size:.78rem;font-weight:600;line-height:1;margin-bottom:3px;}
+.rt-pkr{font-size:.54rem;margin-top:2px;}
+</style>
+<div class="rt-grid">
+  <div class="rt-card rt-solar">
+    <div class="rt-lbl">☀️ SOLAR</div>
+    <div class="rt-val" style="color:#00e676" id="rtSolar">--W</div>
+    <div class="rt-pkr" style="color:#00e676" id="rtSolarPKR">Rs.--/hr</div>
+  </div>
+  <div class="rt-card rt-batt">
+    <div class="rt-lbl">🔋 BATTERY</div>
+    <div class="rt-val" style="color:#ffb300" id="rtBatt">--%</div>
+    <div class="rt-pkr" style="color:#ffb300" id="rtBattPKR">Rs.-- stored</div>
+  </div>
+  <div class="rt-card rt-wapda">
+    <div class="rt-lbl">🔌 WAPDA</div>
+    <div class="rt-val" style="color:#00e5ff" id="rtWapda">--W</div>
+    <div class="rt-pkr" style="color:#ff4444" id="rtWapdaPKR">Rs.--/hr</div>
+  </div>
+</div>

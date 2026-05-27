@@ -1197,7 +1197,7 @@ function loadDateRange(){
       });
       var u=0;
       Object.keys(days).forEach(function(d){u+=days[d];});
-      u=Math.round(u);
+      u=Math.round(u);if(u<=0)u=0;
       document.getElementById("unitsSlider").value=Math.min(u,800);
       document.getElementById("unitsDisp").textContent=Math.min(u,800);
       calcBill();

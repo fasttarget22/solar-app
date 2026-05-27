@@ -22,7 +22,7 @@ def scrape():
         batt_pct=gn(d.get('Batt_Status',0))
         grid_w=gn(d.get('AC_Watt',0))
         mode=d.get('In_Mode','')
-        temp=d.get('Inv_Temp','')
+        temp=d.get('Inv_Temp','').replace('temp=d.get('Inv_Temp','')#8451;','°C')
         fan=d.get('Inv_Fan','')
         batt_charge_w=gn(d.get('Batt_Charge_W',0))
         batt_discharge_w=gn(d.get('Batt_Discharge_W',0))

@@ -998,6 +998,7 @@ function updateAll(d) {
   // ─ Chart ─
   logHourly(loadW);
   updateRealTimeCosts(solarW, gridW, battPct);
+  startDualTicker(solarW, gridW);
 }
 
 // ─── PKR TICKER ───
@@ -1252,3 +1253,45 @@ function updateRealTimeCosts(solarW, gridW, battPct) {
     <div class="rt-pkr" style="color:#ff4444" id="rtWapdaPKR">Rs.--/hr</div>
   </div>
 </div>
+<style>
+.dual-ticker{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px;margin-bottom:8px;}
+.ticker-save{background:linear-gradient(135deg,#031a0a,#0a1628);border:1px solid rgba(0,230,118,.3);border-radius:12px;padding:14px;text-align:center;}
+.ticker-cost{background:linear-gradient(135deg,#1a0303,#1a0a0a);border:1px solid rgba(255,68,68,.3);border-radius:12px;padding:14px;text-align:center;}
+.ticker-lbl{font-size:.6rem;font-weight:700;letter-spacing:.1em;margin-bottom:6px;}
+.ticker-val{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;line-height:1;}
+.ticker-rate{font-size:.58rem;margin-top:4px;opacity:.7;}
+</style>
+<div class="dual-ticker">
+  <div class="ticker-save">
+    <div class="ticker-lbl" style="color:#00e676">💚 SAVING</div>
+    <div class="ticker-val" style="color:#00e676">Rs.<span id="savingTicker">0.0000</span></div>
+    <div class="ticker-rate" style="color:#00e676" id="savingRate">Rs.0/sec from solar</div>
+  </div>
+  <div class="ticker-cost">
+    <div class="ticker-lbl" style="color:#ff4444">🔴 CONSUMING</div>
+    <div class="ticker-val" style="color:#ff4444">Rs.<span id="costTicker">0.0000</span></div>
+    <div class="ticker-rate" style="color:#ff4444" id="costRate">Rs.0/sec from wapda</div>
+  </div>
+</div>
+<script>
+var saveTick = 0;
+var costTick = 0;
+var dualInterval = null;
+function startDualTicker(solarW, gridW) {
+  if (dualInterval) clearInterval(dualInterval);
+  var saveRate = (solarW / 1000) * 22 / 3600;
+  var costRate = (gridW / 1000) * 22 * 1.18 / 3600;
+  dualInterval = setInterval(function(){
+    saveTick += saveRate;
+    costTick += costRate;
+    var se = document.getElementById('savingTicker');
+    var ce = document.getElementById('costTicker');
+    var sr = document.getElementById('savingRate');
+    var cr = document.getElementById('costRate');
+    if(se) se.textContent = saveTick.toFixed(4);
+    if(ce) ce.textContent = costTick.toFixed(4);
+    if(sr) sr.textContent = 'Rs.' + saveRate.toFixed(6) + '/sec solar';
+    if(cr) cr.textContent = 'Rs.' + costRate.toFixed(6) + '/sec wapda';
+  }, 1000);
+}
+</script>

@@ -1,1139 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<title>Sufly Solar Apps</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#060d1a;--card:rgba(255,255,255,0.05);--card2:rgba(255,255,255,0.08);--border:rgba(255,255,255,0.08);--green:#00e676;--green2:#00c853;--amber:#ffab00;--blue:#40c4ff;--red:#ff5252;--purple:#e040fb;--text:#f0f4ff;--muted:#8892a4;--nav:#0a1628}
-body.bmode{--bg:#120005;--card:rgba(255,0,30,0.06);--nav:#1a0008}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--text);font-family:"Inter",sans-serif;min-height:100vh;overflow-x:hidden;padding-bottom:70px}
-body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 15% 15%,rgba(0,230,118,0.08) 0%,transparent 50%),radial-gradient(ellipse at 85% 85%,rgba(64,196,255,0.06) 0%,transparent 50%);pointer-events:none;z-index:0}
-body.bmode::before{background:radial-gradient(ellipse at 50% 20%,rgba(255,0,50,0.15) 0%,transparent 60%)}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Solar Management Dashboard</title>
+  <style>
+    body {
+      background-color: #0b0f19;
+      color: #f0f4ff;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      padding: 20px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-/* PARTICLES */
-.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.particle{position:absolute;background:var(--green);border-radius:50%;animation:pfloat linear infinite;opacity:0}
-body.bmode .particle{background:var(--red)}
-@keyframes pfloat{0%{transform:translateY(100vh);opacity:0}10%{opacity:0.4}90%{opacity:0.1}100%{transform:translateY(-50px);opacity:0}}
-
-/* HEADER */
-header{position:sticky;top:0;z-index:50;background:rgba(6,13,26,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;justify-content:space-between;align-items:center}
-body.bmode header{background:rgba(18,0,5,0.95)}
-.logo-sec{display:flex;align-items:center;gap:10px}
-.av-wrap{position:relative;width:42px;height:42px;flex-shrink:0}
-.av-img{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--green);animation:avGlow 3s ease-in-out infinite}
-@keyframes avGlow{0%,100%{box-shadow:0 0 8px rgba(0,230,118,0.5)}50%{box-shadow:0 0 20px rgba(0,230,118,0.9),0 0 40px rgba(0,230,118,0.2)}}
-body.bmode .av-img{border-color:var(--red);animation:avGlowR 0.8s ease-in-out infinite}
-@keyframes avGlowR{0%,100%{box-shadow:0 0 8px rgba(255,0,50,0.5)}50%{box-shadow:0 0 25px rgba(255,0,50,1)}}
-.av-ring{position:absolute;inset:-3px;border-radius:50%;border:2px dashed var(--green);animation:ringR 3s linear infinite;opacity:0.6}
-body.bmode .av-ring{border-color:var(--red);animation:ringR 0.7s linear infinite}
-@keyframes ringR{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.av-dot{position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:var(--green);border-radius:50%;border:2px solid var(--bg);animation:lp 1.5s infinite}
-@keyframes lp{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(0,230,118,0.5)}70%{transform:scale(1.4);box-shadow:0 0 0 5px rgba(0,230,118,0)}}
-.logo-main{font-family:"Orbitron",monospace;font-size:13px;font-weight:900;color:var(--green);letter-spacing:2px}
-.logo-name{font-size:9px;color:var(--amber);letter-spacing:1px;font-weight:600}
-.logo-sub{font-size:7px;color:var(--muted);letter-spacing:1px}
-.hdr-right{display:flex;align-items:center;gap:6px}
-.hdr-btn{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text);padding:5px 9px;border-radius:18px;font-size:11px;cursor:pointer;transition:all 0.2s}
-.live-wrap{display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:12px;background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2)}
-.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:lp 1.5s infinite}
-.live-txt{font-size:8px;letter-spacing:2px;color:var(--green);font-family:"Orbitron",monospace}
-
-/* WEATHER BAR */
-.wt-bar{position:relative;z-index:5;padding:8px 14px;background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border);display:none}
-.wt-top{display:flex;align-items:center;gap:8px}
-.wt-icon{font-size:28px;animation:wtFloat 3s ease-in-out infinite}
-@keyframes wtFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.wt-city{font-size:7px;letter-spacing:2px;color:var(--muted)}
-.wt-desc{font-size:12px;font-weight:600}
-.wt-stats{display:flex;gap:8px;margin-left:auto}
-.wt-stat{text-align:center}
-.wt-lbl{font-size:7px;letter-spacing:1px;color:var(--muted)}
-.wt-val{font-family:"Orbitron",monospace;font-size:12px;font-weight:700}
-.wt-temp{color:var(--red)}.wt-hum{color:var(--blue)}.wt-cld{color:var(--amber)}.wt-wind{color:var(--green)}
-.wt-warn{margin-top:5px;padding:3px 10px;border-radius:8px;background:rgba(255,171,0,0.1);border:1px solid rgba(255,171,0,0.3);font-size:10px;color:var(--amber);font-weight:600;display:none;animation:af 1.5s infinite}
-.wt-good{margin-top:5px;padding:3px 10px;border-radius:8px;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);font-size:10px;color:var(--green);font-weight:600;display:none}
-@keyframes af{0%,100%{opacity:1}50%{opacity:0.6}}
-
-/* SOURCE BANNER */
-.src-ban{position:relative;z-index:5;padding:8px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.15)}
-.src-badge{padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;animation:bp 2s infinite}
-.b-solar{background:rgba(0,230,118,0.15);color:var(--green);border:1px solid var(--green)}
-.b-grid{background:rgba(64,196,255,0.15);color:var(--blue);border:1px solid var(--blue)}
-.b-mixed{background:rgba(255,171,0,0.15);color:var(--amber);border:1px solid var(--amber)}
-.b-batt{background:rgba(255,82,82,0.15);color:var(--red);border:1px solid var(--red);animation:bp 0.7s infinite}
-@keyframes bp{0%,100%{opacity:1}50%{opacity:0.6}}
-.conn-s{font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:10px}
-.c-fresh{color:var(--green);background:rgba(0,230,118,0.1)}.c-stale{color:var(--amber);background:rgba(255,171,0,0.1)}
-
-/* ALERTS */
-.alerts{position:relative;z-index:15}
-.alert{display:none;padding:10px 14px;border-bottom:2px solid;animation:af 1s infinite}
-.al-batt{background:linear-gradient(135deg,#2d0000,#1a0000);border-color:var(--red)}
-.al-high{background:linear-gradient(135deg,#2d0505,#1a0303);border-color:var(--red)}
-.al-med{background:linear-gradient(135deg,#2d1a00,#1a1000);border-color:var(--amber)}
-.al-temp{background:linear-gradient(135deg,#2d1500,#1a0a00);border-color:#ff6600;animation:af 0.6s infinite}
-.al-in{display:flex;align-items:center;gap:10px}
-.al-ic{font-size:20px;display:inline-block}
-.al-sk{animation:sk 0.4s infinite}
-@keyframes sk{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
-.al-ur{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:13px;font-weight:700;direction:rtl}
-.al-batt .al-ur,.al-high .al-ur{color:var(--red)}.al-med .al-ur{color:var(--amber)}.al-temp .al-ur{color:#ff6600}
-.al-sub{font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:1px}
-
-/* MAIN */
-.main{position:relative;z-index:5;padding:10px}
-
-/* POWER FLOW CARD */
-.pf-card{background:linear-gradient(135deg,rgba(0,230,118,0.04),rgba(64,196,255,0.04));border:1px solid var(--border);border-radius:20px;padding:14px;margin-bottom:10px;backdrop-filter:blur(10px)}
-.pf-title{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px}
-.pf-line{stroke-width:2.5;fill:none;stroke-dasharray:8,4;animation:flowAnim 1s linear infinite}
-.pf-line-off{opacity:0.1;animation:none}
-@keyframes flowAnim{0%{stroke-dashoffset:24}100%{stroke-dashoffset:0}}
-
-/* BATTERY HOURS */
-.bh-card{border-radius:20px;padding:14px;border:2px solid;transition:all 0.5s;margin-bottom:10px;backdrop-filter:blur(10px)}
-.bh-safe{background:linear-gradient(135deg,rgba(0,51,34,0.8),rgba(0,26,17,0.8));border-color:var(--green)}
-.bh-caution{background:linear-gradient(135deg,rgba(51,34,0,0.8),rgba(26,16,0,0.8));border-color:var(--amber)}
-.bh-danger{background:linear-gradient(135deg,rgba(51,10,0,0.8),rgba(26,5,0,0.8));border-color:#ff6600;animation:af 2s infinite}
-.bh-critical{background:linear-gradient(135deg,rgba(61,0,0,0.8),rgba(34,0,0,0.8));border-color:var(--red);animation:af 0.8s infinite}
-.bh-top{display:flex;justify-content:space-between;align-items:flex-start}
-.bh-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
-.bh-val{font-family:"Orbitron",monospace;font-size:36px;font-weight:900;line-height:1}
-.bh-unit{font-size:10px;color:var(--muted);margin-top:3px}
-.bh-ic{font-size:40px;animation:bhA 2s ease-in-out infinite}
-@keyframes bhA{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
-.bh-bar-bg{margin-top:10px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
-.bh-bar-fill{height:100%;border-radius:3px;transition:width 1.5s cubic-bezier(0.4,0,0.2,1)}
-.bh-safe .bh-bar-fill{background:linear-gradient(90deg,var(--green2),var(--green));box-shadow:0 0 8px var(--green)}
-.bh-caution .bh-bar-fill{background:linear-gradient(90deg,#ff8f00,var(--amber));box-shadow:0 0 8px var(--amber)}
-.bh-danger .bh-bar-fill{background:linear-gradient(90deg,#cc4400,#ff6600)}
-.bh-critical .bh-bar-fill{background:linear-gradient(90deg,#cc0000,var(--red))}
-.bh-sug{margin-top:10px;padding:8px 12px;border-radius:10px;background:rgba(0,0,0,0.25)}
-.bh-ur{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:13px;direction:rtl;font-weight:600;line-height:1.6}
-.bh-safe .bh-ur{color:var(--green)}.bh-caution .bh-ur{color:var(--amber)}.bh-danger .bh-ur{color:#ff6600}.bh-critical .bh-ur{color:var(--red)}
-.bh-en{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:1px}
-.bh-note{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:9px;color:var(--muted)}
-
-/* PKR METER */
-.pkr-meter{background:linear-gradient(135deg,rgba(0,26,10,0.9),rgba(0,34,17,0.9));border:2px solid var(--green);border-radius:20px;padding:14px;text-align:center;margin-bottom:10px}
-.pkr-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px}
-.pkr-val{font-family:"Orbitron",monospace;font-size:34px;font-weight:900;color:var(--green);animation:pkrGlow 1s ease-in-out infinite}
-@keyframes pkrGlow{0%,100%{text-shadow:0 0 10px rgba(0,230,118,0.5)}50%{text-shadow:0 0 25px rgba(0,230,118,1),0 0 50px rgba(0,230,118,0.3)}}
-.pkr-sub{font-size:10px;color:var(--muted);margin-top:4px}
-.pkr-rate{font-size:11px;color:var(--amber);margin-top:6px;font-weight:600}
-.pkr-off{color:var(--muted);animation:none;font-size:20px}
-
-/* MAIN CARDS */
-.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
-.card{background:var(--card);border:1px solid var(--border);border-top:2px solid transparent;border-radius:18px;padding:12px;position:relative;overflow:hidden;transition:all 0.3s;backdrop-filter:blur(10px)}
-.card:active{transform:scale(0.97)}
-.card.green{border-top-color:var(--green)}.card.amber{border-top-color:var(--amber)}.card.blue{border-top-color:var(--blue)}
-.cg{position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:0.1;filter:blur(20px)}
-.card.green .cg{background:var(--green)}.card.amber .cg{background:var(--amber)}.card.blue .cg{background:var(--blue)}
-.cl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:4px;text-transform:uppercase}
-.cv{font-family:"Orbitron",monospace;font-size:22px;font-weight:700;line-height:1}
-.card.green .cv{color:var(--green);text-shadow:0 0 12px rgba(0,230,118,0.3)}
-.card.amber .cv{color:var(--amber);text-shadow:0 0 12px rgba(255,171,0,0.3)}
-.card.blue .cv{color:var(--blue);text-shadow:0 0 12px rgba(64,196,255,0.3)}
-body.bmode .card.green .cv{color:var(--red)}
-.cu{font-size:9px;color:var(--muted);margin-top:3px}
-.pb2{margin-top:8px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
-.pf2{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1)}
-.green .pf2{background:linear-gradient(90deg,var(--green2),var(--green));box-shadow:0 0 6px var(--green)}
-.amber .pf2{background:linear-gradient(90deg,#ff8f00,var(--amber));box-shadow:0 0 6px var(--amber)}
-.chg-ind{font-size:11px;margin-top:4px;font-weight:600}
-.chg-up{color:var(--green)}.chg-dn{color:var(--red)}.chg-fl{color:var(--muted)}
-
-/* ICON ANIMATIONS */
-.is{font-size:26px;margin-bottom:6px;display:inline-block;animation:solarSpin 8s linear infinite;filter:drop-shadow(0 0 6px rgba(255,171,0,0.6))}
-@keyframes solarSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.ib{font-size:26px;margin-bottom:6px;display:inline-block;animation:bc 1.5s ease-in-out infinite}
-@keyframes bc{0%,100%{transform:scale(1);filter:drop-shadow(0 0 3px #ffab00)}50%{transform:scale(1.2);filter:drop-shadow(0 0 14px #ffab00)}}
-.iv{font-size:26px;margin-bottom:6px;display:inline-block;animation:vz 2s ease-in-out infinite}
-@keyframes vz{0%,85%,100%{transform:scale(1)}92%{transform:scale(1.4) rotate(-15deg);filter:drop-shadow(0 0 18px #40c4ff) brightness(2.5)}}
-.ih{font-size:26px;margin-bottom:6px;display:inline-block;animation:hb 2s ease-in-out infinite}
-@keyframes hb{0%,100%{transform:scale(1)}14%{transform:scale(1.2)}28%{transform:scale(1)}42%{transform:scale(1.12)}70%{transform:scale(1)}}
-.ig{font-size:26px;margin-bottom:6px;display:inline-block;animation:gp 3s ease-in-out infinite}
-@keyframes gp{0%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}60%{transform:translateY(-2px)}}
-.ie{font-size:26px;margin-bottom:6px;display:inline-block;animation:ew 2s ease-in-out infinite}
-@keyframes ew{0%,100%{filter:drop-shadow(0 0 2px #ffab00);transform:scale(1)}50%{filter:drop-shadow(0 0 14px #ffab00);transform:scale(1.15)}}
-
-/* TEMP ROW */
-.tc{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(10px)}
-.ti{text-align:center}
-.tic{font-size:18px;display:inline-block;animation:tf 3s ease-in-out infinite}
-@keyframes tf{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.tv2{font-family:"Orbitron",monospace;font-size:14px;color:var(--amber)}
-.tl2{font-size:8px;color:var(--muted);letter-spacing:1px}
-.mb2{padding:5px 12px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;background:rgba(0,230,118,0.12);color:var(--green);border:1px solid rgba(0,230,118,0.3);animation:bp 2s infinite}
-
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px;backdrop-filter:blur(10px)}
-.si{font-size:18px;margin-bottom:3px;display:inline-block}
-.its{animation:solarSpin 10s linear infinite}
-.ipk{animation:ps 2.5s ease-in-out infinite}
-@keyframes ps{0%,100%{transform:rotate(0)}8%{transform:rotate(-12deg)}16%{transform:rotate(12deg)}24%{transform:rotate(-6deg)}32%{transform:rotate(6deg)}40%{transform:rotate(0)}}
-.iw{animation:ws 5s linear infinite}
-@keyframes ws{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.im{animation:mb3 1.2s ease-in-out infinite}
-@keyframes mb3{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.ir{animation:rg 2s ease-in-out infinite}
-@keyframes rg{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
-.irec{animation:rf 4s ease-in-out infinite}
-@keyframes rf{0%,40%,100%{transform:rotateY(0deg)}50%,90%{transform:rotateY(180deg)}}
-.sl{font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:2px}
-.sv{font-family:"Orbitron",monospace;font-size:14px;font-weight:700;color:var(--green)}
-.sv.am{color:var(--amber)}.sv.bl{color:var(--blue)}.sv.pu{color:var(--purple)}
-.su{font-size:9px;color:var(--muted)}
-.rb2{margin-top:5px;height:3px;background:rgba(255,255,255,0.06);border-radius:2px}
-.rf2{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--green))}
-
-/* DAILY BAR */
-.daily-bar{display:flex;gap:8px;padding:10px;overflow-x:auto;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.1)}
-.daily-item{flex:1;min-width:72px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:6px 8px;text-align:center}
-.daily-lbl{font-size:7px;letter-spacing:1px;color:var(--muted);margin-bottom:2px}
-.daily-val{font-family:"Orbitron",monospace;font-size:12px;font-weight:700}
-.daily-val.g{color:var(--green)}.daily-val.b{color:var(--blue)}.daily-val.p{color:var(--purple)}.daily-val.a{color:var(--amber)}
-
-/* EFFICIENCY BAR */
-.eff-card{background:var(--card);border:1px solid var(--border);border-top:2px solid var(--green);border-radius:14px;padding:12px;margin-bottom:8px}
-.eff-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.eff-lbl{font-size:9px;letter-spacing:2px;color:var(--muted)}
-.eff-pct{font-family:"Orbitron",monospace;font-size:18px;font-weight:700;color:var(--green)}
-.eff-bg{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
-.eff-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--green));transition:width 1s;box-shadow:0 0 6px var(--green)}
-
-/* FORECAST */
-.fc-card{background:linear-gradient(135deg,rgba(10,22,40,0.9),rgba(13,31,53,0.9));border:1px solid rgba(64,196,255,0.2);border-radius:18px;padding:14px;margin-bottom:10px}
-.fc-title{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px}
-.fc-grid{display:flex;justify-content:space-between;align-items:center}
-.fc-item{text-align:center}
-.fc-lbl{font-size:8px;color:var(--muted)}
-.fc-val{font-family:"Orbitron",monospace;font-size:18px;font-weight:700}
-.fc-msg{margin-top:10px;padding:6px 10px;border-radius:10px;font-size:11px;font-weight:600;text-align:center}
-
-/* APPLIANCE */
-.app-card{background:linear-gradient(135deg,rgba(13,27,10,0.9),rgba(10,31,6,0.9));border:1px solid rgba(0,230,118,0.2);border-radius:18px;padding:14px;margin-bottom:10px}
-.app-title{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px}
-
-/* OUTAGE */
-.outage-card{background:var(--card);border:1px solid var(--border);border-top:2px solid var(--blue);border-radius:14px;padding:12px;margin-bottom:8px}
-.outage-lbl{font-size:9px;letter-spacing:2px;color:var(--muted)}
-.outage-count{font-family:"Orbitron",monospace;font-size:24px;font-weight:700;color:var(--blue)}
-.outage-btn{background:rgba(255,82,82,0.15);border:1px solid var(--red);color:var(--red);padding:6px 14px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer}
-.outage-ur{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:11px;color:var(--muted);direction:rtl;margin-top:4px}
-
-/* BOTTOM NAV */
-.bot-nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(10,22,40,0.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 12px}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 12px;border-radius:12px;transition:all 0.2s;text-decoration:none;color:var(--muted)}
-.nav-item.active{color:var(--green)}
-.nav-item.active .nav-icon{filter:drop-shadow(0 0 6px var(--green))}
-.nav-icon{font-size:20px}
-.nav-lbl{font-size:8px;letter-spacing:1px}
-
-/* POPUP */
-.pop-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
-.pop-ov.show{display:flex}
-.pop-box{background:linear-gradient(135deg,#1a0808,#2a0a0a);border:2px solid var(--red);border-radius:20px;padding:24px;max-width:300px;width:90%;text-align:center;animation:popIn 0.4s cubic-bezier(0.34,1.56,0.64,1)}
-@keyframes popIn{0%{transform:scale(0.4);opacity:0}100%{transform:scale(1);opacity:1}}
-.pop-ic{font-size:48px;animation:sk 0.5s infinite;display:inline-block;margin-bottom:12px}
-.pop-title{font-family:"Noto Nastaliq Urdu","Inter",sans-serif;font-size:20px;color:var(--red);direction:rtl;font-weight:700;margin-bottom:6px;line-height:1.5}
-.pop-sub{font-size:11px;color:var(--muted);margin-bottom:16px;direction:rtl;font-family:"Noto Nastaliq Urdu","Inter",sans-serif;line-height:1.6}
-.pop-btn{background:linear-gradient(135deg,var(--red),#cc0000);border:none;color:#fff;padding:12px 28px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer}
-
-/* SETTINGS */
-#settingsPanel{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
-#settingsPanel.show{display:flex}
-.set-box{background:linear-gradient(135deg,#0d1627,#111f35);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:20px;width:90%;max-width:340px}
-.set-title{font-family:"Orbitron",monospace;font-size:13px;color:var(--green);letter-spacing:2px;margin-bottom:16px}
-.set-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:8px 12px;border-radius:10px;font-size:13px;margin-top:4px;font-family:"Orbitron",monospace}
-.set-lbl{font-size:9px;letter-spacing:1px;color:var(--muted);margin-top:10px;display:block}
-.set-save{background:linear-gradient(135deg,var(--green2),var(--green));border:none;color:#000;padding:12px;border-radius:12px;font-weight:700;font-size:12px;cursor:pointer;width:100%;margin-top:14px;letter-spacing:1px}
-
-/* FOOTER */
-footer{position:relative;z-index:5;padding:10px 14px;border-top:1px solid var(--border);background:rgba(0,0,0,0.2)}
-.foot-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.foot-bot{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.refresh-btn{background:linear-gradient(135deg,var(--green2),var(--green));border:none;color:#000;padding:10px 18px;border-radius:25px;font-weight:700;font-size:11px;letter-spacing:2px;cursor:pointer;animation:rba 3s ease-in-out infinite}
-@keyframes rba{0%,100%{box-shadow:0 4px 15px rgba(0,230,118,0.3)}50%{box-shadow:0 4px 30px rgba(0,230,118,0.7)}}
-.share-btn{background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:#fff;padding:10px 14px;border-radius:25px;font-size:11px;font-weight:700;cursor:pointer}
-.ts2{font-size:9px;color:var(--muted)}
-</style>
+    .main-svg-card {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+    }
+  </style>
 </head>
-<body id="mainBody">
-<div class="particles" id="pt"></div>
+<body>
 
-<!-- POPUP -->
-<div class="pop-ov" id="popup">
-  <div class="pop-box">
-    <div class="pop-ic">&#128267;</div>
-    <div class="pop-title" id="popTitle">&#1589;&#1585;&#1601; &#1576;&#1740;&#1657;&#1585;&#1740; &#1670;&#1604; &#1585;&#1729;&#1740; &#1729;&#1746;!</div>
-    <div class="pop-sub" id="popHrs"></div><div class="pop-sub" id="popMsg" id="popSub">&#1601;&#1608;&#1585;&#1740; &#1608;&#1575;&#1662;&#1688;&#1575; &#1604;&#1711;&#1575;&#1574;&#1740;&#1722;</div>
-    <button class="pop-btn" onclick="document.getElementById('popup').classList.remove('show')">&#1587;&#1605;&#1580;&#1726; &#1711;&#1740;&#1575;</button>
-  </div>
-</div>
+<div class="container">
 
-<!-- SETTINGS -->
-<div id="settingsPanel">
-  <div class="set-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <div class="set-title">&#9881; SETTINGS</div>
-      <button onclick="toggleSettings()" style="background:rgba(255,82,82,0.15);border:1px solid var(--red);color:var(--red);padding:4px 10px;border-radius:10px;font-size:11px;cursor:pointer">&#10005;</button>
-    </div>
-    <label class="set-lbl">&#128176; PKR PER UNIT</label>
-    <input id="setPKR" class="set-input" type="number" value="22">
-    <label class="set-lbl">&#128267; BATTERY CAPACITY (kWh)</label>
-    <input id="setBattCap" class="set-input" type="number" value="4.8" step="0.1">
-    <label class="set-lbl">&#9888;&#65039; SAFE MINIMUM %</label>
-    <input id="setSafeMin" class="set-input" type="number" value="20">
-    <label class="set-lbl">&#9201; REFRESH INTERVAL (seconds)</label>
-    <input id="setRefresh" class="set-input" type="number" value="30">
-    <label class="set-lbl">&#128300; INVERTER MODEL</label>
-    <input id="setInverter" class="set-input" type="text" value="Aliyar 48V 6200W" style="font-family:Inter,sans-serif;font-size:12px">
-    <button class="set-save" onclick="saveSettings()">&#10003; SAVE SETTINGS</button>
-  </div>
-</div>
-
-<!-- HEADER -->
-<header>
-  <div class="logo-sec">
-    <div class="av-wrap">
-      <img class="av-img" src="https://i.ibb.co/LdW5QKsx/1000544568.jpg" alt="S" onerror="this.style.display='none'">
-      <div class="av-ring"></div>
-      <div class="av-dot"></div>
-    </div>
-    <div>
-      <div class="logo-main">SUFLY SOLAR</div>
-      <div class="logo-name">Shahadat Sufly &#9889;</div>
-      <div class="logo-sub">ABBOTTABAD PRIME MONITOR</div>
-    </div>
-  </div>
-  <div class="hdr-right">
-    <button class="hdr-btn" onclick="toggleVoice()" id="voiceBtn">&#128263;</button>
-    <button class="hdr-btn" onclick="toggleSettings()">&#9881;&#65039;</button>
-    <button class="hdr-btn" onclick="toggleLang()" id="langBtn">&#1575;&#1585;&#1583;&#1608;</button>
-    <div class="live-wrap">
-      <div class="live-dot"></div>
-      <div class="live-txt">LIVE</div>
-    </div>
-  </div>
-</header>
-
-<!-- WEATHER -->
-<div class="wt-bar" id="wtBar">
-  <div class="wt-top">
-    <div class="wt-icon" id="wtIcon">&#127780;&#65039;</div>
-    <div>
-      <div class="wt-city">&#128205; ABBOTTABAD, PAKISTAN</div>
-      <div class="wt-desc" id="wtDesc">Loading...</div>
-    </div>
-    <div class="wt-stats">
-      <div class="wt-stat"><div class="wt-lbl">TEMP</div><div class="wt-val wt-temp" id="wtTemp">--</div></div>
-      <div class="wt-stat"><div class="wt-lbl">HUMID</div><div class="wt-val wt-hum" id="wtHum">--</div></div>
-      <div class="wt-stat"><div class="wt-lbl">CLOUD</div><div class="wt-val wt-cld" id="wtCloud">--</div></div>
-      <div class="wt-stat"><div class="wt-lbl">WIND</div><div class="wt-val wt-wind" id="wtWind">--</div></div>
-    </div>
-  </div>
-  <div class="wt-warn" id="wtWarn">&#9888;&#65039; High clouds — solar may be reduced</div>
-  <div class="wt-good" id="wtGood">&#9989; Clear sky — excellent solar!</div>
-</div>
-
-<!-- DAILY STATS -->
-<div class="daily-bar">
-  <div class="daily-item"><div class="daily-lbl">TODAY SOLAR</div><div class="daily-val g" id="todaySolar">--</div><div style="font-size:7px;color:var(--muted)">kWh</div></div>
-  <div class="daily-item"><div class="daily-lbl">TODAY WAPDA</div><div class="daily-val b" id="todayWapda">--</div><div style="font-size:7px;color:var(--muted)">kWh</div></div>
-  <div class="daily-item"><div class="daily-lbl">SAVED TODAY</div><div class="daily-val p" id="todaySaved">--</div><div style="font-size:7px;color:var(--muted)">PKR</div></div>
-  <div class="daily-item"><div class="daily-lbl">EFFICIENCY</div><div class="daily-val a" id="effNow">--</div><div style="font-size:7px;color:var(--muted)">%</div></div>
-</div>
-
-<!-- SOURCE BANNER -->
-<div class="src-ban">
-  <div style="font-size:20px" id="srcIcon">&#9728;&#65039;</div>
-  <div>
-    <div style="font-size:8px;letter-spacing:2px;color:var(--muted)">POWER SOURCE</div>
-    <div style="font-weight:600;font-size:12px" id="srcVal">--</div>
-  </div>
-  <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
-    <span class="conn-s c-fresh" id="connStatus">LIVE</span>
-    <span class="src-badge b-solar" id="srcBadge">--</span>
-  </div>
-</div>
-
-<!-- ALERTS -->
-<div class="alerts">
-  <div class="alert al-temp" id="alTemp"><div class="al-in"><span class="al-ic al-sk">&#127777;&#65039;</span><div><div class="al-ur">&#1575;&#1606;&#1608;&#1585;&#1657;&#1585; &#1576;&#1729;&#1578; &#1711;&#1585;&#1605; &#1729;&#1746;</div><div class="al-sub">INVERTER TEMP &gt; 55&deg;C</div></div></div></div>
-  <div class="alert al-batt" id="alBatt"><div class="al-in"><span class="al-ic al-sk">&#128308;</span><div><div class="al-ur">&#1589;&#1585;&#1601; &#1576;&#1740;&#1657;&#1585;&#1740; &#1670;&#1604; &#1585;&#1729;&#1740; &#1729;&#1746;!</div><div class="al-sub">BATTERY ONLY MODE</div></div></div></div>
-  <div class="alert al-high" id="alHigh"><div class="al-in"><span class="al-ic al-sk">&#9888;&#65039;</span><div><div class="al-ur">&#1705;&#1740;&#1575; &#1670;&#1604; &#1585;&#1729;&#1575; &#1729;&#1746;&#1567; &#1576;&#1608;&#1580;&#1726; &#1576;&#1729;&#1578; &#1586;&#1740;&#1575;&#1583;&#1729;</div><div class="al-sub">LOAD ABOVE 1200W</div></div></div></div>
-  <div class="alert al-med" id="alMed"><div class="al-in"><span class="al-ic">&#128161;</span><div><div class="al-ur">&#1594;&#1740;&#1585; &#1590;&#1585;&#1608;&#1585;&#1740; &#1662;&#1606;&#1705;&#1726;&#1746; &#1576;&#1606;&#1583; &#1705;&#1585;&#1608;</div><div class="al-sub">LOAD ABOVE 300W</div></div></div></div>
-</div>
-
-<div class="main">
-
-<!-- POWER FLOW -->
-<div class="pf-card" id="pfCard">
-  <div class="pf-title">&#9889; LIVE POWER FLOW</div>
-  <svg width="100%" height="220" viewBox="0 0 300 220" preserveAspectRatio="xMidYMid meet">
-    <text x="40" y="35" text-anchor="middle" font-size="28" id="pfSolarIcon">&#9728;&#65039;</text>
-    <text x="40" y="52" text-anchor="middle" font-size="8" fill="#8892a4">SOLAR</text>
-    <text x="40" y="64" text-anchor="middle" font-size="9" font-weight="bold" fill="#00e676" id="pfSolarVal">--W</text>
-    <text x="40" y="155" text-anchor="middle" font-size="28" id="pfBattIcon">&#128267;</text>
-    <text x="40" y="172" text-anchor="middle" font-size="8" fill="#8892a4">BATTERY</text>
-    <text x="40" y="184" text-anchor="middle" font-size="9" font-weight="bold" fill="#ffab00" id="pfBattVal">--%</text>
-    <g id="pfHomeIcon">
-      <style>
-        @keyframes homeFanSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .fan-spin-active { animation: homeFanSpin 1s linear infinite; transform-origin: center; transform-box: fill-box; }
+  <div class="main-svg-card">
+    <svg width="320" height="160" viewBox="0 0 320 160" style="background: transparent;">
+      <g id="pfHomeIcon">
+        <style>
+          @keyframes homeFanSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+          .fan-spin-active { animation: homeFanSpin 1s linear infinite; transform-origin: center; transform-box: fill-box; }
+          
+          @keyframes heartPulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.18); opacity: 1; filter: drop-shadow(0 0 4px #ef4444); }
+            100% { transform: scale(1); opacity: 0.4; }
+          }
+          .heart-blink { animation: heartPulse 1.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+        </style>
         
-        @keyframes heartPulse {
-          0% { transform: scale(1); opacity: 0.4; }
-          50% { transform: scale(1.18); opacity: 1; filter: drop-shadow(0 0 4px #ef4444); }
-          100% { transform: scale(1); opacity: 0.4; }
-        }
-        .heart-blink { animation: heartPulse 1.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
-      </style>
-      
-      <text x="150" y="102" text-anchor="middle" font-size="52" style="filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));">🏠</text>
-      
-      <text class="heart-blink" x="150" y="89" text-anchor="middle" font-size="14">❤️</text>
-      
-      <text id="shFan" x="150" y="56" text-anchor="middle" font-size="16" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">🌀</text>
-      
-      <text id="shLight" x="120" y="94" text-anchor="middle" font-size="13" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">💡</text>
-      
-      <text id="shTV" x="180" y="94" text-anchor="middle" font-size="13" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">📺</text>
-      
-      <g id="shTV_Glow" style="display:none;"></g>
-    </g>
-    <text x="150" y="120" text-anchor="middle" font-size="9" fill="#8892a4">HOME</text>
-    <text x="150" y="133" text-anchor="middle" font-size="10" font-weight="bold" fill="#f0f4ff" id="pfHomeLoad">--W</text>
-    <text x="260" y="100" text-anchor="middle" font-size="28" id="pfGridIcon">&#128268;</text>
-    <text x="260" y="117" text-anchor="middle" font-size="8" fill="#8892a4">WAPDA</text>
-    <text x="260" y="129" text-anchor="middle" font-size="9" font-weight="bold" fill="#40c4ff" id="pfGridVal">--W</text>
-    <path id="pfLineSolar" d="M 68 45 Q 110 45 130 90" stroke="#00e676" stroke-width="2.5" fill="none" stroke-dasharray="8,4" class="pf-line pf-line-off"/>
-    <path id="pfLineSolarBatt" d="M 55 65 Q 40 110 55 140" stroke="#00e676" stroke-width="2" fill="none" stroke-dasharray="6,4" class="pf-line pf-line-off"/>
-    <path id="pfLineBatt" d="M 68 155 Q 110 155 130 115" stroke="#ffab00" stroke-width="2.5" fill="none" stroke-dasharray="8,4" class="pf-line pf-line-off"/>
-    <path id="pfLineGrid" d="M 232 105 L 175 105" stroke="#40c4ff" stroke-width="2.5" fill="none" stroke-dasharray="8,4" class="pf-line pf-line-off"/>
-    <path id="pfLineGridBatt" d="M 245 120 Q 180 180 68 170" stroke="#40c4ff" stroke-width="2" fill="none" stroke-dasharray="6,4" class="pf-line pf-line-off"/>
-    <circle id="pfDotSolar" r="5" fill="#00e676" opacity="0"><animateMotion dur="1s" repeatCount="indefinite" path="M 68 45 Q 110 45 130 90"/></circle>
-    <circle id="pfDotSolarBatt" r="4" fill="#00e676" opacity="0"><animateMotion dur="1.5s" repeatCount="indefinite" path="M 55 65 Q 40 110 55 140"/></circle>
-    <circle id="pfDotBatt" r="5" fill="#ffab00" opacity="0"><animateMotion dur="1.2s" repeatCount="indefinite" path="M 68 155 Q 110 155 130 115"/></circle>
-    <circle id="pfDotGrid" r="5" fill="#40c4ff" opacity="0"><animateMotion dur="0.8s" repeatCount="indefinite" path="M 232 105 L 175 105"/></circle>
-    <circle id="pfDotGridBatt" r="4" fill="#40c4ff" opacity="0"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 245 120 Q 180 180 68 170"/></circle>
-  </svg>
-</div>
+        <text x="150" y="102" text-anchor="middle" font-size="52" style="filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));">🏠</text>
+        
+        <text class="heart-blink" x="150" y="89" text-anchor="middle" font-size="14">❤️</text>
+        
+        <text id="shFan" x="150" y="56" text-anchor="middle" font-size="16" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">🌀</text>
+        <text id="shLight" x="120" y="94" text-anchor="middle" font-size="13" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">💡</text>
+        <text id="shTV" x="180" y="94" text-anchor="middle" font-size="13" style="transition: all 0.3s; opacity: 0.2; filter: grayscale(1);">📺</text>
+        
+        <g id="shTV_Glow" style="display:none;"></g>
+      </g>
 
-<!-- BATTERY HOURS -->
-<div class="bh-card bh-safe" id="bhCard">
-  <div class="bh-top">
-    <div>
-      <div class="bh-lbl">BATTERY REMAINING</div>
-      <div class="bh-val" id="bhVal" style="color:var(--green)">&#8734;</div>
-      <div class="bh-unit en" id="bhUnit">Solar active</div>
+      <text x="150" y="122" text-anchor="middle" font-size="9" fill="#8892a4" style="letter-spacing: 0.5px;">HOME LOAD</text>
+      <text x="150" y="136" text-anchor="middle" font-size="11" font-weight="bold" fill="#f0f4ff" id="pfHomeLoad">450W</text>
+      
+      <text x="50" y="90" text-anchor="middle" font-size="24">&#9700;</text>
+      <text x="50" y="112" text-anchor="middle" font-size="9" fill="#8892a4">SOLAR ARRAY</text>
+      <text x="50" y="126" text-anchor="middle" font-size="10" font-weight="bold" fill="#10b981">1250W</text>
+      
+      <text x="260" y="90" text-anchor="middle" font-size="24">&#128268;</text>
+      <text x="260" y="112" text-anchor="middle" font-size="9" fill="#8892a4">WAPDA GRID</text>
+      <text x="260" y="126" text-anchor="middle" font-size="10" font-weight="bold" fill="#38bdf8">0W</text>
+    </svg>
+  </div>
+
+  <div id="peakLoadTrackerCard" style="background: #111827; border: 1px solid #374151; padding: 16px; border-radius: 12px; color: #f0f4ff;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <span style="font-size: 13px; font-weight: 600; color: #9ca3af; letter-spacing: 0.5px;">📊 24-HOUR PEAK LOAD PROFILE</span>
+      <span id="peakTimeBadge" style="font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; color: #38bdf8; background: rgba(56,189,248,0.15); font-family: monospace;">PROFILING TIME</span>
     </div>
-    <div class="bh-ic" id="bhIcon">&#129001;</div>
-  </div>
-  <div class="bh-bar-bg"><div class="bh-bar-fill" id="bhBar" style="width:100%"></div></div>
-  <div class="bh-sug">
-    <div class="bh-ur" id="bhSugUr">&#1604;&#1608;&#1672; &#1729;&#1608; &#1585;&#1729;&#1740; &#1729;&#1746;...</div>
-    <div class="bh-en" id="bhSugEn">Calculating...</div>
-  </div>
-  <div class="bh-note">&#9889; <span id="bhNote">Safe zone: 20% minimum</span></div>
-</div>
-
-<!-- PKR METER -->
-<div class="pkr-meter" id="pkrMeter">
-  <div class="pkr-lbl">&#128176; SAVING RIGHT NOW</div>
-  <div class="pkr-val" id="pkrVal">PKR 0.00</div>
-  <div class="pkr-sub" id="pkrSub">calculating...</div>
-  <div class="pkr-rate" id="pkrRate"></div>
-</div>
-
-<!-- EFFICIENCY -->
-<div class="eff-card">
-  <div class="eff-top">
-    <span style="font-size:9px;letter-spacing:2px;color:var(--muted)">&#9889; SOLAR COVERAGE</span>
-    <span class="eff-pct" id="effCov">--%</span>
-  </div>
-  <div class="eff-bg"><div class="eff-fill" id="effFill" style="width:0%"></div></div>
-</div>
-
-<!-- CARDS -->
-<div class="cards">
-  <div class="card green"><div class="cg"></div><div class="is">&#9728;&#65039;</div><div class="cl">SOLAR NOW</div><div class="cv" id="cSolar">--</div><div class="cu">kWh reading</div></div>
-  <div class="card amber"><div class="cg"></div><div class="ib">&#128267;</div><div class="cl">BATTERY</div><div class="cv" id="cBatt">--</div><div class="cu">% charged 4.8kWh</div><div class="pb2"><div class="pf2" id="battP" style="width:0%"></div></div><div class="chg-ind" id="chgInd"></div></div>
-  <div class="card blue"><div class="cg"></div><div class="iv">&#9889;</div><div class="cl">VOLTAGE</div><div class="cv" id="cVolt">--</div><div class="cu">volts 48V lithium</div></div>
-  <div class="card green"><div class="cg"></div><div class="ih">&#127968;</div><div class="cl">HOME LOAD</div><div class="cv" id="cLoad">--</div><div class="cu">watts now</div></div>
-  <div class="card blue"><div class="cg"></div><div class="ig">&#128268;</div><div class="cl">WAPDA/GRID</div><div class="cv" id="cGrid">--</div><div class="cu">kWh from grid</div></div>
-  <div class="card amber"><div class="cg"></div><div class="ie">&#128262;</div><div class="cl">BATT ENERGY</div><div class="cv" id="cBkwh">--</div><div class="cu">of 4.8 kWh</div><div class="pb2"><div class="pf2" id="bkwhP" style="width:0%"></div></div></div>
-</div>
-
-<!-- TEMP ROW -->
-<div class="tc">
-  <div class="ti"><div class="tic">&#127777;&#65039;</div><div class="tv2" id="tempV">--</div><div class="tl2">TEMP</div></div>
-  <div class="ti"><span class="mb2" id="modeB">-- MODE</span></div>
-  <div class="ti"><div class="tic">&#127744;</div><div class="tv2" id="fanV">--</div><div class="tl2">FAN</div></div>
-</div>
-
-<div style="position:relative;z-index:5;margin:0 0 10px 0;background:linear-gradient(135deg,rgba(0,26,10,0.9),rgba(0,20,8,0.9));border:1px solid rgba(0,230,118,0.3);border-radius:18px;padding:14px;display:flex;align-items:center;gap:14px">
-  <div style="font-size:40px;animation:solarSpin 8s linear infinite">&#128293;</div>
-  <div style="flex:1">
-    <div style="font-size:9px;letter-spacing:2px;color:var(--muted)">&#9728;&#65039; PURE SOLAR STREAK</div>
-    <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px">
-      <div style="font-family:Orbitron,monospace;font-size:36px;font-weight:900;color:var(--green)" id="streakVal">--</div>
-      <div style="font-size:14px;color:var(--muted)">days</div>
+    
+    <div id="hourlyBarChart" style="display: flex; justify-content: space-between; align-items: flex-end; height: 65px; padding-top: 10px; border-bottom: 1px solid #374151;"></div>
+    
+    <div style="display: flex; justify-content: space-between; font-size: 9px; color: #6b7280; margin-top: 6px; font-weight: 500;">
+      <span>12 AM</span><span>6 AM</span><span>12 PM</span><span>6 PM</span><span>11 PM</span>
     </div>
-    <div style="font-size:11px;color:var(--amber);margin-top:3px;font-weight:600" id="streakMsg">Calculating...</div>
-  </div>
-</div>
-<div style="margin-bottom:10px;background:linear-gradient(135deg,rgba(15,10,30,0.9),rgba(10,8,25,0.9));border:1px solid rgba(224,64,251,0.3);border-radius:18px;padding:14px">
-  <div style="font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">&#127942; ACHIEVEMENTS</div>
-  <div id="badgeList" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-    <div style="color:var(--muted);font-size:11px">Loading...</div>
-  </div>
-</div>
-<div style="margin-bottom:10px;background:linear-gradient(135deg,rgba(10,5,30,0.9),rgba(8,4,22,0.9));border:1px solid rgba(224,64,251,0.3);border-radius:18px;padding:14px">
-  <div style="font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">&#128179; MONTHLY BILL COMPARISON</div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center">
-    <div style="background:rgba(255,82,82,0.08);border:1px solid rgba(255,82,82,0.2);border-radius:12px;padding:10px">
-      <div style="font-size:9px;color:var(--muted);margin-bottom:4px">IF ONLY WAPDA</div>
-      <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:var(--red)" id="billFull">--</div>
-    </div>
-    <div style="background:rgba(64,196,255,0.08);border:1px solid rgba(64,196,255,0.2);border-radius:12px;padding:10px">
-      <div style="font-size:9px;color:var(--muted);margin-bottom:4px">WAPDA PAID</div>
-      <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:var(--blue)" id="billWapda">--</div>
-    </div>
-    <div style="background:rgba(0,230,118,0.08);border:1px solid rgba(0,230,118,0.2);border-radius:12px;padding:10px">
-      <div style="font-size:9px;color:var(--muted);margin-bottom:4px">YOU SAVED</div>
-      <div style="font-family:Orbitron,monospace;font-size:13px;font-weight:700;color:var(--green)" id="billSaved">--</div>
+    
+    <div id="peakInsights" style="margin-top: 12px; font-size: 11px; line-height: 1.4; color: #38bdf8; background: rgba(56,189,248,0.08); padding: 8px 10px; border-radius: 6px; border-left: 3px solid #0284c7;">
+      Analyzing real-time hourly load distribution profiles...
     </div>
   </div>
-</div>
-<div style="margin-bottom:10px;background:linear-gradient(135deg,rgba(5,15,30,0.9),rgba(4,12,24,0.9));border:1px solid rgba(64,196,255,0.3);border-radius:18px;padding:14px">
-  <div style="font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">&#9889; INVERTER EFFICIENCY SCORE</div>
-  <div style="display:flex;align-items:center;gap:14px">
-    <div style="font-family:Orbitron,monospace;font-size:52px;font-weight:900" id="effGrade" style="color:var(--green)">--</div>
-    <div style="flex:1">
-      <div style="font-family:Orbitron,monospace;font-size:16px;color:var(--text)" id="effScore">--</div>
-      <div style="margin-top:8px;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden">
-        <div id="effBar2" style="height:100%;border-radius:4px;width:0%;transition:width 1s;background:var(--green)"></div>
+
+  <div id="wapdaSlabCalculatorCard" style="background: #111827; border: 1px solid #374151; padding: 16px; border-radius: 12px; color: #f0f4ff;">
+    
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; border-bottom: 1px solid #1f2937; padding-bottom: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 13px; font-weight: 600; color: #9ca3af; letter-spacing: 0.5px;">💰 WAPDA BILL & FBR TAX ENGINE</span>
+        <select id="billingMonthFilter" onchange="calculateWapdaBill()" style="background: #1f2937; color: #38bdf8; border: 1px solid #4b5563; border-radius: 6px; font-size: 11px; padding: 4px 8px; font-weight: bold; cursor: pointer; outline: none;">
+          <option value="may_jun" selected>🗓️ 07 May - 07 Jun (Running)</option>
+          <option value="apr_may">🗓️ 07 Apr - 07 May (Last Bill)</option>
+          <option value="mar_apr">🗓️ 07 Mar - 07 Apr (Past Bill)</option>
+        </select>
       </div>
-      <div style="font-size:9px;color:var(--muted);margin-top:4px">Based on temp, battery & solar efficiency</div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(31, 41, 55, 0.5); padding: 6px 10px; border-radius: 6px; border: 1px solid #374151;">
+        <span style="font-size: 11px; color: #cbd5e1; font-weight: 500;">FBR Active Taxpayer Status:</span>
+        <select id="fbrFilerStatus" onchange="calculateWapdaBill()" style="background: #111827; color: #10b981; border: 1px solid #10b981; border-radius: 4px; font-size: 11px; padding: 3px 6px; font-weight: bold; cursor: pointer; outline: none;">
+          <option value="filer" selected>✅ ATL Active (Filer)</option>
+          <option value="nonfiler">❌ Not on ATL (Non-Filer)</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 12px;">
+      <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px;">
+        <span style="color: #9ca3af;">Units Accumulated In Cycle:</span>
+        <span style="color: #f43f5e; font-weight: bold; font-family: monospace;" id="displayUnitsValue">320 kWh</span>
+      </div>
+      <input type="range" id="unitsSliderInput" min="20" max="1000" value="320" oninput="calculateWapdaBill()" style="width: 100%; accent-color: #06b6d4; cursor: pointer; height: 6px; background: #374151; border-radius: 5px;" />
+    </div>
+
+    <div style="margin-bottom: 14px;">
+      <div style="width: 100%; background: #1f2937; height: 6px; border-radius: 3px; overflow: hidden; display: flex;">
+        <div id="slabProgressSeg" style="width: 32%; height: 100%; background: linear-gradient(90deg, #10b981, #ef4444); transition: width 0.4s ease;"></div>
+      </div>
+    </div>
+
+    <div id="slabWarningAlert" style="font-size: 11px; font-weight: 500; color: #fbbf24; background: rgba(251,191,36,0.05); padding: 8px 10px; border-radius: 6px; border-left: 3px solid #d97706; margin-bottom: 14px;">
+      Calculating cycle parameters...
+    </div>
+
+    <div style="background: rgba(16,185,129,0.05); border: 1px dashed rgba(16,185,129,0.3); border-radius: 8px; padding: 12px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-size: 11px; font-weight: bold; color: #34d399; letter-spacing: 0.3px; border-bottom: 1px solid rgba(16,185,129,0.15); padding-bottom: 4px;">📈 CYCLE SAVINGS METRICS (TAXES INCLUDED)</div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 11px; color: #e5e7eb;">☀️ Saved via Solar Power:</div>
+        <span style="color: #34d399; font-weight: bold; font-family: monospace; font-size: 12px;" id="savedSolarVal">Rs. 0</span>
+      </div>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 11px; color: #e5e7eb;">🔋 Saved via Battery Bank:</div>
+        <span style="color: #6ee7b7; font-weight: bold; font-family: monospace; font-size: 12px;" id="savedBatteryVal">Rs. 0</span>
+      </div>
+    </div>
+
+    <div style="font-size: 11px; color: #9ca3af; display: flex; flex-direction: column; gap: 6px;">
+      <div style="display: flex; justify-content: space-between;"><span>Base Energy Charges:</span><span style="color: #f0f4ff; font-family: monospace;" id="breakdownBase">Rs. 0</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Fixed System Charge (2026):</span><span style="color: #f0f4ff; font-family: monospace;" id="breakdownFixed">Rs. 0</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Fuel Price Adjustment (FPA):</span><span style="color: #f0f4ff; font-family: monospace;" id="breakdownFpa">Rs. 0</span></div>
+      
+      <div style="display: flex; justify-content: space-between; border-top: 1px solid #1f2937; padding-top: 4px; margin-top: 2px;"><span>Electricity Duty (E.D @ 1.5%):</span><span style="color: #cbd5e1; font-family: monospace;" id="breakdownEd">Rs. 0</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>Financing Cost Surcharge (F.C @ 3.23/u):</span><span style="color: #cbd5e1; font-family: monospace;" id="breakdownFc">Rs. 0</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>General Sales Tax (GST @ 18%):</span><span style="color: #cbd5e1; font-family: monospace;" id="breakdownGst">Rs. 0</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>PTV License Fee (Fixed Rate):</span><span style="color: #cbd5e1; font-family: monospace;">Rs. 35</span></div>
+      
+      <div id="nonFilerTaxRow" style="display: flex; flex-direction: column; gap: 6px; border-top: 1px dashed rgba(244,63,94,0.3); padding-top: 4px; display: none;">
+        <div style="display: flex; justify-content: space-between; color: #f43f5e;"><span>Further Tax (FBR Non-Filer @ 4%):</span><span style="color: #f43f5e; font-family: monospace;" id="breakdownFurtherTax">Rs. 0</span></div>
+        <div style="display: flex; justify-content: space-between; color: #f43f5e;"><span>Extra Tax (FBR Penalty @ 5%):</span><span style="color: #f43f5e; font-family: monospace;" id="breakdownExtraTax">Rs. 0</span></div>
+        <div id="nonFilerUnitSurchargeRow" style="display: flex; justify-content: space-between; color: #f43f5e;"><span>Commercial ATL Penalty (Rs. 9/u):</span><span style="color: #f43f5e; font-family: monospace;" id="breakdownUnitSurcharge">Rs. 0</span></div>
+      </div>
+      
+      <div id="advanceTaxRow" style="display: flex; justify-content: space-between; color: #f43f5e; display: none;"><span>Advance Income Tax (WHT @ 7.5%):</span><span style="color: #f43f5e; font-weight: bold; font-family: monospace;" id="breakdownWht">Rs. 0</span></div>
+      
+      <div style="display: flex; justify-content: space-between; border-top: 1px solid #374151; padding-top: 8px; margin-top: 4px; font-size: 13px; font-weight: bold;">
+        <span style="color: #fff;">Estimated Cycle Cost:</span>
+        <span style="color: #10b981; font-family: monospace;" id="breakdownTotal">Rs. 0</span>
+      </div>
     </div>
   </div>
-</div>
-<!-- STATS -->
-<div class="stats">
-  <div class="stat"><div class="si its">&#9728;&#65039;</div><div class="sl">TOTAL SOLAR</div><div class="sv" id="sTsolar">--</div><div class="su">kWh</div></div>
-  <div class="stat"><div class="si ipk">&#9888;&#65039;</div><div class="sl">PEAK LOAD</div><div class="sv am" id="sPeak">--</div><div class="su">watts</div></div>
-  <div class="stat"><div class="si iw">&#127758;</div><div class="sl">TOTAL WAPDA</div><div class="sv bl" id="sTwapda">--</div><div class="su">kWh</div></div>
-  <div class="stat"><div class="si im">&#128176;</div><div class="sl">PKR SAVED</div><div class="sv pu" id="sSaved">--</div><div class="su">rupees</div></div>
-  <div class="stat"><div class="si ir">&#127807;</div><div class="sl">SOLAR RATIO</div><div class="sv" id="sRatio">--</div><div class="rb2"><div class="rf2" id="ratioF" style="width:0%"></div></div></div>
-  <div class="stat"><div class="si irec">&#128203;</div><div class="sl">READINGS</div><div class="sv bl" id="sCount">--</div><div class="su">logged</div></div>
+
 </div>
 
-<!-- FORECAST -->
-<div class="fc-card">
-  <div class="fc-title">&#127774; TOMORROW SOLAR FORECAST — ABBOTTABAD</div>
-  <div class="fc-grid">
-    <div class="fc-item"><div style="font-size:28px" id="fcIcon">--</div><div class="fc-lbl">CONDITION</div><div style="font-size:11px;font-weight:600" id="fcDesc">--</div></div>
-    <div class="fc-item"><div class="fc-lbl">MAX TEMP</div><div class="fc-val" style="color:var(--red)" id="fcTemp">--</div></div>
-    <div class="fc-item"><div class="fc-lbl">CLOUDS</div><div class="fc-val" style="color:var(--amber)" id="fcCloud">--</div></div>
-    <div class="fc-item"><div class="fc-lbl">SOLAR EXP</div><div class="fc-val" id="fcExp">--</div></div>
-  </div>
-  <div class="fc-msg" id="fcMsg"></div>
-</div>
-
-<!-- APPLIANCES -->
-<div class="app-card">
-  <div class="app-title">&#9889; BEST TIME FOR APPLIANCES TODAY</div>
-  <div id="appList" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px"></div>
-</div>
-
-<!-- OUTAGE -->
-<div class="outage-card">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <div class="outage-lbl">&#128268; WAPDA OUTAGES TODAY</div>
-      <div class="outage-ur">&#1570;&#1580; &#1608;&#1575;&#1662;&#1688;&#1575; &#1705;&#1578;&#1606;&#1740; &#1576;&#1575;&#1585; &#1711;&#1574;&#1740;</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <div class="outage-count" id="outageCount">0</div>
-      <button class="outage-btn" onclick="logOutage()">+ LOG</button>
-    </div>
-  </div>
-</div>
-
-</div><!-- end main -->
-
-<footer>
-  <div class="foot-top">
-    <div class="ts2" id="updTime">--</div>
-    <span class="conn-s c-fresh" id="connStatus2">&#9679; CONNECTED</span>
-  </div>
-  <div class="foot-bot">
-    <button class="share-btn" onclick="shareFamily()">&#128241; Share</button>
-    <a href="/analytics" style="background:rgba(64,196,255,0.15);border:1px solid #40c4ff;color:#40c4ff;padding:10px 14px;border-radius:25px;font-weight:700;font-size:11px;text-decoration:none">&#128202; Analytics</a>
-    <button class="refresh-btn" onclick="loadAll()">&#10227; Refresh</button>
-  </div>
-</footer>
-
-<!-- BOTTOM NAV -->
-<nav class="bot-nav">
-  <a class="nav-item active" href="/dashboard"><div class="nav-icon">&#127968;</div><div class="nav-lbl">DASHBOARD</div></a>
-  <a class="nav-item" href="/analytics"><div class="nav-icon">&#128202;</div><div class="nav-lbl">ANALYTICS</div></a>
-  <div class="nav-item" onclick="loadAll()"><div class="nav-icon">&#10227;</div><div class="nav-lbl">REFRESH</div></div>
-  <div class="nav-item" onclick="shareFamily()"><div class="nav-icon">&#128241;</div><div class="nav-lbl">SHARE</div></div>
-  <div class="nav-item" onclick="toggleSettings()"><div class="nav-icon">&#9881;&#65039;</div><div class="nav-lbl">SETTINGS</div></div>
-</nav>
-
-<script>window.onerror = function(msg, url, line){ alert("GLOBAL ERROR CAUGHT:\n\n" + msg + "\n\nLine: " + line); };</script>\n<script>
-var API = '';
-var BC = parseFloat(localStorage.getItem('batt')||4.8);
-var SM = parseFloat(localStorage.getItem('safe')||20);
-var BATT_CAP = BC;
-var SAFE_MIN = SM;
-let popupShown = false;
-let isUrdu = false;
-
-// Particles
-var pw = document.getElementById('particles');
-for(let i=0;i<15;i++){
-  var p = document.createElement('div');
-  p.className = 'particle';
-  p.style.cssText = `left:${Math.random()*100}%;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;animation-duration:${Math.random()*10+8}s;animation-delay:${Math.random()*12}s`;
-  if(pw) pw.appendChild(p);
-}
-
-
-
-let voiceOn=false;
-function toggleVoice(){
-  voiceOn=!voiceOn;
-  var btn=document.getElementById('voiceBtn');
-  if(voiceOn){btn.style.color='var(--green)';btn.style.borderColor='var(--green)';btn.textContent='\ud83d\udd0a Voice ON';speakUrdu('وائس الرٹ آن ہے');}
-  else{btn.style.color='var(--muted)';btn.style.borderColor='var(--border)';btn.textContent='\ud83d\udd07 Voice';}
-}
-
-function shareFamily(){
-  var url='https://solar-app-yrm6.onrender.com/dashboard';
-  var solar=document.getElementById('sTsolar').textContent;
-  var batt=document.getElementById('cBatt').textContent;
-  var load=document.getElementById('cLoad').textContent;
-  var saved=document.getElementById('sSaved').textContent;
-  var msg='\u2600\ufe0f *Sufly Solar - Abbottabad Prime*\n\n\ud83d\udd0b Battery: '+batt+'\n\ud83c\udfe0 Load: '+load+'\n\u2600\ufe0f Total Solar: '+solar+' kWh\n\ud83d\udcb0 Saved: '+saved+'\n\n\ud83d\udcf1 Live: '+url;
-  window.open('https://wa.me/?text='+encodeURIComponent(msg));
-}
-
-
-let prevLoad=0;
-function analyzeLoad(load,solar,grid){
-  var spike=load-prevLoad;
-  var al=document.getElementById('alHigh');
-  if(spike>300&&prevLoad>0){
-    var el=document.getElementById('alHigh');
-    el.style.display='block';
-    el.querySelector('.al-ur').textContent='\u06a9\u0686\u06be \u0646\u06cc\u0627 \u0686\u0644\u0627 \u062f\u06cc\u0627 \u06af\u06cc\u0627! +'+spike.toFixed(0)+'W \u0627\u0636\u0627\u0641\u06c1';
-    el.querySelector('.al-sub').textContent='LOAD SPIKE DETECTED: +'+spike.toFixed(0)+'W increase!';
-    setTimeout(()=>{if(load<=1200)el.style.display='none';},10000);
-  }
-  prevLoad=load;
-}
-
-
-let lastVoiceAlert='';
-function speakUrdu(text){
-  if(!window.speechSynthesis)return;
-  if(lastVoiceAlert===text)return;
-  lastVoiceAlert=text;
-  var u=new SpeechSynthesisUtterance(text);
-  u.lang='ur-PK';u.rate=0.9;u.pitch=1;u.volume=1;
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(u);
-  setTimeout(()=>{lastVoiceAlert='';},60000);
-}
-function checkVoiceAlerts(solar,grid,load,batt){
-  var battOnly=solar==0&&grid==0;
-  if(battOnly&&batt<30){
-    speakUrdu('خبردار! بیٹری تیس فیصد سے کم ہے۔ فوری واپڈا لگائیں۔');
-  } else if(battOnly&&batt<50){
-    speakUrdu('بیٹری پچاس فیصد سے کم ہے۔ بوجھ کم کریں۔');
-  } else if(load>1200){
-    speakUrdu('خبردار! گھر کا بوجھ بہت زیادہ ہے۔ کچھ آلات بند کریں۔');
-  } else if(solar>0&&grid==0&&batt==100){
-    speakUrdu('بہترین! سولر چل رہا ہے اور بیٹری مکمل چارج ہے۔');
-  }
-}
-
-
-async function loadForecast(){
-  try{
-    var res=await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.1688&longitude=73.2215&daily=weather_code,temperature_2m_max,cloud_cover_mean,sunshine_duration&timezone=Asia/Karachi&forecast_days=2');
-    var d=await res.json();
-    var icons={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',51:'🌦️',61:'🌧️',71:'❄️',80:'🌦️',95:'⛈️'};
-    var descs={0:'Clear Sky',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Foggy',51:'Drizzle',61:'Rain',71:'Snow',80:'Showers',95:'Thunderstorm'};
-    var wc=d.daily.weather_code[1];
-    var temp=d.daily.temperature_2m_max[1];
-    var cloud=d.daily.cloud_cover_mean[1];
-    var sunshine=d.daily.sunshine_duration[1];
-    var solarExp=cloud<20?'HIGH':cloud<50?'MEDIUM':cloud<70?'LOW':'POOR';
-    var expColor=cloud<20?'var(--green)':cloud<50?'var(--amber)':cloud<70?'#ff6600':'var(--red)';
-    document.getElementById('fcIcon').textContent=icons[wc]||'🌤️';
-    document.getElementById('fcDesc').textContent=descs[wc]||'Clear';
-    document.getElementById('fcTemp').textContent=temp+'°C';
-    document.getElementById('fcCloud').textContent=cloud+'%';
-    document.getElementById('fcExp').textContent=solarExp;
-    document.getElementById('fcExp').style.color=expColor;
-    var sunHrs=(sunshine/3600).toFixed(1);
-    var msg=cloud<30?'✅ Excellent solar day tomorrow! Expected '+sunHrs+' hrs sunshine':cloud<60?'⚡ Good solar expected. '+sunHrs+' hrs sunshine':'⚠️ Cloudy tomorrow. Charge battery today!';
-    var msgEl=document.getElementById('fcMsg');
-    msgEl.textContent=msg;
-    msgEl.style.background=cloud<30?'rgba(0,230,118,0.1)':cloud<60?'rgba(255,171,0,0.1)':'rgba(255,82,82,0.1)';
-    msgEl.style.color=cloud<30?'var(--green)':cloud<60?'var(--amber)':'var(--red)';
-  }catch(e){console.error('Forecast:',e);}
-}
-
-
-function updateApplianceTimes(){
-  var now=new Date();
-  var hr=now.getHours();
-  var appliances=[
-    {name:'&#129529; Washing Machine',best:'10:00-13:00',bestHr:[10,13],icon:'&#129529;'},
-    {name:'&#9749; Iron',best:'11:00-14:00',bestHr:[11,14],icon:'&#9749;'},
-    {name:'&#10052; AC',best:'12:00-15:00',bestHr:[12,15],icon:'&#10052;'},
-    {name:'&#127861; Oven',best:'11:00-13:00',bestHr:[11,13],icon:'&#127861;'},
-    {name:'&#128187; Computer',best:'09:00-16:00',bestHr:[9,16],icon:'&#128187;'},
-    {name:'&#128268; Chargers',best:'09:00-17:00',bestHr:[9,17],icon:'&#128268;'}
-  ];
-  var list=document.getElementById('appList');
-  list.innerHTML=appliances.map(a=>{
-    var active=hr>=a.bestHr[0]&&hr<a.bestHr[1];
-    var bg=active?'rgba(0,230,118,0.15)':'rgba(255,255,255,0.04)';
-    var border=active?'1px solid var(--green)':'1px solid rgba(255,255,255,0.08)';
-    var status=active?'&#9989; NOW':'&#128336; '+a.best;
-    var color=active?'var(--green)':'var(--muted)';
-    return '<div style="background:'+bg+';border:'+border+';border-radius:10px;padding:8px;text-align:center"><div style="font-size:16px">'+a.icon+'</div><div style="font-size:9px;color:var(--muted);letter-spacing:1px">'+a.name.replace(/&#\d+;/g,'')+'</div><div style="font-size:10px;font-weight:700;color:'+color+'">'+status+'</div></div>';
-  }).join('');
-}
-
-
-function updatePowerFlow(solar,grid,load,batt){
-  var solarW=(solar*1000).toFixed(0);
-  var gridW=(grid*1000).toFixed(0);
-  var battOnly=solar==0&&grid==0;
-
-  document.getElementById('pfSolarVal').textContent=solarW+'W';
-  document.getElementById('pfBattVal').textContent=batt.toFixed(0)+'%';
-  document.getElementById('pfGridVal').textContent=gridW+'W';
-  document.getElementById('pfHomeLoad').textContent=load.toFixed(0)+'W';
-  
-  // Dynamic Smart Appliance Controllers
-  var sLight = document.getElementById('shLight');
-  var sFan = document.getElementById('shFan');
-  var sTV = document.getElementById('shTV');
-  
-  if(sLight) {
-    if(load > 30) { sLight.style.opacity = '1'; sLight.style.filter = 'drop-shadow(0 0 5px #ffd600)'; }
-    else { sLight.style.opacity = '0.2'; sLight.style.filter = 'grayscale(1)'; }
-  }
-  if(sTV) {
-    if(load > 120) { 
-      sTV.style.opacity = '1'; 
-      sTV.style.filter = 'drop-shadow(0 0 5px #29b6f6)';
-      var tg = document.getElementById('shTV_Glow'); if(tg) tg.style.opacity = '1';
+<script>
+  function syncSmartAppliances() {
+    var loadEl = document.getElementById("pfHomeLoad");
+    if(!loadEl) return;
+    
+    var loadVal = parseInt(loadEl.innerText) || 0;
+    
+    var fan = document.getElementById("shFan");
+    var light = document.getElementById("shLight");
+    var tv = document.getElementById("shTV");
+    
+    if(loadVal > 300) {
+      fan.classList.add("fan-spin-active");
+      fan.style.opacity = "1";
+      fan.style.filter = "drop-shadow(0 0 4px #00e5ff)";
+    } else {
+      fan.classList.remove("fan-spin-active");
+      fan.style.opacity = "0.2";
+      fan.style.filter = "grayscale(1)";
     }
-    else { 
-      sTV.style.opacity = '0.2'; 
-      sTV.style.filter = 'grayscale(1)'; 
-      var tg = document.getElementById('shTV_Glow'); if(tg) tg.style.opacity = '0';
+    
+    if(loadVal > 50) {
+      light.style.opacity = "1";
+      light.style.filter = "drop-shadow(0 0 5px #ffe082)";
+    } else {
+      light.style.opacity = "0.2";
+      light.style.filter = "grayscale(1)";
+    }
+    
+    if(loadVal > 120) {
+      tv.style.opacity = "1";
+      tv.style.filter = "drop-shadow(0 0 5px #29b6f6)";
+    } else {
+      tv.style.opacity = "0.2";
+      tv.style.filter = "grayscale(1)";
     }
   }
-  if(sFan) {
-    if(load > 300) { sFan.style.opacity = '1'; sFan.style.filter = 'none'; sFan.classList.add('fan-spin-active'); }
-    else { sFan.style.opacity = '0.2'; sFan.style.filter = 'grayscale(1)'; sFan.classList.remove('fan-spin-active'); }
+
+  function trackHourlyLoad() {
+    var loadEl = document.getElementById("pfHomeLoad");
+    if(!loadEl) return;
+    var loadVal = parseInt(loadEl.innerText) || 0;
+    var hr = new Date().getHours();
+    
+    var data = JSON.parse(localStorage.getItem("solar_hourly_load")) || Array(24).fill(0);
+    var counts = JSON.parse(localStorage.getItem("solar_hourly_counts")) || Array(24).fill(0);
+    
+    data[hr] = Math.round(((data[hr] * counts[hr]) + loadVal) / (counts[hr] + 1));
+    counts[hr] = Math.min(counts[hr] + 1, 100);
+    
+    localStorage.setItem("solar_hourly_load", JSON.stringify(data));
+    localStorage.setItem("solar_hourly_counts", JSON.stringify(counts));
+    
+    renderHourlyChart(data);
   }
 
-  // Solar line
-  var sl=document.getElementById('pfLineSolar');
-  var sd=document.getElementById('pfDotSolar');
-  if(solar>0){sl.classList.remove('pf-line-off');sd.setAttribute('opacity','0.8');}
-  else{sl.classList.add('pf-line-off');sd.setAttribute('opacity','0');}
-
-  var solarExcess=Math.round(solar*1000)>load&&batt<100;
-  var wapdaChargingBatt=grid>0&&batt<100&&solar==0;
-
-  function setLine(lid,did,on){
-    var l=document.getElementById(lid);var d=document.getElementById(did);
-    if(!l||!d)return;
-    if(on){l.classList.remove('pf-line-off');d.setAttribute('opacity','0.9');}
-    else{l.classList.add('pf-line-off');d.setAttribute('opacity','0');}
-  }
-
-  setLine('pfLineBatt','pfDotBatt',battOnly);
-  setLine('pfLineGrid','pfDotGrid',grid>0);
-  setLine('pfLineSolarBatt','pfDotSolarBatt',solarExcess);
-  setLine('pfLineGridBatt','pfDotGridBatt',wapdaChargingBatt);
-
-  document.getElementById('pfBattVal').textContent=batt.toFixed(0)+'%'+(solarExcess||wapdaChargingBatt?' ↑':battOnly?' ↓':'');
-
-  var homeEl=document.getElementById('pfHomeIcon');
-  if(solar>0&&grid==0)homeEl.style.filter='drop-shadow(0 0 15px rgba(0,230,118,0.9))';
-  else if(grid>0&&solar==0)homeEl.style.filter='drop-shadow(0 0 15px rgba(64,196,255,0.9))';
-  else if(grid>0&&solar>0)homeEl.style.filter='drop-shadow(0 0 15px rgba(255,171,0,0.9))';
-  else homeEl.style.filter='drop-shadow(0 0 15px rgba(255,82,82,0.9))';
-
-  var battEl=document.getElementById('pfBattIcon');
-  if(solarExcess||wapdaChargingBatt)battEl.style.filter='drop-shadow(0 0 12px rgba(0,230,118,0.9))';
-  else if(battOnly)battEl.style.filter='drop-shadow(0 0 12px rgba(255,82,82,0.9))';
-  else battEl.style.filter='drop-shadow(0 0 6px rgba(255,171,0,0.4))';
-}
-
-
-let PKR_RATE=parseFloat(localStorage.getItem('pkr')||22);
-let REFRESH_INT=parseInt(localStorage.getItem('refresh')||30);
-let refreshTimer=null;
-
-function toggleSettings(){
-  var p=document.getElementById('settingsPanel');
-  var show=p.style.display!=='flex';
-  p.style.display=show?'flex':'none';
-  if(show){
-    document.getElementById('setPKR').value=PKR_RATE;
-    document.getElementById('setBattCap').value=BATT_CAP;
-    document.getElementById('setSafeMin').value=SAFE_MIN;
-    document.getElementById('setRefresh').value=REFRESH_INT;
-  }
-}
-
-function saveSettings(){
-  PKR_RATE=parseFloat(document.getElementById('setPKR').value)||22;
-  BATT_CAP=parseFloat(document.getElementById('setBattCap').value)||4.8;
-  SAFE_MIN=parseFloat(document.getElementById('setSafeMin').value)||20;
-  REFRESH_INT=parseInt(document.getElementById('setRefresh').value)||30;
-  localStorage.setItem('pkr',PKR_RATE);
-  localStorage.setItem('batt',BATT_CAP);
-  localStorage.setItem('safe',SAFE_MIN);
-  localStorage.setItem('refresh',REFRESH_INT);
-  if(refreshTimer)clearInterval(refreshTimer);
-  refreshTimer=setInterval(loadAll,REFRESH_INT*1000);
-  toggleSettings();
-  loadAll();
-  alert('Settings saved!');
-}
-
-
-function updateStreak(rows){
-  if(!rows||!rows.length)return;
-  let streak=0;
-  var today=new Date().toLocaleDateString();
-  var days={};
-  rows.forEach(r=>{
-    var d=new Date(r.ts).toLocaleDateString();
-    if(!days[d])days[d]={solar:0,wapda:0};
-    days[d].solar+=r.solar_kwh||0;
-    days[d].wapda+=r.utility_kwh||0;
-  });
-  var sortedDays=Object.keys(days).sort((a,b)=>new Date(b)-new Date(a));
-  for(var d of sortedDays){
-    if(days[d].wapda===0&&days[d].solar>0)streak++;
-    else break;
-  }
-  var el=document.getElementById('streakVal');
-  if(el){
-    el.textContent=streak;
-    var msg=document.getElementById('streakMsg');
-    if(streak>=7)msg.textContent='Amazing! '+streak+' days pure solar!';
-    else if(streak>=3)msg.textContent=streak+' days on pure solar!';
-    else if(streak===1)msg.textContent='1 day pure solar today!';
-    else msg.textContent='No pure solar streak yet';
-  }
-}
-
-
-function updateBadges(totalSolar, records, streak){
-  var badges=[];
-  if(totalSolar>=100)badges.push({icon:'&#127942;',name:'100 kWh Club',color:'#ffab00'});
-  if(totalSolar>=250)badges.push({icon:'&#11088;',name:'250 kWh Star',color:'#ffab00'});
-  if(totalSolar>=500)badges.push({icon:'&#128081;',name:'500 kWh Legend',color:'#e040fb'});
-  if(records>=500)badges.push({icon:'&#128202;',name:'500 Readings',color:'#40c4ff'});
-  if(records>=1000)badges.push({icon:'&#128200;',name:'1000 Readings',color:'#e040fb'});
-  if(streak>=3)badges.push({icon:'&#128293;',name:'3 Day Streak',color:'#00e676'});
-  if(streak>=7)badges.push({icon:'&#127942;',name:'7 Day Solar Hero',color:'#ffab00'});
-  if(streak>=30)badges.push({icon:'&#128081;',name:'Solar Champion',color:'#e040fb'});
-  var el=document.getElementById('badgeList');
-  if(!el)return;
-  if(!badges.length){el.innerHTML='<div style="color:var(--muted);font-size:11px">Keep going to earn badges!</div>';return;}
-  el.innerHTML=badges.map(b=>`<div style="background:rgba(255,255,255,0.05);border:1px solid ${b.color}33;border-radius:12px;padding:8px;text-align:center"><div style="font-size:22px">${b.icon}</div><div style="font-size:9px;color:${b.color};font-weight:600;margin-top:3px;letter-spacing:1px">${b.name}</div></div>`).join('');
-}
-
-
-function updateBillComparison(totalSolar, totalWapda){
-  var pkr = parseFloat(localStorage.getItem('pkr')||22);
-  var solarCost = 0;
-  var wapdaCost = totalWapda * pkr;
-  var fullWapdaCost = (totalSolar + totalWapda) * pkr;
-  var saved = fullWapdaCost - wapdaCost;
-  var el = document.getElementById('billSaved');
-  var el2 = document.getElementById('billWapda');
-  var el3 = document.getElementById('billFull');
-  if(el) el.textContent = 'PKR ' + Math.round(saved).toLocaleString();
-  if(el2) el2.textContent = 'PKR ' + Math.round(wapdaCost).toLocaleString();
-  if(el3) el3.textContent = 'PKR ' + Math.round(fullWapdaCost).toLocaleString();
-}
-
-
-function updateEfficiencyScore(solar, load, batt, temp){
-  let score = 100;
-  if(temp > 55) score -= 30;
-  else if(temp > 50) score -= 15;
-  else if(temp > 45) score -= 5;
-  if(batt < 20) score -= 20;
-  else if(batt < 50) score -= 10;
-  var solarW = solar * 1000;
-  if(solarW > 0 && load > 0){
-    var eff = Math.min(100, (solarW / load) * 100);
-    if(eff < 50) score -= 10;
-  }
-  score = Math.max(0, Math.min(100, score));
-  let grade, color;
-  if(score >= 90){grade='A+';color='var(--green)';}
-  else if(score >= 80){grade='A';color='var(--green)';}
-  else if(score >= 70){grade='B';color='#aaee00';}
-  else if(score >= 60){grade='C';color='var(--amber)';}
-  else if(score >= 50){grade='D';color:'#ff6600';}
-  else{grade='F';color='var(--red)';}
-  var el = document.getElementById('effGrade');
-  var el2 = document.getElementById('effScore');
-  var el3 = document.getElementById('effBar2');
-  if(el){el.textContent = grade; el.style.color = color;}
-  if(el2) el2.textContent = score + '/100';
-  if(el3){el3.style.width = score + '%'; el3.style.background = color;}
-}
-
-function toggleLang(){
-  isUrdu = !isUrdu;
-  document.body.classList.toggle('urdu-mode', isUrdu);
-  document.getElementById('langBtn').textContent = isUrdu ? 'English' : 'اردو';
-  document.querySelectorAll('.en').forEach(e => e.style.display = isUrdu ? 'none' : '');
-  document.querySelectorAll('.ur').forEach(e => e.style.display = isUrdu ? 'block' : 'none');
-}
-
-function calcBattHours(bp, lw){
-  if(lw <= 0) return {h:99, lvl:'safe'};
-  var up = Math.max(0, bp - SAFE_MIN);
-  var uk = (up/100) * BATT_CAP;
-  var h = uk / (lw/1000);
-  let lvl = 'safe';
-  if(h < 1) lvl = 'critical';
-  else if(h < 3) lvl = 'danger';
-  else if(h < 8) lvl = 'caution';
-  // Pakistan finish time PKT (UTC+5)
-  var now = new Date();
-  var pkt = new Date(now.getTime() + (5*60*60*1000) - (now.getTimezoneOffset()*60*1000));
-  var finishMs = pkt.getTime() + (h * 3600 * 1000);
-  var finish = new Date(finishMs);
-  var fh = finish.getUTCHours().toString().padStart(2,'0');
-  var fm = finish.getUTCMinutes().toString().padStart(2,'0');
-  var finishTime = fh+':'+fm+' PKT';
-  return {h, lvl, uk, up, finishTime};
-}
-
-function updateBattHours(bp, lw, solar=0, grid=0){
-  if(solar>0||grid>0){document.getElementById("bhCard").className="bh-card bh-safe";document.getElementById("bhVal").textContent="inf";document.getElementById("bhVal").style.color="var(--green)";document.getElementById("bhIcon").textContent="G";document.getElementById("bhUnit").textContent="Solar/Grid active - battery safe";document.getElementById("bhBar").style.width="100%";return;}
-  var {h, lvl, uk, up, finishTime} = calcBattHours(bp, lw);
-  var card = document.getElementById('bhCard');
-  card.className = 'bh-card bh-' + lvl;
-  var valEl = document.getElementById('bhVal');
-  var iconEl = document.getElementById('bhIcon');
-  var sugUr = document.getElementById('bhSugUr');
-  var sugEn = document.getElementById('bhSugEn');
-  var bar = document.getElementById('bhBar');
-  var note = document.getElementById('bhNote');
-  var unitEl = document.getElementById('bhUnit');
-  if(finishTime && h<99) unitEl.textContent = h.toFixed(1)+' hrs — ends '+finishTime;
-  else if(h>=99) unitEl.textContent = 'Solar/Grid active — battery protected';
-  note.textContent = `محفوظ حد: ${SAFE_MIN}% لیتھیم — قابل استعمال: ${up.toFixed(0)}% = ${uk.toFixed(2)} kWh`;
-  bar.style.width = Math.min(100, h>=99 ? 100 : (h/12)*100) + '%';
-  if(lvl === 'safe'){
-    valEl.style.color = 'var(--green)';
-    valEl.textContent = h>=99 ? '∞' : h.toFixed(1);
-    iconEl.textContent = '🟢';
-    sugUr.textContent = h>=99 ? 'بیٹری بھری ہے — کوئی فکر نہیں ☀️' : 'بیٹری محفوظ ہے — بے فکر رہیں ✅';
-    sugEn.textContent = h>=99 ? 'Battery full — enjoy solar' : 'Battery safe — no action needed';
-  } else if(lvl === 'caution'){
-    valEl.style.color = 'var(--amber)';
-    valEl.textContent = h.toFixed(1);
-    iconEl.textContent = '🟡';
-    sugUr.textContent = `تقریباً ${h.toFixed(1)} گھنٹے باقی — غیر ضروری بوجھ بند کریں ⚡`;
-    sugEn.textContent = `~${h.toFixed(1)} hrs left — reduce unnecessary load`;
-  } else if(lvl === 'danger'){
-    valEl.style.color = '#ff6600';
-    valEl.textContent = h.toFixed(1);
-    iconEl.textContent = '🟠';
-    sugUr.textContent = `صرف ${h.toFixed(1)} گھنٹے باقی! واپڈا کے لیے تیار رہیں ⚠️`;
-    sugEn.textContent = `Only ${h.toFixed(1)} hrs! Prepare to switch to grid`;
-    if(!popupShown){
-      document.getElementById('popTitle').textContent = `بیٹری ${h.toFixed(1)} گھنٹے میں ختم!`;
-      document.getElementById('popHrs').textContent = h.toFixed(1) + ' HRS';
-      document.getElementById('popMsg').textContent = 'ابھی بوجھ کم کریں یا واپڈا تیار رکھیں';
-      document.getElementById('popup').classList.add('show');
-      popupShown = true;
+  function renderHourlyChart(data) {
+    var chart = document.getElementById("hourlyBarChart");
+    if(!chart) return;
+    chart.innerHTML = "";
+    var maxLoad = Math.max(...data, 150);
+    var currentHour = new Date().getHours();
+    var peakHour = data.indexOf(Math.max(...data));
+    
+    for(let i = 0; i < 24; i++) {
+      var barContainer = document.createElement("div");
+      barContainer.style.width = "3.6%";
+      barContainer.style.height = "100%";
+      barContainer.style.display = "flex";
+      barContainer.style.alignItems = "flex-end";
+      
+      var bar = document.createElement("div");
+      var pct = (data[i] / maxLoad) * 100;
+      bar.style.width = "100%";
+      bar.style.height = Math.max(pct, 6) + "%";
+      bar.style.borderRadius = "2px 2px 0 0";
+      bar.style.transition = "all 0.5s ease";
+      
+      if(i === currentHour) {
+        bar.style.background = "#06b6d4";
+        bar.style.boxShadow = "0 0 6px #06b6d4";
+      } else if(i === peakHour && data[i] > 0) {
+        bar.style.background = "#ef4444";
+      } else {
+        bar.style.background = "#4b5563";
+      }
+      
+      barContainer.appendChild(bar);
+      chart.appendChild(barContainer);
     }
-  } else {
-    var mins = Math.round(h*60);
-    valEl.style.color = 'var(--red)';
-    valEl.textContent = mins + 'm';
-    iconEl.textContent = '🔴';
-    sugUr.textContent = `فوری واپڈا لگائیں! صرف ${mins} منٹ باقی 🚨`;
-    sugEn.textContent = `CRITICAL: Only ${mins} minutes left! Switch NOW`;
-    document.getElementById('popTitle').textContent = '🚨 فوری اقدام کریں!';
-    document.getElementById('popHrs').textContent = mins + ' MIN';
-    document.getElementById('popMsg').textContent = 'بیٹری ختم ہونے والی ہے! ابھی واپڈا لگائیں';
-    document.getElementById('popup').classList.add('show');
-  }
-}
-
-function setSrc(solar, grid){
-  var badge = document.getElementById('srcBadge');
-  var val = document.getElementById('srcVal');
-  var icon = document.getElementById('srcIcon');
-  var battOnly = solar==0 && grid==0;
-  if(battOnly){
-    badge.className='src-badge b-batt'; badge.textContent='BATTERY ONLY';
-    val.style.color='var(--red)'; val.textContent='صرف بیٹری 🔋'; icon.textContent='🔋';
-    document.getElementById('mainBody').classList.add('bmode');
-  } else if(solar>0 && grid==0){
-    badge.className='src-badge b-solar'; badge.textContent='SOLAR ONLY';
-    val.style.color='var(--green)'; val.textContent='Pure solar energy ☀'; icon.textContent='☀️';
-    document.getElementById('mainBody').classList.remove('bmode');
-  } else if(solar>0 && grid>0){
-    badge.className='src-badge b-mixed'; badge.textContent='SOLAR+WAPDA';
-    val.style.color='var(--amber)'; val.textContent='Solar & Wapda mixed ⚡'; icon.textContent='⚡';
-    document.getElementById('mainBody').classList.remove('bmode');
-  } else {
-    badge.className='src-badge b-grid'; badge.textContent='WAPDA ONLY';
-    val.style.color='var(--blue)'; val.textContent='Running on grid 🔌'; icon.textContent='🔌';
-    document.getElementById('mainBody').classList.remove('bmode');
-  }
-}
-
-function setAlerts(solar, grid, load){
-  var battOnly = solar==0 && grid==0;
-  document.getElementById('alBatt').style.display = battOnly ? 'block' : 'none';
-  document.getElementById('alHigh').style.display = (load>1200 && !battOnly) ? 'block' : 'none';
-  document.getElementById('alMed').style.display = (load>300 && load<=1200 && !battOnly) ? 'block' : 'none';
-}
-
-
-async function loadWeather(){
-  try{
-    var res=await fetch('https://wttr.in/Abbottabad?format=j1');
-    var d=await res.json();
-    var cc=d.current_condition[0];
-    var temp=cc.temp_C;
-    var hum=cc.humidity;
-    var wind=cc.windspeedKmph;
-    var cloud=cc.cloudcover;
-    var desc=cc.weatherDesc[0].value;
-    var wcode=parseInt(cc.weatherCode);
-    var icons={113:'☀️',116:'⛅',119:'☁️',122:'☁️',143:'🌫️',176:'🌦️',179:'❄️',182:'🌧️',185:'🌧️',200:'⛈️',227:'❄️',230:'❄️',248:'🌫️',260:'🌫️',263:'🌦️',266:'🌦️',281:'🌧️',284:'🌧️',293:'🌧️',296:'🌧️',299:'🌧️',302:'🌧️',305:'🌧️',308:'🌧️',311:'🌧️',314:'🌧️',317:'🌨️',320:'🌨️',323:'❄️',326:'❄️',329:'❄️',332:'❄️',335:'❄️',338:'❄️',350:'🌧️',353:'🌦️',356:'🌧️',359:'🌧️',362:'🌨️',365:'🌨️',368:'🌨️',371:'❄️',374:'🌨️',377:'🌨️',386:'⛈️',389:'⛈️',392:'⛈️',395:'⛈️'};
-    var icon=icons[wcode]||'🌤️';
-    document.getElementById('wtBar').style.display='block';
-    document.getElementById('wtIcon').textContent=icon;
-    document.getElementById('wtDesc').textContent=desc;
-    document.getElementById('wtTemp').textContent=temp+'°C';
-    document.getElementById('wtHum').textContent=hum+'%';
-    document.getElementById('wtCloud').textContent=cloud+'%';
-    document.getElementById('wtWind').textContent=wind+' km/h';
-    var ic=document.getElementById('wtIcon');
-    if(wcode===113){ic.style.filter='drop-shadow(0 0 10px rgba(255,200,0,0.9))';}
-    else{ic.style.filter='drop-shadow(0 0 6px rgba(100,150,255,0.5))';}
-    if(parseInt(cloud)>70){document.getElementById('wtWarn').style.display='block';document.getElementById('wtGood').style.display='none';}
-    else if(parseInt(cloud)<30&&wcode===113){document.getElementById('wtGood').style.display='block';document.getElementById('wtWarn').style.display='none';}
-    else{document.getElementById('wtWarn').style.display='none';document.getElementById('wtGood').style.display='none';}
-  }catch(e){console.error('Weather:',e);}
-}
-
-
-let pkrPerSec=0;let pkrTotal=0;let pkrInterval=null;
-function updateMeter(solar,grid,load){
-  var active=solar>0||grid>0;
-  var solarW=solar*1000;
-  var pkrPerHour=solarW/1000*22;
-  pkrPerSec=pkrPerHour/3600;
-  var el=document.getElementById('pkrVal');
-  var sub=document.getElementById('pkrSub');
-  var rate=document.getElementById('pkrRate');
-  if(solar>0&&grid==0){
-    el.className='pkr-val';
-    rate.textContent='Solar: '+solarW.toFixed(0)+'W x PKR 22/kWh = PKR '+pkrPerHour.toFixed(2)+'/hr';
-    sub.textContent='pure solar saving every second!';
-    if(!pkrInterval){pkrInterval=setInterval(()=>{pkrTotal+=pkrPerSec;document.getElementById('pkrVal').textContent='PKR '+pkrTotal.toFixed(2);},1000);}
-  } else if(solar>0&&grid>0){
-    el.className='pkr-val';
-    rate.textContent='Solar saving PKR '+pkrPerHour.toFixed(2)+'/hr';
-    sub.textContent='solar + wapda mixed mode';
-    if(!pkrInterval){pkrInterval=setInterval(()=>{pkrTotal+=pkrPerSec;document.getElementById('pkrVal').textContent='PKR '+pkrTotal.toFixed(2);},1000);}
-  } else {
-    if(pkrInterval){clearInterval(pkrInterval);pkrInterval=null;}
-    el.className='pkr-val pkr-off';
-    el.textContent='PKR 0.00';
-    sub.textContent='no solar active right now';
-    rate.textContent='waiting for solar...';
-  }
-}
-
-async function loadAll(){
-  try{
-    var [sr, hr] = await Promise.all([
-      fetch(API + '/api/summary').then(r=>r.json()),
-      fetch(API + '/api/live').then(r=>r.json()).then(d=>[d])
-    ]);
-    document.getElementById('sTsolar').textContent = sr.total_solar.toFixed(2);
-    document.getElementById('sTwapda').textContent = sr.total_utility.toFixed(2);
-    document.getElementById('sPeak').textContent = sr.peak_load.toFixed(0) + 'W';
-    document.getElementById('sCount').textContent = sr.record_count;
-    document.getElementById('sSaved').textContent = 'PKR ' + Math.round(sr.total_solar*22).toLocaleString();
-    var rt = sr.total_solar>0 ? Math.min(100, Math.round(sr.total_solar/(sr.total_solar+sr.total_utility)*100)) : 0;
-    document.getElementById('sRatio').textContent = rt + '%';
-    document.getElementById('ratioF').style.width = rt + '%';
-    if(hr.length){
-      var l = hr[0];
-      document.getElementById('cSolar').textContent = (l.solar_kwh||0).toFixed(3);
-      var bp = l.battery_pct||0;
-      document.getElementById('cBatt').textContent = bp.toFixed(1) + '%';
-      document.getElementById('battP').style.width = bp + '%';
-      document.getElementById('cVolt').textContent = (l.voltage||48).toFixed(1) + 'V';
-      var lw = l.load_w||0;
-      document.getElementById('cLoad').textContent = lw.toFixed(0) + 'W';
-      document.getElementById('cGrid').textContent = (l.utility_kwh||0).toFixed(3);
-      var bk = (bp/100) * BATT_CAP;
-      document.getElementById('cBkwh').textContent = bk.toFixed(2);
-      document.getElementById('bkwhP').style.width = (bk/BATT_CAP*100) + '%';
-      setSrc(l.solar_kwh||0, l.utility_kwh||0);updateMeter(l.solar_kwh||0,l.utility_kwh||0,lw);analyzeLoad(lw,l.solar_kwh||0,l.utility_kwh||0);checkVoiceAlerts(l.solar_kwh||0,l.utility_kwh||0,lw,bp);updatePowerFlow(l.solar_kwh||0,l.utility_kwh||0,lw,bp);
-      setAlerts(l.solar_kwh||0, l.utility_kwh||0, lw);
-      updateBattHours(bp, lw, l.solar_kwh||0, l.utility_kwh||0);
-      var tempRaw=l.temp||'';
-      var tempNum=tempRaw.match(/([0-9]+)/);
-      updateEfficiencyScore(l.solar_kwh||0,lw,bp,tempNum?parseInt(tempNum[1]):40);
-      document.getElementById('tempV').textContent=tempNum?tempNum[1]+'°C':'--';
-      document.getElementById('fanV').textContent=l.fan||'--';
-      var mode=l.notes||'';
-      document.getElementById('modeB').textContent=mode?mode+' MODE':(l.solar_kwh||0)>0?'☀️ SOLAR':'🔌 GRID';
+    
+    var insightEl = document.getElementById("peakInsights");
+    var badgeEl = document.getElementById("peakTimeBadge");
+    
+    if(insightEl) {
+      if(data[peakHour] > 0) {
+        insightEl.innerHTML = "⚡ Max peak consumption today occurred at <strong>" + peakHour + ":00</strong> with an average load of <strong>" + data[peakHour] + "W</strong>.";
+        if(badgeEl) {
+          badgeEl.innerText = "PEAK: " + peakHour + ":00";
+          badgeEl.style.color = "#ef4444";
+          badgeEl.style.background = "rgba(239,68,68,0.15)";
+        }
+      } else {
+        insightEl.innerHTML = "📊 Monitoring system timelines to log and display daily maximum peak load hours...";
+      }
     }
-    document.getElementById('updTime').textContent = 'Updated: ' + new Date().toLocaleTimeString();
-    if(typeof updateStreak === 'function' && typeof hr !== 'undefined') updateStreak(hr);
-    if(typeof updateBadges === 'function' && typeof sr !== 'undefined') updateBadges(sr.total_solar, sr.record_count, 0);
-    if(typeof updateBillComparison === 'function' && typeof sr !== 'undefined') updateBillComparison(sr.total_solar, sr.total_utility);
-  } catch(e){ alert("DASHBOARD CRASH DETECTED:\n\n" + e.message + "\n\n" + e.stack); }
-}
+  }
 
-loadAll();
-setInterval(loadAll, 30000);loadWeather();setInterval(loadWeather,600000);loadForecast();setInterval(loadForecast,1800000);updateApplianceTimes();setInterval(updateApplianceTimes,60000);
+  function calculateWapdaBill() {
+    var slider = document.getElementById("unitsSliderInput");
+    var filter = document.getElementById("billingMonthFilter");
+    var filerSelect = document.getElementById("fbrFilerStatus");
+    if(!slider || !filter || !filerSelect) return;
+    
+    var units = parseInt(slider.value);
+    document.getElementById("displayUnitsValue").innerText = units + " kWh";
+    
+    var isNonFiler = (filerSelect.value === "nonfiler");
+    filerSelect.style.color = isNonFiler ? "#f43f5e" : "#10b981";
+    filerSelect.style.borderColor = isNonFiler ? "#f43f5e" : "#10b981";
+    
+    var fpaRate = 1.73; 
+    if(filter.value === "apr_may") fpaRate = 1.42;
+    if(filter.value === "mar_apr") fpaRate = 1.15;
+    
+    var baseCost = 0; var fixedCharge = 0; var nextSlabTarget = 0; var unitRate = 22.00;
+    
+    if(units <= 100) {
+      baseCost = units * 22.00; fixedCharge = 275; nextSlabTarget = 100; unitRate = 22.00;
+    } else if(units <= 200) {
+      baseCost = (100 * 22.00) + ((units - 100) * 35.00); fixedCharge = 300; nextSlabTarget = 200; unitRate = 35.00;
+    } else if(units <= 300) {
+      baseCost = (100 * 22.00) + (100 * 35.00) + ((units - 200) * 41.00); fixedCharge = 350; nextSlabTarget = 300; unitRate = 41.00;
+    } else if(units <= 700) {
+      baseCost = (100 * 22.00) + (100 * 35.00) + (100 * 41.00) + ((units - 300) * 48.00); fixedCharge = 675; nextSlabTarget = 700; unitRate = 48.00;
+    } else {
+      baseCost = (100 * 22.00) + (100 * 35.00) + (100 * 41.00) + (400 * 48.00) + ((units - 700) * 52.00); fixedCharge = 675; nextSlabTarget = 1000; unitRate = 52.00;
+    }
+    
+    var fpaCost = units * fpaRate;
+    var fcSurcharge = units * 3.23;
+    var electricityDuty = baseCost * 0.015;
+    var ptvFee = 35;
+    
+    var taxableSubtotal = baseCost + fixedCharge + fpaCost + fcSurcharge + electricityDuty;
+    var gstCost = taxableSubtotal * 0.18;
+    
+    var furtherTax = 0; var extraTax = 0; var unitSurcharge = 0;
+    var nonFilerPanel = document.getElementById("nonFilerTaxRow");
+    
+    if(isNonFiler) {
+      furtherTax = baseCost * 0.04;
+      extraTax = baseCost * 0.05;
+      if(units > 300) {
+        unitSurcharge = units * 9;
+        document.getElementById("nonFilerUnitSurchargeRow").style.display = "flex";
+      } else {
+        document.getElementById("nonFilerUnitSurchargeRow").style.display = "none";
+      }
+      if(nonFilerPanel) nonFilerPanel.style.display = "block";
+      document.getElementById("breakdownFurtherTax").innerText = "Rs. " + Math.round(furtherTax).toLocaleString();
+      document.getElementById("breakdownExtraTax").innerText = "Rs. " + Math.round(extraTax).toLocaleString();
+      document.getElementById("breakdownUnitSurcharge").innerText = "Rs. " + Math.round(unitSurcharge).toLocaleString();
+    } else {
+      if(nonFilerPanel) nonFilerPanel.style.display = "none";
+    }
+    
+    var finalBill = taxableSubtotal + gstCost + ptvFee + furtherTax + extraTax + unitSurcharge;
+    
+    var whtRow = document.getElementById("advanceTaxRow");
+    var whtCost = 0;
+    if(finalBill > 25000) {
+      whtCost = finalBill * 0.075;
+      finalBill += whtCost;
+      if(whtRow) {
+        whtRow.style.display = "flex";
+        document.getElementById("breakdownWht").innerText = "Rs. " + Math.round(whtCost).toLocaleString();
+      }
+    } else {
+      if(whtRow) whtRow.style.display = "none";
+    }
+    
+    document.getElementById("breakdownBase").innerText = "Rs. " + Math.round(baseCost).toLocaleString();
+    document.getElementById("breakdownFixed").innerText = "Rs. " + fixedCharge;
+    document.getElementById("breakdownFpa").innerText = "Rs. " + Math.round(fpaCost).toLocaleString();
+    document.getElementById("breakdownEd").innerText = "Rs. " + Math.round(electricityDuty).toLocaleString();
+    document.getElementById("breakdownFc").innerText = "Rs. " + Math.round(fcSurcharge).toLocaleString();
+    document.getElementById("breakdownGst").innerText = "Rs. " + Math.round(gstCost).toLocaleString();
+    document.getElementById("breakdownTotal").innerText = "Rs. " + Math.round(finalBill).toLocaleString();
+    
+    var activeSolarUnits = 220; var activeBatteryUnits = 110;
+    var totalSavedPerUnit = (unitRate + fpaRate + 3.23) * 1.18;
+    if(isNonFiler) {
+      totalSavedPerUnit += (unitRate * 0.04) + (unitRate * 0.05);
+      if(units > 300) totalSavedPerUnit += 9;
+    }
+    
+    document.getElementById("savedSolarVal").innerText = "Rs. " + Math.round(activeSolarUnits * totalSavedPerUnit).toLocaleString();
+    document.getElementById("savedBatteryVal").innerText = "Rs. " + Math.round(activeBatteryUnits * totalSavedPerUnit).toLocaleString();
+    
+    var progressFill = (units / 1000) * 100;
+    document.getElementById("slabProgressSeg").style.width = Math.min(progressFill, 100) + "%";
+    
+    var alertBox = document.getElementById("slabWarningAlert");
+    var unitsLeft = nextSlabTarget - units;
+    
+    if(filter.value === "may_jun") {
+      var today = new Date(); var targetDate = new Date(today.getFullYear(), today.getMonth(), 7);
+      if (today.getDate() >= 7) targetDate.setMonth(targetDate.getMonth() + 1);
+      var daysLeft = Math.ceil(Math.abs(targetDate - today) / (1000 * 60 * 60 * 24));
+      
+      if(isNonFiler && units > 300) {
+        alertBox.style.color = "#f43f5e"; alertBox.style.background = "rgba(244,63,94,0.08)"; alertBox.style.borderLeftColor = "#f43f5e";
+        alertBox.innerHTML = "🚨 <strong>FBR Penalty Rule Triggered:</strong> Non-filer status with >300 units incurs an additional Rs. 9/unit tax surcharge.";
+      } else if(unitsLeft <= 25 && unitsLeft > 0) {
+        alertBox.style.color = "#ef4444"; alertBox.style.background = "rgba(239,68,68,0.05)"; alertBox.style.borderLeftColor = "#ef4444";
+        alertBox.innerHTML = "⚠️ <strong>Slab Threat:</strong> " + unitsLeft + " units left before entering higher tax tier. (" + daysLeft + " days until reading on June 7)";
+      } else {
+        alertBox.style.color = "#38bdf8"; alertBox.style.background = "rgba(56,189,248,0.05)"; alertBox.style.borderLeftColor = "#0284c7";
+        alertBox.innerHTML = "📅 <strong>Active Cycle:</strong> " + daysLeft + " days remaining until the meter is read on June 7. Safe margin: " + unitsLeft + " units.";
+      }
+    } else {
+      alertBox.style.color = "#fbbf24"; alertBox.style.background = "rgba(251,191,36,0.05)"; alertBox.style.borderLeftColor = "#d97706";
+      alertBox.innerHTML = "📋 <strong>Historical Cycle:</strong> Closed billing interval. Buffer was " + unitsLeft + " units.";
+    }
+  }
+
+  function runDashboardCorePipeline() {
+    syncSmartAppliances();
+    trackHourlyLoad();
+  }
+
+  setInterval(function() {
+    var loadEl = document.getElementById("pfHomeLoad");
+    if(loadEl) {
+      var mockLoads = [450, 180, 80, 550, 320, 25];
+      var randomLoad = mockLoads[Math.floor(Math.random() * mockLoads.length)];
+      loadEl.innerText = randomLoad + "W";
+      syncSmartAppliances();
+    }
+  }, 5000);
+
+  setInterval(runDashboardCorePipeline, 6000);
+  setTimeout(function() {
+    var initialData = JSON.parse(localStorage.getItem("solar_hourly_load")) || Array(24).fill(0);
+    renderHourlyChart(initialData);
+    calculateWapdaBill();
+    syncSmartAppliances();
+  }, 1000);
 </script>
 </body>
 </html>

@@ -177,3 +177,42 @@ def can_alert(key, hours=1):
         _alert_cooldown[key] = now
         return True
     return False
+
+def smart_power_manager(d):
+    batt = d.get('battery_pct', 100)
+    solar_w = d.get('solar_w', 0)
+    load_w = d.get('load_w', 0)
+    import datetime
+    hour = datetime.datetime.now().hour
+    is_night = hour >= 20 or hour <= 5
+    SS = 'https://smartsolar.net.pk/api/inverter/isetting.php'
+    KEY = {'X-API-KEY':'6637103e47ce38c4f5b4f2fad69474642b67d8bc-0'}
+    def set_priority(output, charger):
+        try:
+            r.post(SS,headers=KEY,json={'key':'output_source_priority','value':output},timeout=10)
+            r.post(SS,headers=KEY,json={'key':'charger_source_priority','value':charger},timeout=10)
+        except:
+            pass
+    if solar_w >= load_w and batt >= 60:
+        if can_alert('mode_solar',1):
+            set_priority('Solar','Solar Only')
+            send_whatsapp('☀️ AUTO: Solar covering full load. Solar Only mode.')
+    elif solar_w > 100 and batt >= 60:
+        if can_alert('mode_sbu',1):
+            set_priority('SBU','Solar Only')
+    elif batt < 60 and batt >= 35 and solar_w < load_w:
+        if can_alert('mode_hybrid',1):
+            set_priority('Solar','Solar First')
+            send_whatsapp('🟠 AUTO: Battery '+str(batt)+'% - Hybrid mode activated.')
+    elif batt < 35 and solar_w < 100:
+        if can_alert('mode_utility',1):
+            set_priority('Utility','Solar First')
+            send_whatsapp('🔴 AUTO: Battery critical '+str(batt)+'% - Switched to Wapda!')
+    if is_night and batt < 20:
+        if can_alert('night_charge',2):
+            set_priority('Utility','Utility And Solar')
+            send_whatsapp('🌙 AUTO: Night battery critical - Charging from Wapda.')
+    if batt >= 85 and solar_w > 200:
+        if can_alert('mode_recovery',2):
+            set_priority('Solar','Solar Only')
+            send_whatsapp('✅ AUTO: Battery '+str(batt)+'% - Back to Solar Only!')

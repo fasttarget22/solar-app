@@ -217,3 +217,11 @@ def smart_power_manager(d):
             set_priority('Solar','Solar Only')
             send_whatsapp('✅ AUTO: Battery '+str(batt)+'% - Back to Solar Only!')
 
+
+@app.route('/manifest.json')
+def manifest():
+    return open('manifest.json').read(), 200, {'Content-Type':'application/manifest+json'}
+
+@app.route('/sw.js')
+def sw():
+    return open('sw.js').read(), 200, {'Content-Type':'application/javascript'}

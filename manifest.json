@@ -1,0 +1,22 @@
+{
+  "name": "Sufly Solar Apps",
+  "short_name": "Sufly Solar",
+  "description": "Abbottabad Prime Solar Monitor",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#060010",
+  "theme_color": "#00e676",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/LdW5QKsx/1000544568.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "https://i.ibb.co/LdW5QKsx/1000544568.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

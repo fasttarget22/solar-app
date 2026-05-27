@@ -163,7 +163,7 @@ def check_alerts(d):
         
         _last_batt_alert=now
         if can_alert("batt"): send_whatsapp('🔴 SUFLY SOLAR ALERT: Battery low '+str(batt)+'% - Connect Wapda immediately!')
-    if temp>55:
+    if temp>30:
         if can_alert("temp"): send_whatsapp('🌡️ SUFLY SOLAR ALERT: Inverter temperature high '+str(temp)+'C - Check ventilation!')
 
 _last_batt_alert = 0

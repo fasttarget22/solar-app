@@ -4,476 +4,207 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>Sufly Solar Apps</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#080010;
-  --card:#0d0018;
-  --card2:#120020;
-  --green:#00e676;
-  --amber:#ffb300;
-  --cyan:#00e5ff;
-  --red:#ff4444;
-  --indigo:#818cf8;
-  --text:#e8f0ff;
-  --mid:#7a8fa8;
-  --dim:#3a4a5a;
-  --r:12px;
+  --bg:#060010;--card:#0c0018;--card2:#110020;
+  --green:#00e676;--amber:#ffb300;--cyan:#00e5ff;
+  --red:#ff4444;--indigo:#818cf8;--text:#e8f0ff;
+  --mid:#7a8fa8;--dim:#2a3a4a;--r:12px;
 }
 body{
   background:var(--bg);
-  background-image:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(0,180,80,0.06) 0%,transparent 70%);
-  color:var(--text);
-  font-family:'Rajdhani',sans-serif;
-  min-height:100vh;
-  padding-bottom:76px;
-  overflow-x:hidden;
+  background-image:radial-gradient(ellipse 80% 40% at 50% 0%,rgba(0,180,80,.07) 0%,transparent 65%),radial-gradient(ellipse 50% 30% at 90% 80%,rgba(0,150,255,.05) 0%,transparent 60%);
+  color:var(--text);font-family:'Exo 2',sans-serif;
+  min-height:100vh;padding-bottom:76px;overflow-x:hidden;
 }
-
-/* ═══ MODALS ═══ */
-.modal-overlay{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.85);z-index:200;
-  justify-content:center;align-items:center;
-}
-.modal-overlay.show{display:flex;}
-.modal-box{
-  background:#111122;border:1px solid rgba(0,230,118,.25);
-  border-radius:16px;padding:20px;width:88%;max-width:360px;
-}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;justify-content:center;align-items:center;}
+.modal.show{display:flex;}
+.modal-box{background:#0d001a;border:1px solid rgba(0,230,118,.25);border-radius:16px;padding:20px;width:88%;max-width:360px;}
 .modal-title{font-size:.85rem;font-weight:700;letter-spacing:.1em;color:var(--green);margin-bottom:14px;}
+.modal-lbl{font-size:.7rem;color:var(--mid);margin-bottom:4px;}
 .modal-row{margin-bottom:12px;}
-.modal-lbl{font-size:.72rem;color:var(--mid);margin-bottom:4px;}
-.modal-inp{
-  width:100%;background:#0a0015;border:1px solid rgba(255,255,255,.1);
-  border-radius:8px;padding:8px 10px;color:var(--text);
-  font-family:'Rajdhani',sans-serif;font-size:.9rem;outline:none;
-}
+.modal-inp{width:100%;background:#08000f;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 10px;color:var(--text);font-family:'Exo 2',sans-serif;font-size:.9rem;outline:none;}
 .modal-inp:focus{border-color:var(--green);}
-.modal-save{
-  width:100%;padding:10px;border-radius:8px;
-  background:rgba(0,230,118,.12);border:1px solid var(--green);
-  color:var(--green);font-family:'Rajdhani',sans-serif;
-  font-size:.8rem;font-weight:700;letter-spacing:.1em;cursor:pointer;margin-top:6px;
-}
-.modal-close{
-  float:right;background:none;border:none;color:var(--mid);
-  font-size:1.1rem;cursor:pointer;margin-bottom:10px;
-}
-
-/* ═══ BATTERY ALERT MODAL ═══ */
-.batt-modal{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.9);z-index:300;
-  justify-content:center;align-items:center;
-}
-.batt-modal.show{display:flex;}
-.batt-modal-box{
-  background:#1a0000;border:2px solid var(--red);
-  border-radius:16px;padding:24px;width:88%;text-align:center;
-}
+.modal-save{width:100%;padding:10px;border-radius:8px;background:rgba(0,230,118,.1);border:1px solid var(--green);color:var(--green);font-family:'Exo 2',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:.1em;cursor:pointer;margin-top:6px;}
+.modal-close{float:right;background:none;border:none;color:var(--mid);font-size:1.1rem;cursor:pointer;}
+.batt-modal-box{background:#1a0000;border:2px solid var(--red);border-radius:16px;padding:24px;width:88%;text-align:center;}
 .batt-modal-icon{font-size:2.5rem;margin-bottom:8px;}
 .batt-modal-title{font-size:1rem;font-weight:700;color:var(--red);margin-bottom:6px;}
 .batt-modal-sub{font-size:.8rem;color:var(--mid);margin-bottom:16px;}
-.batt-modal-btn{
-  padding:10px 28px;border-radius:8px;
-  background:rgba(255,68,68,.15);border:1px solid var(--red);
-  color:var(--red);font-family:'Rajdhani',sans-serif;
-  font-size:.8rem;font-weight:700;cursor:pointer;
-}
-
-/* ═══ HEADER ═══ */
-.hdr{
-  background:linear-gradient(180deg,#0e0020 0%,#080010 100%);
-  border-bottom:1px solid rgba(0,230,118,.12);
-  padding:10px 14px;
-  display:flex;align-items:center;gap:10px;
-  position:sticky;top:0;z-index:50;
-}
-.hdr-pic-wrap{
-  position:relative;flex-shrink:0;
-  width:52px;height:52px;
-}
-.hdr-pic-wrap::before{
-  content:'';position:absolute;inset:-3px;
-  border-radius:50%;
-  border:2px dashed var(--green);
-  animation:spin-border 8s linear infinite;
-}
-@keyframes spin-border{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.hdr-pic{
-  width:52px;height:52px;border-radius:50%;
-  object-fit:cover;border:2px solid #000;
-  position:relative;z-index:1;
-}
+.batt-modal-btn{padding:10px 28px;border-radius:8px;background:rgba(255,68,68,.12);border:1px solid var(--red);color:var(--red);font-family:'Exo 2',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;}
+.hdr{background:linear-gradient(180deg,#0e0022 0%,#07000f 100%);border-bottom:1px solid rgba(0,230,118,.12);padding:10px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;}
+.hdr-pic-wrap{position:relative;flex-shrink:0;width:52px;height:52px;}
+.hdr-pic-wrap::before{content:'';position:absolute;inset:-3px;border-radius:50%;border:2px dashed var(--green);animation:spin 8s linear infinite;}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.hdr-pic{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #000;position:relative;z-index:1;}
 .hdr-brand{flex:1;}
-.hdr-name{
-  font-family:'Orbitron',monospace;
-  font-size:.9rem;font-weight:700;
-  color:var(--green);letter-spacing:.06em;line-height:1.1;
-}
-.hdr-sub{font-size:.68rem;font-weight:600;color:var(--text);letter-spacing:.03em;}
+.hdr-name{font-family:'Orbitron',monospace;font-size:.9rem;font-weight:700;color:var(--green);letter-spacing:.06em;line-height:1.1;}
+.hdr-sub{font-size:.68rem;font-weight:600;color:var(--text);}
 .hdr-loc{font-size:.58rem;color:var(--mid);letter-spacing:.08em;}
 .hdr-controls{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.hdr-btn{
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
-  border-radius:50%;width:32px;height:32px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.85rem;cursor:pointer;color:var(--text);
-}
-.hdr-urdu{
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
-  border-radius:16px;padding:4px 10px;
-  font-size:.72rem;color:var(--text);cursor:pointer;
-}
-.live-badge{
-  background:rgba(0,200,80,.1);border:1px solid rgba(0,200,80,.35);
-  border-radius:16px;padding:4px 10px;
-  font-size:.68rem;font-weight:700;color:#00c853;
-  display:flex;align-items:center;gap:5px;
-}
-.live-dot{
-  width:6px;height:6px;background:#00c853;border-radius:50%;
-  box-shadow:0 0 6px #00c853;animation:blink 1.5s infinite;
-}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
-
-/* ═══ MAIN ═══ */
+.hdr-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:.85rem;cursor:pointer;color:var(--text);}
+.hdr-urdu{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:4px 10px;font-size:.72rem;color:var(--text);cursor:pointer;}
+.live-badge{background:rgba(0,200,80,.1);border:1px solid rgba(0,200,80,.35);border-radius:16px;padding:4px 10px;font-size:.68rem;font-weight:700;color:#00c853;display:flex;align-items:center;gap:5px;}
+.live-dot{width:6px;height:6px;background:#00c853;border-radius:50%;box-shadow:0 0 6px #00c853;animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
 .main{padding:10px 12px;}
-
-/* ═══ STATS BAR ═══ */
-.stats-bar{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:6px;margin-bottom:10px;
-}
-.stat-card{
-  background:var(--card);border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--r);padding:8px 6px;text-align:center;
-}
-.stat-lbl{font-size:.5rem;font-weight:700;letter-spacing:.09em;color:var(--mid);margin-bottom:4px;}
-.stat-val{
-  font-family:'Orbitron',monospace;font-size:.85rem;
-  font-weight:600;line-height:1;color:var(--green);
-}
-.stat-val.wapda-v{color:var(--cyan);}
-.stat-val.save-v{color:var(--amber);}
-.stat-val.eff-v{color:var(--amber);}
-.stat-unit{font-size:.52rem;color:var(--dim);margin-top:2px;}
-
-/* ═══ POWER SOURCE STRIP ═══ */
-.ps-strip{
-  background:var(--card);border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--r);padding:10px 14px;
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:8px;
-}
-.ps-icon{font-size:1.5rem;}
-.ps-label{font-size:.65rem;color:var(--mid);font-weight:700;letter-spacing:.1em;}
+.top-tickers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.tt-save{background:linear-gradient(135deg,#021408,#0a1020);border:1px solid rgba(0,230,118,.3);border-radius:var(--r);padding:14px;text-align:center;position:relative;overflow:hidden;}
+.tt-cost{background:linear-gradient(135deg,#140202,#1a0808);border:1px solid rgba(255,68,68,.3);border-radius:var(--r);padding:14px;text-align:center;position:relative;overflow:hidden;}
+.tt-lbl{font-size:.6rem;font-weight:700;letter-spacing:.1em;margin-bottom:6px;}
+.tt-val{font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:700;line-height:1;}
+.tt-rate{font-size:.54rem;margin-top:3px;opacity:.8;}
+.anim-el{position:absolute;font-size:1rem;pointer-events:none;}
+.coin-up{animation:coinUp 1.5s ease-out forwards;}
+.cash-out{animation:cashOut 1.5s ease-out forwards;}
+@keyframes coinUp{0%{bottom:0;opacity:1;}100%{bottom:100%;opacity:0;}}
+@keyframes cashOut{0%{top:40%;opacity:1;transform:scale(1);}100%{top:100%;opacity:0;transform:scale(.2);}}
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;}
+.stat-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:8px 6px;text-align:center;}
+.stat-lbl{font-size:.48rem;font-weight:700;letter-spacing:.09em;color:var(--mid);margin-bottom:4px;}
+.stat-val{font-family:'Orbitron',monospace;font-size:.82rem;font-weight:600;line-height:1;color:var(--green);}
+.stat-val.wv{color:var(--cyan);}.stat-val.sv{color:var(--amber);}.stat-val.ev{color:var(--amber);}
+.stat-unit{font-size:.5rem;color:var(--dim);margin-top:2px;}
+.ps-strip{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.ps-icon{font-size:1.5rem;}.ps-lbl{font-size:.62rem;color:var(--mid);font-weight:700;letter-spacing:.1em;}
 .ps-mode{font-size:.9rem;font-weight:700;color:var(--text);}
 .ps-right{margin-left:auto;display:flex;gap:6px;align-items:center;}
-.ps-live{
-  background:rgba(0,200,80,.1);border:1px solid rgba(0,200,80,.3);
-  border-radius:10px;padding:3px 9px;font-size:.62rem;font-weight:700;color:#00c853;
-}
-.ps-badge{
-  border-radius:10px;padding:3px 10px;
-  font-size:.62rem;font-weight:700;letter-spacing:.06em;
-}
-.badge-solar{background:rgba(0,230,118,.12);border:1px solid rgba(0,230,118,.3);color:var(--green);}
-.badge-batt{background:rgba(255,68,68,.12);border:1px solid rgba(255,68,68,.3);color:var(--red);}
-.badge-wapda{background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.3);color:var(--cyan);}
-.badge-hybrid{background:rgba(255,179,0,.12);border:1px solid rgba(255,179,0,.3);color:var(--amber);}
-
-/* ═══ ALERT STRIP ═══ */
-.alert-strip{
-  border-radius:var(--r);padding:10px 14px;
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:8px;
-}
-.alert-batt{background:rgba(255,40,40,.1);border:1px solid rgba(255,40,40,.3);}
-.alert-load{background:rgba(255,179,0,.1);border:1px solid rgba(255,179,0,.3);}
-.alert-temp{background:rgba(255,100,40,.1);border:1px solid rgba(255,100,40,.3);}
-.alert-icon{font-size:1.1rem;}
-.alert-text{font-size:.82rem;font-weight:700;color:var(--red);}
-.alert-sub{font-size:.6rem;color:var(--mid);letter-spacing:.08em;}
-.alert-load .alert-text{color:var(--amber);}
-
-/* ═══ POWER FLOW SVG ═══ */
-.flow-card{
-  background:var(--card);border:1px solid rgba(255,255,255,.08);
-  border-radius:var(--r);padding:12px;margin-bottom:8px;
-}
-.flow-title{
-  font-size:.65rem;font-weight:700;letter-spacing:.12em;
-  color:var(--mid);margin-bottom:10px;
-  display:flex;align-items:center;gap:6px;
-}
+.ps-live{background:rgba(0,200,80,.1);border:1px solid rgba(0,200,80,.3);border-radius:10px;padding:3px 9px;font-size:.6rem;font-weight:700;color:#00c853;}
+.ps-badge{border-radius:10px;padding:3px 10px;font-size:.6rem;font-weight:700;letter-spacing:.06em;}
+.b-solar{background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);color:var(--green);}
+.b-batt{background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);color:var(--red);}
+.b-wapda{background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3);color:var(--cyan);}
+.b-hybrid{background:rgba(255,179,0,.1);border:1px solid rgba(255,179,0,.3);color:var(--amber);}
+.alert{border-radius:var(--r);padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.alert-batt{background:rgba(255,40,40,.08);border:1px solid rgba(255,40,40,.3);}
+.alert-load{background:rgba(255,179,0,.08);border:1px solid rgba(255,179,0,.3);}
+.alert-temp{background:rgba(255,100,40,.08);border:1px solid rgba(255,100,40,.3);}
+.alert-icon{font-size:1.1rem;}.alert-txt{font-size:.8rem;font-weight:700;}
+.alert-sub{font-size:.58rem;color:var(--mid);letter-spacing:.08em;}
+.flow-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:12px;margin-bottom:8px;}
+.flow-ttl{font-size:.62rem;font-weight:700;letter-spacing:.12em;color:var(--mid);margin-bottom:10px;}
 .flow-svg{width:100%;height:auto;display:block;}
-.flow-node-lbl{font-size:11px;fill:#7a8fa8;font-family:'Rajdhani',sans-serif;font-weight:700;}
-.flow-node-val{font-size:13px;font-weight:700;font-family:'Orbitron',monospace;}
-.flow-path{fill:none;stroke-dasharray:8,4;}
-.flow-path-solar{stroke:rgba(0,230,118,.4);}
-.flow-path-batt{stroke:rgba(255,179,0,.4);}
-.flow-path-wapda{stroke:rgba(0,229,255,.3);}
-.flow-path-active{stroke-dasharray:none;stroke-width:1.5;}
-
-/* ═══ BATTERY REMAINING ═══ */
-.batt-rem-card{
-  background:var(--card);border:1px solid rgba(0,230,118,.2);
-  border-radius:var(--r);padding:14px;margin-bottom:8px;
-}
-.batt-rem-title{font-size:.65rem;font-weight:700;letter-spacing:.12em;color:var(--mid);margin-bottom:8px;}
-.batt-rem-val{
-  font-family:'Orbitron',monospace;font-size:2.2rem;font-weight:700;
-  color:var(--green);text-shadow:0 0 20px rgba(0,230,118,.4);
-  line-height:1;margin-bottom:4px;
-}
-.batt-rem-sub{font-size:.7rem;color:var(--mid);}
-.batt-bar{
-  height:6px;background:rgba(255,255,255,.08);
-  border-radius:3px;margin-top:10px;overflow:hidden;
-}
-.batt-bar-fill{height:100%;border-radius:3px;background:var(--green);transition:width .8s ease;}
-
-/* ═══ PKR METER ═══ */
-.pkr-card{
-  background:var(--card2);border:1px solid rgba(255,179,0,.2);
-  border-radius:var(--r);padding:14px;margin-bottom:8px;
-  text-align:center;
-}
-.pkr-title{font-size:.65rem;font-weight:700;letter-spacing:.12em;color:var(--amber);margin-bottom:6px;}
-.pkr-val{
-  font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:700;
-  color:var(--amber);text-shadow:0 0 15px rgba(255,179,0,.4);
-}
-.pkr-sub{font-size:.65rem;color:var(--mid);margin-top:4px;}
-
-/* ═══ LIVE STATS GRID ═══ */
-.stats-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:7px;margin-bottom:8px;
-}
-.sg-card{
-  background:var(--card);border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--r);padding:10px 8px;text-align:center;
-}
-.sg-icon{font-size:1.2rem;margin-bottom:4px;}
-.sg-val{
-  font-family:'Orbitron',monospace;font-size:.82rem;font-weight:600;
-  color:var(--text);line-height:1;margin-bottom:2px;
-}
-.sg-lbl{font-size:.55rem;color:var(--dim);letter-spacing:.06em;}
-.sg-sub{font-size:.5rem;color:var(--dim);}
-
-/* ═══ INVERTER STATUS ═══ */
-.inv-card{
-  background:var(--card);border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--r);padding:12px;margin-bottom:8px;
-  display:flex;justify-content:space-around;align-items:center;
-}
+.batt-card{background:var(--card);border:1px solid rgba(0,230,118,.18);border-radius:var(--r);padding:14px;margin-bottom:8px;}
+.batt-ttl{font-size:.62rem;font-weight:700;letter-spacing:.12em;color:var(--mid);margin-bottom:8px;}
+.batt-val{font-family:'Orbitron',monospace;font-size:2rem;font-weight:700;color:var(--green);text-shadow:0 0 20px rgba(0,230,118,.4);line-height:1;margin-bottom:4px;}
+.batt-sub{font-size:.68rem;color:var(--mid);}
+.batt-bar{height:5px;background:rgba(255,255,255,.07);border-radius:3px;margin-top:10px;overflow:hidden;}
+.batt-fill{height:100%;border-radius:3px;background:var(--green);transition:width .8s ease;}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:8px;}
+.sg-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:10px 8px;text-align:center;}
+.sg-icon{font-size:1.2rem;margin-bottom:3px;}
+.sg-val{font-family:'Orbitron',monospace;font-size:.78rem;font-weight:600;color:var(--text);line-height:1;margin-bottom:2px;}
+.sg-lbl{font-size:.52rem;color:var(--dim);letter-spacing:.05em;}
+.inv-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:12px;margin-bottom:8px;display:flex;justify-content:space-around;}
 .inv-item{text-align:center;}
-.inv-val{font-family:'Orbitron',monospace;font-size:.9rem;color:var(--text);margin-bottom:2px;}
-.inv-lbl{font-size:.56rem;color:var(--dim);letter-spacing:.07em;}
-
-/* ═══ DIVIDER ═══ */
-.section-gap{
-  height:1px;background:rgba(255,255,255,.06);
-  margin:14px 0;position:relative;
-}
-.section-gap::before{
-  content:attr(data-label);
-  position:absolute;top:-9px;left:50%;transform:translateX(-50%);
-  background:var(--bg);padding:0 12px;
-  font-size:.58rem;color:var(--dim);letter-spacing:.12em;font-weight:700;
-}
-
-/* ═══ APPLIANCE BAR (NEW) ═══ */
-.ap-bar{
-  background:var(--card);border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--r);padding:14px;margin-bottom:8px;
-  display:flex;justify-content:space-around;
-}
+.inv-val{font-family:'Orbitron',monospace;font-size:.85rem;color:var(--text);margin-bottom:2px;}
+.inv-lbl{font-size:.52rem;color:var(--dim);letter-spacing:.06em;}
+.sec-div{height:1px;background:rgba(255,255,255,.05);margin:12px 0;position:relative;}
+.sec-div::before{content:attr(data-label);position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 10px;font-size:.55rem;color:var(--dim);letter-spacing:.12em;font-weight:700;}
+.ap-bar{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:14px;margin-bottom:8px;display:flex;justify-content:space-around;}
 .ap-item{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-.ap-icon{font-size:1.8rem;}
-.fan-icon-el{display:inline-block;}
-.fan-spin{animation:fspin .65s linear infinite;}
+.ap-icon{font-size:1.8rem;}.fan-el{display:inline-block;}
+.fan-spin{animation:fspin .6s linear infinite;}
 @keyframes fspin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.ap-name{font-size:.62rem;font-weight:700;color:var(--mid);letter-spacing:.05em;}
-.pill{font-size:.58rem;font-weight:700;letter-spacing:.1em;padding:3px 11px;border-radius:20px;transition:all .3s;}
-.pill-on{background:rgba(0,229,255,.12);color:var(--cyan);border:1px solid rgba(0,229,255,.35);}
-.pill-run{background:rgba(255,179,0,.12);color:var(--amber);border:1px solid rgba(255,179,0,.35);}
-.pill-off{background:rgba(255,255,255,.04);color:var(--dim);border:1px solid rgba(255,255,255,.08);}
-
-/* ═══ 24H CHART (NEW) ═══ */
-.chart-card{
-  background:var(--card);border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--r);padding:14px;margin-bottom:8px;
-}
+.ap-name{font-size:.6rem;font-weight:700;color:var(--mid);}
+.pill{font-size:.56rem;font-weight:700;letter-spacing:.1em;padding:3px 11px;border-radius:20px;transition:all .3s;}
+.p-on{background:rgba(0,229,255,.1);color:var(--cyan);border:1px solid rgba(0,229,255,.3);}
+.p-run{background:rgba(255,179,0,.1);color:var(--amber);border:1px solid rgba(255,179,0,.3);}
+.p-off{background:rgba(255,255,255,.03);color:var(--dim);border:1px solid rgba(255,255,255,.07);}
+.chart-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:14px;margin-bottom:8px;}
 .chart-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.chart-ttl{font-size:.68rem;font-weight:700;letter-spacing:.1em;color:var(--mid);}
+.chart-ttl{font-size:.65rem;font-weight:700;letter-spacing:.1em;color:var(--mid);}
 .chart-acts{display:flex;gap:7px;align-items:center;}
-.btn-clr{
-  background:rgba(255,68,85,.1);border:1px solid rgba(255,68,85,.3);
-  color:#ff4455;font-family:'Rajdhani',sans-serif;font-size:.58rem;
-  font-weight:700;padding:4px 9px;border-radius:6px;cursor:pointer;
-}
-.peak-tag{
-  background:rgba(255,68,85,.1);border:1px solid rgba(255,68,85,.28);
-  color:#ff4455;font-family:'Orbitron',monospace;font-size:.58rem;
-  padding:3px 8px;border-radius:6px;
-}
-.chart-bars{display:flex;align-items:flex-end;gap:2px;height:80px;margin-bottom:5px;}
+.btn-clr{background:rgba(255,68,85,.08);border:1px solid rgba(255,68,85,.3);color:#ff4455;font-family:'Exo 2',sans-serif;font-size:.56rem;font-weight:700;padding:4px 9px;border-radius:6px;cursor:pointer;}
+.peak-tag{background:rgba(255,68,85,.08);border:1px solid rgba(255,68,85,.25);color:#ff4455;font-family:'Orbitron',monospace;font-size:.56rem;padding:3px 8px;border-radius:6px;}
+.chart-bars{display:flex;align-items:flex-end;gap:2px;height:75px;margin-bottom:5px;}
 .bw{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;}
-.bf{width:100%;border-radius:2px 2px 0 0;min-height:2px;transition:height .5s;background:rgba(0,229,255,.22);}
-.bf.bp{background:#ff4455;box-shadow:0 0 8px rgba(255,68,85,.45);}
+.bf{width:100%;border-radius:2px 2px 0 0;min-height:1px;transition:height .5s;background:rgba(0,229,255,.2);}
+.bf.bp{background:#ff4455;box-shadow:0 0 8px rgba(255,68,85,.4);}
 .bf.bn{background:var(--green);box-shadow:0 0 7px rgba(0,230,118,.4);}
 .chart-ft{display:flex;justify-content:space-between;}
-.chart-lbl{font-size:.52rem;color:var(--dim);}
-
-/* ═══ BILLING ENGINE (NEW) ═══ */
-.bill-card{
-  background:var(--card);border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--r);padding:14px;margin-bottom:8px;
-}
-.sec-ttl{
-  font-size:.68rem;font-weight:700;letter-spacing:.12em;
-  color:var(--mid);margin-bottom:12px;
-  display:flex;align-items:center;gap:6px;
-}
-.cd-pill{
-  background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2);
-  border-radius:8px;padding:7px 12px;
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:12px;
-}
-.cd-lbl{font-size:.66rem;color:var(--mid);}
-.cd-days{font-family:'Orbitron',monospace;font-size:.85rem;color:var(--indigo);}
+.chart-lbl{font-size:.5rem;color:var(--dim);}
+.usage-card{background:var(--card);border:1px solid rgba(0,230,118,.18);border-radius:var(--r);padding:14px;margin-bottom:8px;}
+.usage-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px;}
+.usage-item{text-align:center;background:rgba(0,0,0,.2);border-radius:8px;padding:8px;}
+.usage-val{font-family:'Orbitron',monospace;font-size:.85rem;color:var(--green);font-weight:700;}
+.usage-lbl{font-size:.52rem;color:var(--dim);margin-top:2px;}
+.fault-card{background:rgba(255,68,68,.05);border:1px solid rgba(255,68,68,.22);border-radius:var(--r);padding:14px;margin-bottom:8px;display:none;}
+.fault-item{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.68rem;}
+.mini-chart{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:14px;margin-bottom:8px;}
+.mini-vals{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;}
+.mini-val-box{text-align:center;background:rgba(0,0,0,.2);border-radius:8px;padding:6px;}
+.mini-val{font-family:'Orbitron',monospace;font-size:.8rem;font-weight:600;line-height:1;}
+.mini-lbl{font-size:.5rem;color:var(--dim);margin-top:2px;}
+.mc-bars{display:flex;align-items:flex-end;gap:2px;height:55px;margin-bottom:5px;}
+.mc-wrap{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;}
+.mc-bar{width:100%;border-radius:2px 2px 0 0;min-height:1px;}
+.mc-s{background:rgba(0,230,118,.5);}
+.chart-legend{display:flex;gap:10px;}
+.leg{font-size:.52rem;color:var(--mid);display:flex;align-items:center;gap:3px;}
+.leg-dot{width:7px;height:7px;border-radius:50%;}
+.bill-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:14px;margin-bottom:8px;}
+.sec-ttl{font-size:.65rem;font-weight:700;letter-spacing:.12em;color:var(--mid);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.date-row{display:flex;gap:6px;margin-bottom:10px;align-items:flex-end;}
+.date-box{flex:1;}.date-lbl{font-size:.58rem;color:var(--dim);letter-spacing:.08em;margin-bottom:4px;}
+.date-inp{width:100%;background:#08000f;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 8px;color:var(--text);font-family:'Exo 2',sans-serif;font-size:.72rem;outline:none;}
+.load-btn{padding:7px 14px;border-radius:8px;background:rgba(0,229,255,.08);border:1px solid var(--cyan);color:var(--cyan);font-family:'Exo 2',sans-serif;font-size:.65rem;font-weight:700;cursor:pointer;white-space:nowrap;}
+.cd-pill{background:rgba(129,140,248,.07);border:1px solid rgba(129,140,248,.2);border-radius:8px;padding:7px 12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.cd-lbl{font-size:.64rem;color:var(--mid);}
+.cd-days{font-family:'Orbitron',monospace;font-size:.82rem;color:var(--indigo);}
 .trow{display:flex;gap:7px;margin-bottom:10px;}
-.tbtn{
-  flex:1;padding:7px 4px;border-radius:8px;
-  font-family:'Rajdhani',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.06em;
-  cursor:pointer;transition:all .3s;
-  border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);color:var(--dim);
-}
-.tbtn.act{background:rgba(0,230,118,.08);border-color:var(--green);color:var(--green);}
-.tbtn.act-nf{background:rgba(255,68,68,.08);border-color:var(--red);color:var(--red);}
-.crow{display:flex;gap:5px;margin-bottom:12px;}
-.cbtn{
-  flex:1;padding:6px 3px;border-radius:7px;
-  font-family:'Rajdhani',sans-serif;font-size:.58rem;font-weight:700;
-  cursor:pointer;transition:all .3s;text-align:center;
-  border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);color:var(--dim);
-}
-.cbtn.act{background:rgba(129,140,248,.1);border-color:var(--indigo);color:var(--indigo);}
-.sblock{margin-bottom:12px;}
+.tbtn{flex:1;padding:7px 4px;border-radius:8px;font-family:'Exo 2',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:all .3s;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);color:var(--dim);}
+.tbtn.act{background:rgba(0,230,118,.07);border-color:var(--green);color:var(--green);}
+.tbtn.act-nf{background:rgba(255,68,68,.07);border-color:var(--red);color:var(--red);}
+.crow{display:flex;gap:5px;margin-bottom:10px;}
+.cbtn{flex:1;padding:6px 3px;border-radius:7px;font-family:'Exo 2',sans-serif;font-size:.57rem;font-weight:700;cursor:pointer;transition:all .3s;text-align:center;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);color:var(--dim);}
+.cbtn.act{background:rgba(129,140,248,.08);border-color:var(--indigo);color:var(--indigo);}
+.sblock{margin-bottom:10px;}
 .shead{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
-.slbl{font-size:.68rem;color:var(--mid);}
-.sval{font-family:'Orbitron',monospace;font-size:.82rem;color:var(--cyan);}
-input[type=range]{width:100%;-webkit-appearance:none;height:4px;background:rgba(255,255,255,.09);border-radius:2px;outline:none;}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;background:var(--cyan);border-radius:50%;cursor:pointer;box-shadow:0 0 8px rgba(0,229,255,.55);}
-.sw{
-  display:none;background:rgba(255,179,0,.09);
-  border:1px solid rgba(255,179,0,.28);border-radius:8px;
-  padding:7px 12px;font-size:.66rem;color:var(--amber);margin-bottom:10px;
-}
-.rbox{background:rgba(0,0,0,.2);border-radius:10px;padding:11px;}
+.slbl{font-size:.65rem;color:var(--mid);}
+.sval{font-family:'Orbitron',monospace;font-size:.8rem;color:var(--cyan);}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;background:rgba(255,255,255,.08);border-radius:2px;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;background:var(--cyan);border-radius:50%;cursor:pointer;box-shadow:0 0 8px rgba(0,229,255,.5);}
+.slab-warn{display:none;background:rgba(255,179,0,.07);border:1px solid rgba(255,179,0,.25);border-radius:8px;padding:7px 12px;font-size:.64rem;color:var(--amber);margin-bottom:10px;}
+.rbox{background:rgba(0,0,0,.18);border-radius:10px;padding:11px;}
 .rr{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);}
 .rr:last-child{border-bottom:none;}
-.rl{font-size:.66rem;color:var(--mid);}
-.rv{font-family:'Orbitron',monospace;font-size:.75rem;color:var(--text);}
-.rv.total{color:var(--amber);font-size:.95rem;font-weight:700;}
-.rv.saving{color:var(--green);}
-.rv.tax{color:#ff6b6b;}
-.rv.pen{color:var(--red);}
-
-/* ═══ SAVINGS (NEW) ═══ */
-.save-card{
-  background:linear-gradient(135deg,#031606 0%,#0a1020 100%);
-  border:1.5px solid rgba(0,230,118,.18);
-  border-radius:var(--r);padding:14px;margin-bottom:8px;
-}
-
-/* ═══ TOMORROW FORECAST ═══ */
-.fcast-card{
-  background:var(--card);border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--r);padding:14px;margin-bottom:8px;
-}
+.rl{font-size:.64rem;color:var(--mid);}
+.rv{font-family:'Orbitron',monospace;font-size:.72rem;color:var(--text);}
+.rv.total{color:var(--amber);font-size:.92rem;font-weight:700;}
+.rv.saving{color:var(--green);}.rv.tax{color:#ff6b6b;}.rv.pen{color:var(--red);}
+.save-card{background:linear-gradient(135deg,#021506,#0a1020);border:1.5px solid rgba(0,230,118,.17);border-radius:var(--r);padding:14px;margin-bottom:8px;}
+.fcast-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:14px;margin-bottom:8px;}
 .fcast-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
 .fcast-item{text-align:center;}
-.fcast-lbl{font-size:.58rem;color:var(--dim);letter-spacing:.08em;margin-bottom:3px;}
-.fcast-val{font-family:'Orbitron',monospace;font-size:.85rem;color:var(--text);}
-
-/* ═══ WAPDA OUTAGES ═══ */
-.wapda-outage-card{
-  background:var(--card);border:1px solid rgba(255,255,255,.07);
-  border-radius:var(--r);padding:14px;margin-bottom:8px;
-}
+.fcast-lbl{font-size:.55rem;color:var(--dim);letter-spacing:.08em;margin-bottom:3px;}
+.fcast-val{font-family:'Orbitron',monospace;font-size:.82rem;color:var(--text);}
+.outage-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:14px;margin-bottom:8px;}
 .outage-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.outage-urdu{font-size:1rem;color:var(--mid);direction:rtl;}
-.log-btn{
-  background:rgba(255,179,0,.1);border:1px solid rgba(255,179,0,.3);
-  color:var(--amber);font-family:'Rajdhani',sans-serif;
-  font-size:.62rem;font-weight:700;padding:4px 12px;border-radius:6px;cursor:pointer;
-}
-
-/* ═══ CONNECTED STATUS ═══ */
-.status-bar{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:8px 12px;font-size:.65rem;color:var(--dim);
-  margin-bottom:8px;
-}
-.connected{color:var(--green);font-weight:700;display:flex;align-items:center;gap:4px;}
-.connected::before{content:'●';font-size:.5rem;}
-
-/* ═══ BOTTOM NAV ═══ */
-.bnav{
-  position:fixed;bottom:0;left:0;right:0;
-  background:rgba(8,0,16,.96);backdrop-filter:blur(20px);
-  border-top:1px solid rgba(255,255,255,.07);
-  display:flex;justify-content:space-around;
-  padding:7px 0 12px;z-index:100;
-}
-.bnav-a{
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-  color:var(--dim);text-decoration:none;
-  font-size:.55rem;font-weight:700;letter-spacing:.09em;
-  padding:3px 12px;
-  -webkit-tap-highlight-color:transparent;
-}
-.bnav-a.active{color:var(--green);}
-.bnav-ic{font-size:1.2rem;}
+.outage-urdu{font-size:.95rem;color:var(--mid);direction:rtl;}
+.log-btn{background:rgba(255,179,0,.08);border:1px solid rgba(255,179,0,.3);color:var(--amber);font-family:'Exo 2',sans-serif;font-size:.6rem;font-weight:700;padding:4px 12px;border-radius:6px;cursor:pointer;}
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;font-size:.62rem;color:var(--dim);margin-bottom:8px;}
+.conn-ok{color:var(--green);font-weight:700;}.conn-err{color:var(--amber);font-weight:700;}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(6,0,16,.96);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-around;padding:7px 0 12px;z-index:100;}
+.bnav-a{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--dim);text-decoration:none;font-size:.52rem;font-weight:700;letter-spacing:.09em;padding:3px 10px;-webkit-tap-highlight-color:transparent;}
+.bnav-a.active{color:var(--green);}.bnav-ic{font-size:1.2rem;}
 </style>
 </head>
 <body>
-
-<!-- ═══ SETTINGS MODAL ═══ -->
-<div class="modal-overlay" id="settingsModal">
+<div class="modal" id="settingsModal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
     <div class="modal-title">⚙ SETTINGS</div>
-    <div class="modal-row">
-      <div class="modal-lbl">💰 PKR PER UNIT</div>
-      <input class="modal-inp" type="number" id="setPKR" value="22">
-    </div>
-    <div class="modal-row">
-      <div class="modal-lbl">🔋 BATTERY CAPACITY (kWh)</div>
-      <input class="modal-inp" type="number" id="setBatt" value="4.8">
-    </div>
-    <div class="modal-row">
-      <div class="modal-lbl">⚠️ SAFE MINIMUM %</div>
-      <input class="modal-inp" type="number" id="setSafe" value="20">
-    </div>
-    <div class="modal-row">
-      <div class="modal-lbl">⏱ REFRESH INTERVAL (seconds)</div>
-      <input class="modal-inp" type="number" id="setRefresh" value="30">
-    </div>
+    <div class="modal-row"><div class="modal-lbl">💰 PKR PER UNIT</div><input class="modal-inp" type="number" id="setPKR" value="22"></div>
+    <div class="modal-row"><div class="modal-lbl">🔋 BATTERY CAPACITY (kWh)</div><input class="modal-inp" type="number" id="setBatt" value="4.8"></div>
+    <div class="modal-row"><div class="modal-lbl">⚠️ SAFE MINIMUM %</div><input class="modal-inp" type="number" id="setSafe" value="20"></div>
+    <div class="modal-row"><div class="modal-lbl">⏱ REFRESH INTERVAL (sec)</div><input class="modal-inp" type="number" id="setRefresh" value="30"></div>
     <button class="modal-save" onclick="saveSettings()">✓ SAVE SETTINGS</button>
   </div>
 </div>
-
-<!-- ═══ BATTERY ALERT ═══ -->
-<div class="batt-modal" id="battModal">
+<div class="modal" id="battModal">
   <div class="batt-modal-box">
     <div class="batt-modal-icon">🔋</div>
     <div class="batt-modal-title">صرف بیٹری چل رہی ہے!</div>
@@ -481,12 +212,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;heigh
     <button class="batt-modal-btn" onclick="closeModal('battModal')">سمجھ گیا</button>
   </div>
 </div>
-
-<!-- ═══ HEADER ═══ -->
 <div class="hdr">
-  <div class="hdr-pic-wrap">
-    <img class="hdr-pic" src="https://i.ibb.co/LdW5QKsx/1000544568.jpg" alt="S">
-  </div>
+  <div class="hdr-pic-wrap"><img class="hdr-pic" src="https://i.ibb.co/LdW5QKsx/1000544568.jpg" alt="S"></div>
   <div class="hdr-brand">
     <div class="hdr-name">SUFLY SOLAR</div>
     <div class="hdr-sub">Shahadat Sufly ⚡</div>
@@ -495,902 +222,103 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;heigh
   <div class="hdr-controls">
     <button class="hdr-btn" onclick="toggleMute()" id="muteBtn">🔇</button>
     <button class="hdr-btn" onclick="openModal('settingsModal')">⚙️</button>
-    <div class="hdr-urdu" onclick="toggleUrdu()">اردو</div>
+    <div class="hdr-urdu">اردو</div>
     <div class="live-badge"><div class="live-dot"></div>LIVE</div>
   </div>
 </div>
-
-<div class="main"><div class="top-tickers"><div class="tt-save"><div class="tt-lbl" style="color:#00e676">💚 SAVING</div><div class="tt-val" style="color:#00e676" id="topSaveTicker">Rs.0.0000</div><div class="tt-rate" style="color:#00e676" id="topSaveRate">Rs.0/sec</div><div id="coinBox" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div></div><div class="tt-cost"><div class="tt-lbl" style="color:#ff4444">🔴 CONSUMING</div><div class="tt-val" style="color:#ff4444" id="topCostTicker">Rs.0.0000</div><div class="tt-rate" style="color:#ff4444" id="topCostRate">Rs.0/sec</div><div id="cashBox" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div></div></div>
-
-<!-- ═══ STATS BAR ═══ -->
-<div class="stats-bar">
-  <div class="stat-card">
-    <div class="stat-lbl">TODAY SOLAR</div>
-    <div class="stat-val" id="todaySolar">--</div>
-    <div class="stat-unit">kWh</div>
+<div class="main">
+<div class="top-tickers">
+  <div class="tt-save">
+    <div class="tt-lbl" style="color:var(--green)">💚 SAVING</div>
+    <div class="tt-val" style="color:var(--green)" id="topSave">Rs.0.0000</div>
+    <div class="tt-rate" style="color:var(--green)" id="topSaveRate">Rs.0/sec</div>
+    <div id="coinBox" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
   </div>
-  <div class="stat-card">
-    <div class="stat-lbl">TODAY WAPDA</div>
-    <div class="stat-val wapda-v" id="todayWapda">--</div>
-    <div class="stat-unit">kWh</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-lbl">SAVED TODAY</div>
-    <div class="stat-val save-v" id="savedToday">--</div>
-    <div class="stat-unit">PKR</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-lbl">EFFICIENCY</div>
-    <div class="stat-val eff-v" id="efficiency">--</div>
-    <div class="stat-unit">%</div>
+  <div class="tt-cost">
+    <div class="tt-lbl" style="color:var(--red)">🔴 CONSUMING</div>
+    <div class="tt-val" style="color:var(--red)" id="topCost">Rs.0.0000</div>
+    <div class="tt-rate" style="color:var(--red)" id="topCostRate">Rs.0/sec</div>
+    <div id="cashBox" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
   </div>
 </div>
-
-<!-- ═══ POWER SOURCE ═══ -->
+<div class="stats-bar">
+  <div class="stat-card"><div class="stat-lbl">TODAY SOLAR</div><div class="stat-val" id="stSolar">--</div><div class="stat-unit">kWh</div></div>
+  <div class="stat-card"><div class="stat-lbl">TODAY WAPDA</div><div class="stat-val wv" id="stWapda">--</div><div class="stat-unit">kWh</div></div>
+  <div class="stat-card"><div class="stat-lbl">SAVED TODAY</div><div class="stat-val sv" id="stSaved">--</div><div class="stat-unit">PKR</div></div>
+  <div class="stat-card"><div class="stat-lbl">EFFICIENCY</div><div class="stat-val ev" id="stEff">--</div><div class="stat-unit">%</div></div>
+</div>
 <div class="ps-strip">
   <div class="ps-icon" id="psIcon">🔋</div>
-  <div>
-    <div class="ps-label">POWER SOURCE</div>
-    <div class="ps-mode" id="psMode">--</div>
-  </div>
-  <div class="ps-right">
-    <div class="ps-live">LIVE</div>
-    <div class="ps-badge" id="psBadge">--</div>
-  </div>
+  <div><div class="ps-lbl">POWER SOURCE</div><div class="ps-mode" id="psMode">--</div></div>
+  <div class="ps-right"><div class="ps-live">LIVE</div><div class="ps-badge" id="psBadge">--</div></div>
 </div>
-
-<!-- ═══ ALERT STRIPS ═══ -->
-<div class="alert-strip alert-batt" id="alertBatt" style="display:none">
-  <div class="alert-icon">🔴</div>
-  <div>
-    <div class="alert-text">صرف بیٹری چل رہی ہے!</div>
-    <div class="alert-sub">BATTERY ONLY MODE</div>
-  </div>
-</div>
-<div class="alert-strip alert-load" id="alertLoad" style="display:none">
-  <div class="alert-icon">⚠️</div>
-  <div>
-    <div class="alert-text" style="color:var(--amber)">کیا چل رہا ہے؟ بوجھ بہت زیادہ</div>
-    <div class="alert-sub">LOAD ABOVE 1200W</div>
-  </div>
-</div>
-<div class="alert-strip alert-temp" id="alertTemp" style="display:none">
-  <div class="alert-icon">🌡️</div>
-  <div>
-    <div class="alert-text" style="color:orange">انورٹر بہت گرم ہے</div>
-    <div class="alert-sub">INVERTER TEMP &gt; 55°C</div>
-  </div>
-</div>
-
-<!-- ═══ LIVE POWER FLOW ═══ -->
+<div class="alert alert-batt" id="alertBatt" style="display:none"><div class="alert-icon">🔴</div><div><div class="alert-txt" style="color:var(--red)">صرف بیٹری چل رہی ہے!</div><div class="alert-sub">BATTERY ONLY MODE</div></div></div>
+<div class="alert alert-load" id="alertLoad" style="display:none"><div class="alert-icon">⚠️</div><div><div class="alert-txt" style="color:var(--amber)">کیا چل رہا ہے؟ بوجھ بہت زیادہ</div><div class="alert-sub">LOAD ABOVE 1200W</div></div></div>
+<div class="alert alert-temp" id="alertTemp" style="display:none"><div class="alert-icon">🌡️</div><div><div class="alert-txt" style="color:orange">انورٹر بہت گرم ہے</div><div class="alert-sub">INVERTER TEMP &gt; 55°C</div></div></div>
 <div class="flow-card">
-  <div class="flow-title">⚡ LIVE POWER FLOW</div>
-  <svg class="flow-svg" viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg">
-    <!-- Paths -->
-    <path id="pathSolarHome" class="flow-path flow-path-solar" d="M85,75 Q130,75 155,120" stroke-width="1.5"/>
-    <path id="pathBattHome"  class="flow-path flow-path-batt"  d="M85,175 Q130,175 155,140" stroke-width="1.5"/>
-    <path id="pathWapdaHome" class="flow-path flow-path-wapda" d="M255,120 Q230,120 185,130" stroke-width="1.5"/>
-
-    <!-- Animated dots -->
-    <circle id="dotSolar" r="5" fill="#00e676" opacity="0">
-      <animateMotion id="animSolar" dur="1.8s" repeatCount="indefinite" path="M85,75 Q130,75 155,120"/>
-    </circle>
-    <circle id="dotBatt" r="5" fill="#ffb300" opacity="0">
-      <animateMotion id="animBatt" dur="1.5s" repeatCount="indefinite" path="M85,175 Q130,175 155,140"/>
-    </circle>
-    <circle id="dotWapda" r="5" fill="#00e5ff" opacity="0">
-      <animateMotion id="animWapda" dur="2s" repeatCount="indefinite" path="M255,120 Q230,120 185,130"/>
-    </circle>
-
-    <!-- SOLAR node -->
-    <circle cx="70" cy="50" r="22" fill="#1a2800" stroke="rgba(0,230,118,.3)" stroke-width="1.5"/>
-    <text x="70" y="44" text-anchor="middle" font-size="18">☀️</text>
-    <text x="70" y="80" text-anchor="middle" class="flow-node-lbl">SOLAR</text>
-    <text x="70" y="94" text-anchor="middle" class="flow-node-val" fill="#00e676" id="flowSolar">0W</text>
-
-    <!-- BATTERY node -->
-    <circle cx="70" cy="190" r="22" fill="#1a1200" stroke="rgba(255,179,0,.3)" stroke-width="1.5"/>
-    <text x="70" y="184" text-anchor="middle" font-size="18">🔋</text>
-    <text x="70" y="218" text-anchor="middle" class="flow-node-lbl">BATTERY</text>
-    <text x="70" y="232" text-anchor="middle" class="flow-node-val" fill="#ffb300" id="flowBatt">--%</text>
-
-    <!-- HOME node -->
-    <circle cx="170" cy="130" r="26" fill="#0a0820" stroke="rgba(129,140,248,.4)" stroke-width="1.5"/>
-    <text x="170" y="124" text-anchor="middle" font-size="20">🏠</text>
-    <text x="170" y="160" text-anchor="middle" class="flow-node-lbl">HOME</text>
-    <text x="170" y="174" text-anchor="middle" class="flow-node-val" fill="#e8f0ff" id="flowHome">--W</text>
-
-    <!-- WAPDA node -->
-    <circle cx="270" cy="120" r="22" fill="#001a1a" stroke="rgba(0,229,255,.3)" stroke-width="1.5"/>
-    <text x="270" y="114" text-anchor="middle" font-size="18">🔌</text>
-    <text x="270" y="148" text-anchor="middle" class="flow-node-lbl">WAPDA</text>
-    <text x="270" y="162" text-anchor="middle" class="flow-node-val" fill="#00e5ff" id="flowWapda">0W</text>
+  <div class="flow-ttl">⚡ LIVE POWER FLOW</div>
+  <svg class="flow-svg" viewBox="0 0 340 250" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="rgba(0,230,118,.35)" stroke-width="1.5" stroke-dasharray="8,4" d="M85,75 Q130,75 155,122"/>
+    <path fill="none" stroke="rgba(255,179,0,.35)" stroke-width="1.5" stroke-dasharray="8,4" d="M85,178 Q130,178 155,143"/>
+    <path fill="none" stroke="rgba(0,229,255,.3)" stroke-width="1.5" stroke-dasharray="8,4" d="M258,122 Q228,122 188,132"/>
+    <circle id="dotSolar" r="5" fill="#00e676" opacity="0"><animateMotion dur="1.8s" repeatCount="indefinite" path="M85,75 Q130,75 155,122"/></circle>
+    <circle id="dotBatt" r="5" fill="#ffb300" opacity="0"><animateMotion dur="1.5s" repeatCount="indefinite" path="M85,178 Q130,178 155,143"/></circle>
+    <circle id="dotWapda" r="5" fill="#00e5ff" opacity="0"><animateMotion dur="2s" repeatCount="indefinite" path="M258,122 Q228,122 188,132"/></circle>
+    <circle cx="70" cy="52" r="22" fill="#0d1a00" stroke="rgba(0,230,118,.35)" stroke-width="1.5"/>
+    <text x="70" y="46" text-anchor="middle" font-size="17">☀️</text>
+    <text x="70" y="81" text-anchor="middle" font-size="10" fill="#7a8fa8" font-family="Exo 2">SOLAR</text>
+    <text x="70" y="95" text-anchor="middle" font-size="12" fill="#00e676" font-family="Orbitron" font-weight="700" id="fSolar">0W</text>
+    <circle cx="70" cy="195" r="22" fill="#1a1000" stroke="rgba(255,179,0,.35)" stroke-width="1.5"/>
+    <text x="70" y="189" text-anchor="middle" font-size="17">🔋</text>
+    <text x="70" y="224" text-anchor="middle" font-size="10" fill="#7a8fa8" font-family="Exo 2">BATTERY</text>
+    <text x="70" y="238" text-anchor="middle" font-size="12" fill="#ffb300" font-family="Orbitron" font-weight="700" id="fBatt">--%</text>
+    <circle cx="170" cy="132" r="26" fill="#08061a" stroke="rgba(129,140,248,.4)" stroke-width="1.5"/>
+    <text x="170" y="126" text-anchor="middle" font-size="19">🏠</text>
+    <text x="170" y="162" text-anchor="middle" font-size="10" fill="#7a8fa8" font-family="Exo 2">HOME</text>
+    <text x="170" y="176" text-anchor="middle" font-size="12" fill="#e8f0ff" font-family="Orbitron" font-weight="700" id="fHome">--W</text>
+    <circle cx="270" cy="122" r="22" fill="#001515" stroke="rgba(0,229,255,.3)" stroke-width="1.5"/>
+    <text x="270" y="116" text-anchor="middle" font-size="17">🔌</text>
+    <text x="270" y="151" text-anchor="middle" font-size="10" fill="#7a8fa8" font-family="Exo 2">WAPDA</text>
+    <text x="270" y="165" text-anchor="middle" font-size="12" fill="#00e5ff" font-family="Orbitron" font-weight="700" id="fWapda">0W</text>
   </svg>
 </div>
-
-<!-- ═══ BATTERY REMAINING ═══ -->
-<div class="batt-rem-card">
-  <div class="batt-rem-title">🔋 BATTERY REMAINING</div>
-  <div class="batt-rem-val" id="battHours">∞</div>
-  <div class="batt-rem-sub" id="battRemSub">Solar active</div>
-  <div class="batt-bar"><div class="batt-bar-fill" id="battBarFill" style="width:100%"></div></div>
+<div class="batt-card">
+  <div class="batt-ttl">🔋 BATTERY REMAINING</div>
+  <div class="batt-val" id="battHours">∞</div>
+  <div class="batt-sub" id="battSub">Solar active</div>
+  <div class="batt-bar"><div class="batt-fill" id="battFill" style="width:100%"></div></div>
 </div>
-
-<!-- ═══ PKR COST METER ═══ -->
-<div class="pkr-card">
-  <div class="pkr-title">💰 SAVING RIGHT NOW</div>
-  <div class="pkr-val">PKR <span id="pkrMeter">0.00</span></div>
-  <div class="pkr-sub" id="pkrSub">calculating...</div>
-</div>
-
-<!-- ═══ LIVE STATS ═══ -->
 <div class="stats-grid">
-  <div class="sg-card">
-    <div class="sg-icon">☀️</div>
-    <div class="sg-val" id="sgSolar">--</div>
-    <div class="sg-lbl">SOLAR NOW</div>
-    <div class="sg-sub">kWh reading</div>
-  </div>
-  <div class="sg-card">
-    <div class="sg-icon">🔋</div>
-    <div class="sg-val" id="sgBatt">--</div>
-    <div class="sg-lbl">BATTERY</div>
-    <div class="sg-sub">% charged 4.8kWh</div>
-  </div>
-  <div class="sg-card">
-    <div class="sg-icon">⚡</div>
-    <div class="sg-val" id="sgVolt">--</div>
-    <div class="sg-lbl">VOLTAGE</div>
-    <div class="sg-sub">volts 48V lithium</div>
-  </div>
-  <div class="sg-card">
-    <div class="sg-icon">🏠</div>
-    <div class="sg-val" id="sgLoad">--</div>
-    <div class="sg-lbl">HOME LOAD</div>
-    <div class="sg-sub">watts now</div>
-  </div>
-  <div class="sg-card">
-    <div class="sg-icon">🔌</div>
-    <div class="sg-val" id="sgWapda">--</div>
-    <div class="sg-lbl">WAPDA/GRID</div>
-    <div class="sg-sub">kWh from grid</div>
-  </div>
-  <div class="sg-card">
-    <div class="sg-icon">🔆</div>
-    <div class="sg-val" id="sgEnergy">--</div>
-    <div class="sg-lbl">BATT ENERGY</div>
-    <div class="sg-sub">of 4.8 kWh</div>
-  </div>
+  <div class="sg-card"><div class="sg-icon">☀️</div><div class="sg-val" id="sgSolar">--</div><div class="sg-lbl">SOLAR kWh</div></div>
+  <div class="sg-card"><div class="sg-icon">🔋</div><div class="sg-val" id="sgBatt">--</div><div class="sg-lbl">BATTERY %</div></div>
+  <div class="sg-card"><div class="sg-icon">⚡</div><div class="sg-val" id="sgVolt">--</div><div class="sg-lbl">VOLTAGE</div></div>
+  <div class="sg-card"><div class="sg-icon">🏠</div><div class="sg-val" id="sgLoad">--</div><div class="sg-lbl">LOAD W</div></div>
+  <div class="sg-card"><div class="sg-icon">🔌</div><div class="sg-val" id="sgWapda">--</div><div class="sg-lbl">GRID kWh</div></div>
+  <div class="sg-card"><div class="sg-icon">🔆</div><div class="sg-val" id="sgEnergy">--</div><div class="sg-lbl">BATT kWh</div></div>
 </div>
-
-<!-- ═══ INVERTER ═══ -->
 <div class="inv-card">
-  <div class="inv-item">
-    <div class="inv-val" id="invTemp">--</div>
-    <div class="inv-lbl">TEMP</div>
-  </div>
-  <div class="inv-item">
-    <div class="inv-val" id="invMode">--</div>
-    <div class="inv-lbl">MODE</div>
-  </div>
-  <div class="inv-item">
-    <div class="inv-val" id="invFan">--</div>
-    <div class="inv-lbl">FAN</div>
-  </div>
+  <div class="inv-item"><div class="inv-val" id="invTemp">--</div><div class="inv-lbl">TEMP</div></div>
+  <div class="inv-item"><div class="inv-val" id="invMode">--</div><div class="inv-lbl">MODE</div></div>
+  <div class="inv-item"><div class="inv-val" id="invFan">--</div><div class="inv-lbl">FAN</div></div>
 </div>
-
-<!-- ════════════════════════════════ NEW SECTIONS ═════════════════════════════════ -->
-<div class="section-gap" data-label="⚡ SMART FEATURES"></div>
-
-<!-- ═══ APPLIANCE TRACKER ═══ -->
+<div class="sec-div" data-label="⚡ SMART FEATURES"></div>
 <div class="ap-bar">
-  <div class="ap-item" onclick="toggleAp('fan')">
-    <span class="ap-icon fan-icon-el" id="fanIcon">🌀</span>
-    <div class="ap-name">Ceiling Fan</div>
-    <div class="pill pill-off" id="fanPill">OFF</div>
-  </div>
-  <div class="ap-item" onclick="toggleAp('lights')">
-    <span class="ap-icon">💡</span>
-    <div class="ap-name">Home Lights</div>
-    <div class="pill pill-on" id="lightsPill">ON</div>
-  </div>
-  <div class="ap-item" onclick="toggleAp('tv')">
-    <span class="ap-icon">📺</span>
-    <div class="ap-name">Smart TV</div>
-    <div class="pill pill-off" id="tvPill">OFF</div>
-  </div>
+  <div class="ap-item" onclick="toggleAp('fan')"><span class="ap-icon fan-el" id="fanIcon">🌀</span><div class="ap-name">Ceiling Fan</div><div class="pill p-off" id="fanPill">OFF</div></div>
+  <div class="ap-item" onclick="toggleAp('lights')"><span class="ap-icon">💡</span><div class="ap-name">Home Lights</div><div class="pill p-on" id="lightsPill">ON</div></div>
+  <div class="ap-item" onclick="toggleAp('tv')"><span class="ap-icon">📺</span><div class="ap-name">Smart TV</div><div class="pill p-off" id="tvPill">OFF</div></div>
 </div>
-
-<!-- ═══ 24H CHART ═══ -->
 <div class="chart-card">
   <div class="chart-hd">
-    <div class="chart-ttl">📊 24-HOUR PEAK LOAD PROFILE</div>
+    <div class="chart-ttl">📊 24-HOUR PEAK LOAD</div>
     <div class="chart-acts">
-      <button class="btn-clr" onclick="clearChart()">🔄 Clear Data</button>
+      <button class="btn-clr" onclick="clearChart()">🔄 Clear</button>
       <div class="peak-tag" id="peakTag">PEAK: --</div>
     </div>
   </div>
   <div class="chart-bars" id="chartBars"></div>
-  <div class="chart-ft">
-    <span class="chart-lbl">12 AM</span>
-    <span class="chart-lbl">6 AM</span>
-    <span class="chart-lbl">12 PM</span>
-    <span class="chart-lbl">6 PM</span>
-    <span class="chart-lbl">11 PM</span>
-  </div>
+  <div class="chart-ft"><span class="chart-lbl">12AM</span><span class="chart-lbl">6AM</span><span class="chart-lbl">12PM</span><span class="chart-lbl">6PM</span><span class="chart-lbl">11PM</span></div>
 </div>
-
-<!-- ═══ BILLING ENGINE ═══ -->
-<div class="bill-card">
-  <div class="sec-ttl">⚡ WAPDA BILLING &amp; TAX ENGINE</div>
-  <div class="date-filter-row" style="display:flex;gap:6px;margin-bottom:10px;"><div style="flex:1"><div style="font-size:.6rem;color:var(--dim);letter-spacing:.1em;margin-bottom:4px;">FROM DATE</div><input type="date" id="dateFrom" style="width:100%;background:#0a0015;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 8px;color:var(--text);font-family:Rajdhani,sans-serif;font-size:.75rem;outline:none;"></div><div style="flex:1"><div style="font-size:.6rem;color:var(--dim);letter-spacing:.1em;margin-bottom:4px;">TO DATE</div><input type="date" id="dateTo" style="width:100%;background:#0a0015;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 8px;color:var(--text);font-family:Rajdhani,sans-serif;font-size:.75rem;outline:none;"></div><button onclick="loadDateRange()" style="align-self:flex-end;padding:6px 12px;background:rgba(0,229,255,.1);border:1px solid var(--cyan);color:var(--cyan);font-family:Rajdhani,sans-serif;font-size:.7rem;font-weight:700;border-radius:8px;cursor:pointer;">LOAD</button></div><div class="cd-pill">
-    <span class="cd-lbl">📅 Next meter reading (Jun 7)</span>
-    <span class="cd-days" id="cdDays">-- days</span>
-  </div>
-  <div style="font-size:.6rem;color:var(--dim);letter-spacing:.1em;margin-bottom:5px;">BILLING CYCLE</div>
-  <div class="crow">
-    <button class="cbtn act" onclick="setCycle(this)">May–Jun</button>
-    <button class="cbtn" onclick="setCycle(this)">Apr–May</button>
-    <button class="cbtn" onclick="setCycle(this)">Mar–Apr</button>
-  </div>
-  <div style="font-size:.6rem;color:var(--dim);letter-spacing:.1em;margin-bottom:5px;">FBR ATL STATUS</div>
-  <div class="trow">
-    <button class="tbtn act" id="filerBtn" onclick="setFBR('filer')">✅ FILER</button>
-    <button class="tbtn" id="nfBtn" onclick="setFBR('nonfiler')">❌ NON-FILER</button>
-  </div>
-  <div class="sblock">
-    <div class="shead">
-      <span class="slbl">📊 Units Accumulated This Cycle</span>
-      <span class="sval"><span id="unitsDisp">150</span> units</span>
-    </div>
-    <input type="range" id="unitsSlider" min="0" max="800" value="0" oninput="calcBill()">
-  </div>
-  <div class="sw" id="slabWarn"></div>
-  <div class="rbox">
-    <div class="rr"><span class="rl">Energy Charges (NEPRA Slabs)</span><span class="rv" id="rEnergy">--</span></div>
-    <div class="rr"><span class="rl">FC Surcharge (Rs.3.23/unit)</span><span class="rv" id="rFC">--</span></div>
-    <div class="rr"><span class="rl">FPA Adjustment (Rs.4.50/unit)</span><span class="rv" id="rFPA">--</span></div>
-    <div class="rr"><span class="rl">GST (18%)</span><span class="rv tax" id="rGST">--</span></div>
-    <div class="rr" id="rowWHT" style="display:none"><span class="rl">WHT 7.5% (bill &gt;Rs.25,000)</span><span class="rv tax" id="rWHT">--</span></div>
-    <div class="rr" id="rowFT" style="display:none"><span class="rl">Further Tax 4% + Extra 5%</span><span class="rv pen" id="rFT">--</span></div>
-    <div class="rr" id="rowATL" style="display:none"><span class="rl">ATL Penalty Rs.9/unit &gt;300</span><span class="rv pen" id="rATL">--</span></div>
-    <div class="rr" style="padding-top:7px">
-      <span class="rl" style="font-weight:700;color:var(--text)">ESTIMATED CYCLE TOTAL</span>
-      <span class="rv total" id="rTotal">--</span>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ SOLAR SAVINGS ═══ -->
-<div class="save-card">
-  <div class="sec-ttl" style="color:var(--green)">🌿 SOLAR FINANCIAL RETURN LEDGER</div>
-  <div class="rbox" style="background:rgba(0,0,0,.18)">
-    <div class="rr"><span class="rl">Solar Generated Today</span><span class="rv" id="savKwh">-- kWh</span></div>
-    <div class="rr"><span class="rl">PKR Saved vs Grid (Rs.22/unit)</span><span class="rv saving" id="savPKR">--</span></div>
-    <div class="rr"><span class="rl">Tax Avoided (est. 18% GST)</span><span class="rv saving" id="savTax">--</span></div>
-    <div class="rr" style="padding-top:7px">
-      <span class="rl" style="font-weight:700;color:var(--text)">NET POCKET SAVINGS TODAY</span>
-      <span class="rv saving" style="font-size:.92rem" id="savTotal">--</span>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ TOMORROW FORECAST ═══ -->
-<div class="fcast-card">
-  <div class="sec-ttl">🌞 TOMORROW SOLAR FORECAST — ABBOTTABAD</div>
-  <div class="fcast-grid">
-    <div class="fcast-item"><div class="fcast-lbl">CONDITION</div><div class="fcast-val" id="fcastCond">--</div></div>
-    <div class="fcast-item"><div class="fcast-lbl">MAX TEMP</div><div class="fcast-val" id="fcastTemp">--</div></div>
-    <div class="fcast-item"><div class="fcast-lbl">CLOUD COVER</div><div class="fcast-val" id="fcastCloud">--</div></div>
-    <div class="fcast-item"><div class="fcast-lbl">SOLAR EXPECT</div><div class="fcast-val" id="fcastExp">--</div></div>
-  </div>
-</div>
-
-<!-- ═══ WAPDA OUTAGES ═══ -->
-<div class="wapda-outage-card">
-  <div class="sec-ttl">🔌 WAPDA OUTAGES TODAY</div>
-  <div class="outage-head">
-    <div class="outage-urdu">آج واپڈا کتنی بار گئی</div>
-    <button class="log-btn" onclick="logOutage()">+ LOG</button>
-  </div>
-  <div style="font-family:'Orbitron',monospace;font-size:1.4rem;color:var(--amber);text-align:center;padding:8px 0" id="outageCount">0</div>
-</div>
-
-<!-- ═══ STATUS BAR ═══ -->
-<div class="status-bar">
-  <span id="lastUpdate">--</span>
-  <span class="connected" id="connStatus">CONNECTED</span>
-</div>
-
-</div><!-- /main -->
-
-<!-- ═══ BOTTOM NAV ═══ -->
-<nav class="bnav">
-  <a class="bnav-a active" href="/dashboard"><span class="bnav-ic">🏠</span>DASHBOARD</a>
-  <a class="bnav-a" href="/analytics"><span class="bnav-ic">📊</span>ANALYTICS</a>
-  <a class="bnav-a" href="#" onclick="fetchLive();return false;"><span class="bnav-ic">⟳</span>REFRESH</a>
-  <a class="bnav-a" href="#" onclick="shareWA();return false;"><span class="bnav-ic">📱</span>SHARE</a>
-  <a class="bnav-a" href="#" onclick="openModal('settingsModal');return false;"><span class="bnav-ic">⚙️</span>SETTINGS</a>
-</nav>
-
-<script>
-// ════════════════════════════════════════════════════════
-// SUFLY SOLAR APPS — DASHBOARD JS
-// Rule: var only (no const/let)
-// ════════════════════════════════════════════════════════
-
-var CFG = {
-  pkr: parseFloat(localStorage.getItem('cfg_pkr') || '22'),
-  batt: parseFloat(localStorage.getItem('cfg_batt') || '4.8'),
-  safe: parseFloat(localStorage.getItem('cfg_safe') || '20'),
-  refresh: parseInt(localStorage.getItem('cfg_refresh') || '30')
-};
-var liveData = {};
-var pkrTicker = 0;
-var pkrInterval = null;
-var isFiler = true;
-var apState = {fan:false, lights:true, tv:false};
-var outageCt = parseInt(localStorage.getItem('outage_today') || '0');
-var lastOutageDate = localStorage.getItem('outage_date') || '';
-var isMuted = false;
-var refreshTimer = null;
-
-// ─── INIT ───
-function init() {
-  var today = new Date().toDateString();
-  if (lastOutageDate !== today) {
-    outageCt = 0;
-    localStorage.setItem('outage_today','0');
-    localStorage.setItem('outage_date', today);
-  }
-  document.getElementById('outageCount').textContent = outageCt;
-
-  updateCountdown();
-  renderChart();
-  calcBill();
-  renderAp();
-  fetchLive();
-  fetchWeather();
-  startRefreshTimer();
-}
-
-// ─── SETTINGS ───
-function openModal(id) { document.getElementById(id).classList.add('show'); }
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-function saveSettings() {
-  CFG.pkr     = parseFloat(document.getElementById('setPKR').value) || 22;
-  CFG.batt    = parseFloat(document.getElementById('setBatt').value) || 4.8;
-  CFG.safe    = parseFloat(document.getElementById('setSafe').value) || 20;
-  CFG.refresh = parseInt(document.getElementById('setRefresh').value) || 30;
-  localStorage.setItem('cfg_pkr',     CFG.pkr);
-  localStorage.setItem('cfg_batt',    CFG.batt);
-  localStorage.setItem('cfg_safe',    CFG.safe);
-  localStorage.setItem('cfg_refresh', CFG.refresh);
-  closeModal('settingsModal');
-  startRefreshTimer();
-}
-function startRefreshTimer() {
-  if (refreshTimer) clearInterval(refreshTimer);
-  refreshTimer = setInterval(fetchLive, CFG.refresh * 1000);
-}
-
-// ─── LIVE DATA ───
-function fetchLive() {
-  fetch('/api/live')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      liveData = d;
-      updateAll(d);
-      document.getElementById('connStatus').textContent  = '● CONNECTED';
-      document.getElementById('connStatus').style.color  = 'var(--green)';
-      document.getElementById('lastUpdate').textContent  = 'Updated ' + new Date().toLocaleTimeString('en-PK');
-    })
-    .catch(function(){
-      document.getElementById('connStatus').textContent = '⚠ RECONNECTING';
-      document.getElementById('connStatus').style.color = 'var(--amber)';
-    });
-}
-
-function updateAll(d) {
-  var notes    = (d.notes || '').toLowerCase();
-  var hasSolar = notes.indexOf('solar') !== -1 || (d.solar_w && d.solar_w > 0);
-  var hasWapda = notes.indexOf('line') !== -1 || notes.indexOf('hybrid') !== -1 || gridW > 0;
-  var battOnly = !hasSolar && !hasWapda;
-  var solarW   = d.solar_w !== undefined ? d.solar_w : 0;
-  var gridW    = d.grid_w  !== undefined ? d.grid_w  : 0;
-  var loadW    = d.load_w  || 0;
-  var battPct  = d.battery_pct || 0;
-
-  // ─ Stats bar ─
-  document.getElementById('todaySolar').textContent = (d.solar_kwh   || 0).toFixed(2);
-  document.getElementById('todayWapda').textContent = (d.utility_kwh || 0).toFixed(2);
-  var saved = (d.solar_kwh || 0) * CFG.pkr;
-  document.getElementById('savedToday').textContent = saved.toFixed(0);
-  var totalKwh = (d.solar_kwh||0) + (d.utility_kwh||0);
-  var eff = totalKwh > 0 ? ((d.solar_kwh||0) / totalKwh * 100).toFixed(0) : '--';
-  document.getElementById('efficiency').textContent = eff;
-
-  // ─ Power source ─
-  var modeStr = d.notes || '--';
-  var icon = '🔋'; var badgeCls = 'ps-badge badge-batt'; var badgeTxt = 'BATTERY ONLY';
-  if (hasSolar && hasWapda) { icon='⚡'; badgeCls='ps-badge badge-hybrid'; badgeTxt='HYBRID MODE'; modeStr='Hybrid Mode'; }
-  else if (hasSolar)         { icon='☀️'; badgeCls='ps-badge badge-solar'; badgeTxt='SOLAR MODE'; }
-  else if (hasWapda)         { icon='🔌'; badgeCls='ps-badge badge-wapda'; badgeTxt='WAPDA MODE'; modeStr='Line Mode'; }
-  document.getElementById('psIcon').textContent    = icon;
-  document.getElementById('psMode').textContent    = modeStr;
-  var pb = document.getElementById('psBadge');
-  pb.className = badgeCls;
-  pb.textContent = badgeTxt;
-
-  // ─ Alerts ─
-  document.getElementById('alertBatt').style.display = battOnly  ? 'flex' : 'none';
-  document.getElementById('alertLoad').style.display = loadW>1200 ? 'flex' : 'none';
-  var tempNum = parseFloat((d.temp||'').replace(/[^0-9.]/g,'')) || 0;
-  document.getElementById('alertTemp').style.display = tempNum>55  ? 'flex' : 'none';
-  if (battOnly && !isMuted && battPct < 30) openModal('battModal');
-
-  // ─ Power flow SVG ─
-  document.getElementById('flowSolar').textContent = solarW + 'W';
-  document.getElementById('flowBatt').textContent  = battPct.toFixed(0) + '%';
-  document.getElementById('flowHome').textContent  = loadW + 'W';
-  document.getElementById('flowWapda').textContent = gridW + 'W';
-  // Dot visibility
-  document.getElementById('dotSolar').setAttribute('opacity', hasSolar && solarW > 0 ? '1' : '0');
-  document.getElementById('dotBatt').setAttribute('opacity',  battOnly ? '1' : '0');
-  document.getElementById('dotWapda').setAttribute('opacity', hasWapda && gridW > 0 ? '1' : '0');
-
-  // ─ Battery remaining ─
-  var bhEl = document.getElementById('battHours');
-  var bsEl = document.getElementById('battRemSub');
-  if (hasSolar || hasWapda) {
-    bhEl.textContent = '∞';
-    bsEl.textContent = hasSolar ? 'Solar active' : 'Wapda active';
-  } else if (loadW > 0) {
-    var hrs = ((battPct - CFG.safe) * CFG.batt) / (loadW / 1000);
-    if (hrs > 0) {
-      var h = Math.floor(hrs);
-      var m = Math.round((hrs - h) * 60);
-      var fin = new Date(Date.now() + hrs * 3600000);
-      bhEl.textContent = h + 'h ' + m + 'm';
-      bsEl.textContent = 'Finishes ~' + fin.toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Karachi'}) + ' PKT';
-    } else {
-      bhEl.textContent = '0h';
-      bsEl.textContent = 'Below safe level!';
-    }
-  } else {
-    bhEl.textContent = '∞';
-    bsEl.textContent = 'No load';
-  }
-  document.getElementById('battBarFill').style.width = Math.min(100, battPct) + '%';
-
-  // ─ PKR Ticker ─
-  stopPKRTicker();
-  if (hasSolar) startPKRTicker(solarW, d.solar_kwh || 0);
-
-  // ─ Live stats grid ─
-  document.getElementById('sgSolar').textContent  = (d.solar_kwh  || 0).toFixed(2);
-  document.getElementById('sgBatt').textContent   = battPct.toFixed(0) + '%';
-  document.getElementById('sgVolt').textContent   = (d.voltage     || '--') + 'V';
-  document.getElementById('sgLoad').textContent   = loadW + 'W';
-  document.getElementById('sgWapda').textContent  = (d.utility_kwh || 0).toFixed(2);
-  document.getElementById('sgEnergy').textContent = (d.battery_kwh || 0).toFixed(2);
-
-  // ─ Inverter ─
-  document.getElementById('invTemp').textContent  = d.temp || '--';
-  document.getElementById('invMode').textContent  = d.notes || '--';
-  document.getElementById('invFan').textContent   = d.fan   || '--';
-
-  // ─ Appliances auto-sense ─
-  apState.fan    = loadW > 250;
-  apState.lights = loadW > 50;
-  apState.tv     = loadW > 160;
-  renderAp();
-
-  // ─ Savings ─
-  var kwh  = d.solar_kwh || 0;
-  var pkrs = kwh * CFG.pkr;
-  var taxs = pkrs * 0.18;
-  document.getElementById('savKwh').textContent  = kwh.toFixed(2) + ' kWh';
-  document.getElementById('savPKR').textContent  = 'Rs. ' + pkrs.toFixed(0);
-  document.getElementById('savTax').textContent  = 'Rs. ' + taxs.toFixed(0);
-  document.getElementById('savTotal').textContent = 'Rs. ' + (pkrs + taxs).toFixed(0);
-
-  // ─ Chart ─
-  logHourly(loadW);
-  updateRealTimeCosts(solarW, gridW, battPct);
-  startDualTicker(solarW, gridW);
-}
-
-// ─── PKR TICKER ───
-function startPKRTicker(solarW, basePKR) {
-  pkrTicker = basePKR * CFG.pkr;
-  var ratePerSec = (solarW / 1000) * CFG.pkr / 3600;
-  pkrInterval = setInterval(function(){
-    pkrTicker += ratePerSec;
-    document.getElementById('pkrMeter').textContent = pkrTicker.toFixed(4);
-    document.getElementById('pkrSub').textContent = 'Rs.' + ratePerSec.toFixed(6) + '/sec from solar';
-  }, 1000);
-}
-function stopPKRTicker() {
-  if (pkrInterval) { clearInterval(pkrInterval); pkrInterval = null; }
-}
-
-// ─── WEATHER ───
-function fetchWeather() {
-  fetch('https://wttr.in/Abbottabad?format=j1')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      var tom = d.weather[1];
-      var cond  = tom.hourly[4].weatherDesc[0].value;
-      var temp  = tom.maxtempC;
-      var cloud = tom.hourly[4].cloudcover;
-      var exp   = parseInt(cloud) < 30 ? 'Excellent ☀️' : parseInt(cloud) < 60 ? 'Good ⛅' : 'Low ☁️';
-      document.getElementById('fcastCond').textContent  = cond;
-      document.getElementById('fcastTemp').textContent  = temp + '°C';
-      document.getElementById('fcastCloud').textContent = cloud + '%';
-      document.getElementById('fcastExp').textContent   = exp;
-    })
-    .catch(function(){});
-}
-
-// ─── COUNTDOWN ───
-function updateCountdown() {
-  var now  = new Date();
-  var next = new Date(now.getFullYear(), 5, 7);
-  if (now >= next) next.setFullYear(next.getFullYear() + 1);
-  var days = Math.ceil((next - now) / 86400000);
-  document.getElementById('cdDays').textContent = days + ' days';
-}
-
-// ─── 24H CHART ───
-function logHourly(w) {
-  var data = {};
-  try { data = JSON.parse(localStorage.getItem('sfPeak') || '{}'); } catch(e){}
-  var h = new Date().getHours();
-  if (!data[h] || w > data[h]) data[h] = w;
-  try { localStorage.setItem('sfPeak', JSON.stringify(data)); } catch(e){}
-  renderChart();
-}
-function renderChart() {
-  var data = {};
-  try { data = JSON.parse(localStorage.getItem('sfPeak') || '{}'); } catch(e){}
-  var maxV = 1; var peakH = -1;
-  for (var h=0; h<24; h++) { if ((data[h]||0) > maxV){ maxV = data[h]; peakH = h; } }
-  var curH = new Date().getHours();
-  var ct = document.getElementById('chartBars');
-  ct.innerHTML = '';
-  for (var h=0; h<24; h++) {
-    var v = data[h] || 0;
-    var pct = v > 0 ? Math.max((v/maxV)*100, 3) : 0;
-    var wrap = document.createElement('div'); wrap.className = 'bw';
-    var fill = document.createElement('div'); fill.className = 'bf';
-    if (h === peakH) fill.classList.add('bp');
-    else if (h === curH) fill.classList.add('bn');
-    fill.style.height = pct + '%';
-    wrap.appendChild(fill); ct.appendChild(wrap);
-  }
-  if (peakH >= 0)
-    document.getElementById('peakTag').textContent = 'PEAK: ' + (peakH<10?'0':'') + peakH + ':00';
-}
-function clearChart() {
-  try { localStorage.removeItem('sfPeak'); } catch(e){}
-  document.getElementById('peakTag').textContent = 'PEAK: --';
-  renderChart();
-}
-
-// ─── BILLING ───
-var SLABS = [{max:100,rate:19.99},{max:200,rate:24.82},{max:300,rate:29.97},{max:700,rate:31.97},{max:Infinity,rate:37.27}];
-function calcEnergy(u) {
-  var tot=0; var prev=0;
-  for (var i=0; i<SLABS.length; i++) {
-    if (u<=prev) break;
-    tot += (Math.min(u,SLABS[i].max)-prev) * SLABS[i].rate;
-    prev = SLABS[i].max;
-    if (u<=SLABS[i].max) break;
-  }
-  return tot;
-}
-function setFBR(t) {
-  isFiler = (t==='filer');
-  document.getElementById('filerBtn').className = isFiler ? 'tbtn act' : 'tbtn';
-  document.getElementById('nfBtn').className    = !isFiler ? 'tbtn act-nf' : 'tbtn';
-  calcBill();
-}
-function setCycle(btn) {
-  document.querySelectorAll('.cbtn').forEach(function(b){ b.classList.remove('act'); });
-  btn.classList.add('act');
-}
-function calcBill() {
-  var u    = parseInt(document.getElementById('unitsSlider').value) || 0;
-  document.getElementById('unitsDisp').textContent = u;
-  var en   = calcEnergy(u);
-  var fc   = u * 3.23;
-  var fpa  = u * 4.5;
-  var sub  = en + fc + fpa + 35;
-  var gst  = sub * 0.18;
-  var aft  = sub + gst;
-  var ft=0, atl=0, wht=0;
-  if (!isFiler) { ft = sub*0.09; if (u>300) atl=(u-300)*9; }
-  if (aft > 25000) wht = aft * 0.075;
-  var tot = aft + ft + atl + wht;
-  document.getElementById('rEnergy').textContent = 'Rs.'+en.toFixed(0);
-  document.getElementById('rFC').textContent     = 'Rs.'+fc.toFixed(0);
-  document.getElementById('rFPA').textContent    = 'Rs.'+fpa.toFixed(0);
-  document.getElementById('rGST').textContent    = 'Rs.'+gst.toFixed(0);
-  document.getElementById('rTotal').textContent  = 'Rs.'+tot.toFixed(0);
-  var rWHT=document.getElementById('rowWHT');
-  if (wht>0){ rWHT.style.display='flex'; document.getElementById('rWHT').textContent='Rs.'+wht.toFixed(0); } else rWHT.style.display='none';
-  var rFT=document.getElementById('rowFT');
-  if (!isFiler){ rFT.style.display='flex'; document.getElementById('rFT').textContent='Rs.'+ft.toFixed(0); } else rFT.style.display='none';
-  var rATL=document.getElementById('rowATL');
-  if (!isFiler&&u>300){ rATL.style.display='flex'; document.getElementById('rATL').textContent='Rs.'+atl.toFixed(0); } else rATL.style.display='none';
-  var slabs=[100,200,300,700]; var sw=document.getElementById('slabWarn'); var warned=false;
-  for (var i=0; i<slabs.length; i++) {
-    if (u>=slabs[i]-25 && u<slabs[i]){
-      sw.style.display='block';
-      sw.textContent='⚠️ Only '+(slabs[i]-u)+' units until next slab (>'+slabs[i]+')!';
-      warned=true; break;
-    }
-  }
-  if (!warned) sw.style.display='none';
-}
-
-// ─── APPLIANCES ───
-function toggleAp(name) { apState[name] = !apState[name]; renderAp(); }
-function renderAp() {
-  var fi=document.getElementById('fanIcon');
-  var fp=document.getElementById('fanPill');
-  if (apState.fan){ fi.classList.add('fan-spin'); fp.className='pill pill-run'; fp.textContent='RUNNING'; }
-  else { fi.classList.remove('fan-spin'); fp.className='pill pill-off'; fp.textContent='OFF'; }
-  var lp=document.getElementById('lightsPill');
-  lp.className=apState.lights?'pill pill-on':'pill pill-off';
-  lp.textContent=apState.lights?'ON':'OFF';
-  var tp=document.getElementById('tvPill');
-  tp.className=apState.tv?'pill pill-run':'pill pill-off';
-  tp.textContent=apState.tv?'ON':'OFF';
-}
-
-// ─── OUTAGES ───
-function logOutage() {
-  outageCt++;
-  localStorage.setItem('outage_today', outageCt);
-  localStorage.setItem('outage_date', new Date().toDateString());
-  document.getElementById('outageCount').textContent = outageCt;
-}
-
-// ─── UTILS ───
-function toggleMute() {
-  isMuted = !isMuted;
-  document.getElementById('muteBtn').textContent = isMuted ? '🔊' : '🔇';
-}
-function toggleUrdu() {}
-function shareWA() {
-  var d = liveData;
-  var msg = '🌞 Sufly Solar Update\n' +
-    'Solar: '   + (d.solar_kwh||0).toFixed(2)   + ' kWh\n' +
-    'Battery: ' + (d.battery_pct||0).toFixed(0)  + '%\n' +
-    'Load: '    + (d.load_w||0)                   + 'W\n' +
-    'Mode: '    + (d.notes||'--')                 + '\n' +
-    'Saved: Rs.' + ((d.solar_kwh||0)*CFG.pkr).toFixed(0);
-  window.open('https://wa.me/?text=' + encodeURIComponent(msg));
-}
-
-// ─── START ───
-init();
-setInterval(fetchWeather, 300000);
-</script>
-</body>
-</html>
-<script>
-function loadDateRange(){
-  var from=document.getElementById("dateFrom").value;
-  var to=document.getElementById("dateTo").value;
-  if(!from||!to){alert("Select both dates");return;}
-  fetch("/api/analytics?period=all")
-    .then(function(r){return r.json();})
-    .then(function(rows){
-      var days={};
-      rows.forEach(function(x){
-        var d=x.ts.substring(0,10);
-        if(d>=from&&d<=to){
-          if(!days[d])days[d]=0;
-          if(x.utility_kwh>days[d])days[d]=x.utility_kwh;
-        }
-      });
-      var u=0;
-      Object.keys(days).forEach(function(d){u+=days[d];});
-      u=Math.round(u);if(u<=0)u=0;
-      document.getElementById("unitsSlider").value=Math.min(u,800);
-      document.getElementById("unitsDisp").textContent=Math.min(u,800);
-      calcBill();
-    })
-    .catch(function(){alert("Failed");});
-}
-</script>
-<script>
-function updateRealTimeCosts(solarW, gridW, battPct) {
-  var solarPKR = (solarW / 1000) * CFG.pkr;
-  var wapdaPKR = (gridW / 1000) * CFG.pkr * 1.18;
-  var battVal  = (battPct / 100) * 4.8 * CFG.pkr;
-  var el = document.getElementById('rtSolar');
-  if (el) el.textContent = solarW + 'W';
-  el = document.getElementById('rtSolarPKR');
-  if (el) el.textContent = 'Rs.' + solarPKR.toFixed(2) + '/hr';
-  el = document.getElementById('rtBatt');
-  if (el) el.textContent = battPct.toFixed(0) + '%';
-  el = document.getElementById('rtBattPKR');
-  if (el) el.textContent = 'Rs.' + battVal.toFixed(0) + ' stored';
-  el = document.getElementById('rtWapda');
-  if (el) el.textContent = gridW + 'W';
-  el = document.getElementById('rtWapdaPKR');
-  if (el) el.textContent = 'Rs.' + wapdaPKR.toFixed(2) + '/hr';
-}
-</script>
-<style>
-.rt-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:0 12px;margin-bottom:8px;}
-.rt-card{border-radius:10px;padding:10px 6px;text-align:center;}
-.rt-solar{background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);}
-.rt-batt{background:rgba(255,179,0,.08);border:1px solid rgba(255,179,0,.2);}
-.rt-wapda{background:rgba(255,68,68,.08);border:1px solid rgba(0,229,255,.2);}
-.rt-lbl{font-size:.55rem;color:#7a8fa8;margin-bottom:4px;}
-.rt-val{font-family:'Orbitron',monospace;font-size:.78rem;font-weight:600;line-height:1;margin-bottom:3px;}
-.rt-pkr{font-size:.54rem;margin-top:2px;}
-</style>
-<div class="rt-grid">
-  <div class="rt-card rt-solar">
-    <div class="rt-lbl">☀️ SOLAR</div>
-    <div class="rt-val" style="color:#00e676" id="rtSolar">--W</div>
-    <div class="rt-pkr" style="color:#00e676" id="rtSolarPKR">Rs.--/hr</div>
-  </div>
-  <div class="rt-card rt-batt">
-    <div class="rt-lbl">🔋 BATTERY</div>
-    <div class="rt-val" style="color:#ffb300" id="rtBatt">--%</div>
-    <div class="rt-pkr" style="color:#ffb300" id="rtBattPKR">Rs.-- stored</div>
-  </div>
-  <div class="rt-card rt-wapda">
-    <div class="rt-lbl">🔌 WAPDA</div>
-    <div class="rt-val" style="color:#00e5ff" id="rtWapda">--W</div>
-    <div class="rt-pkr" style="color:#ff4444" id="rtWapdaPKR">Rs.--/hr</div>
-  </div>
-</div>
-<style>
-.dual-ticker{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px;margin-bottom:8px;}
-.ticker-save{background:linear-gradient(135deg,#031a0a,#0a1628);border:1px solid rgba(0,230,118,.3);border-radius:12px;padding:14px;text-align:center;}
-.ticker-cost{background:linear-gradient(135deg,#1a0303,#1a0a0a);border:1px solid rgba(255,68,68,.3);border-radius:12px;padding:14px;text-align:center;}
-.ticker-lbl{font-size:.6rem;font-weight:700;letter-spacing:.1em;margin-bottom:6px;}
-.ticker-val{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;line-height:1;}
-.ticker-rate{font-size:.58rem;margin-top:4px;opacity:.7;}
-</style>
-<div class="dual-ticker">
-  <div class="ticker-save">
-    <div class="ticker-lbl" style="color:#00e676">💚 SAVING</div>
-    <div class="ticker-val" style="color:#00e676">Rs.<span id="savingTicker">0.0000</span></div>
-    <div class="ticker-rate" style="color:#00e676" id="savingRate">Rs.0/sec from solar</div>
-  </div>
-  <div class="ticker-cost">
-    <div class="ticker-lbl" style="color:#ff4444">🔴 CONSUMING</div>
-    <div class="ticker-val" style="color:#ff4444">Rs.<span id="costTicker">0.0000</span></div>
-    <div class="ticker-rate" style="color:#ff4444" id="costRate">Rs.0/sec from wapda</div>
-  </div>
-</div>
-<script>
-var saveTick = 0;
-var costTick = 0;
-var dualInterval = null;
-function startDualTicker(solarW, gridW) {
-  if (dualInterval) clearInterval(dualInterval);
-  var saveRate = (solarW / 1000) * 22 / 3600;
-  var costRate = (gridW / 1000) * 22 * 1.18 / 3600;
-  dualInterval = setInterval(function(){
-    saveTick += saveRate;
-    costTick += costRate;
-    var se = document.getElementById('savingTicker');
-    var ce = document.getElementById('costTicker');
-    var sr = document.getElementById('savingRate');
-    var cr = document.getElementById('costRate');
-    if(se) se.textContent = saveTick.toFixed(4);
-    if(ce) ce.textContent = costTick.toFixed(4);
-    if(sr) sr.textContent = 'Rs.' + saveRate.toFixed(6) + '/sec solar';
-    if(cr) cr.textContent = 'Rs.' + costRate.toFixed(6) + '/sec wapda';
-  }, 1000);
-}
-</script>
-<style>
-.top-tickers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
-.tt-save{background:linear-gradient(135deg,#031a0a,#0a1628);border:1px solid rgba(0,230,118,.3);border-radius:12px;padding:14px;text-align:center;position:relative;overflow:hidden;}
-.tt-cost{background:linear-gradient(135deg,#1a0303,#1a0808);border:1px solid rgba(255,68,68,.3);border-radius:12px;padding:14px;text-align:center;position:relative;overflow:hidden;}
-.tt-lbl{font-size:.6rem;font-weight:700;letter-spacing:.1em;margin-bottom:6px;}
-.tt-val{font-family:'Orbitron',monospace;font-size:1.15rem;font-weight:700;line-height:1;}
-.tt-rate{font-size:.54rem;margin-top:3px;opacity:.8;}
-.coin{position:absolute;font-size:1rem;animation:coinUp 1.5s ease-out forwards;}
-@keyframes coinUp{0%{bottom:-10px;opacity:1;}100%{bottom:100%;opacity:0;}}
-.cash{position:absolute;font-size:1rem;animation:cashOut 1.5s ease-out forwards;}
-@keyframes cashOut{0%{top:50%;opacity:1;transform:scale(1);}100%{top:100%;opacity:0;transform:scale(0.3);}}
-</style>
-<script>
-function spawnCoin(containerId, emoji) {
-  var c = document.getElementById(containerId);
-  if (!c) return;
-  var el = document.createElement('span');
-  el.className = containerId === 'coinBox' ? 'coin' : 'cash';
-  el.textContent = emoji;
-  el.style.left = Math.random()*80 + '%';
-  c.appendChild(el);
-  setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 1500);
-}
-function updateTopTickers(saveRate, costRate, saveTot, costTot) {
-  var ts = document.getElementById('topSaveTicker');
-  var tc = document.getElementById('topCostTicker');
-  var tsr = document.getElementById('topSaveRate');
-  var tcr = document.getElementById('topCostRate');
-  if(ts) ts.textContent = 'Rs.' + saveTot.toFixed(4);
-  if(tc) tc.textContent = 'Rs.' + costTot.toFixed(4);
-  if(tsr) tsr.textContent = 'Rs.' + saveRate.toFixed(6) + '/sec';
-  if(tcr) tcr.textContent = 'Rs.' + costRate.toFixed(6) + '/sec';
-  if(saveRate > 0) spawnCoin('coinBox', '💰');
-  if(costRate > 0) spawnCoin('cashBox', '💸');
-}
-</script>
-<script>
-setInterval(function(){
-  if(typeof saveTick==='undefined') return;
-  var sW = liveData.grid_w !== undefined ? liveData.grid_w : 0;
-  var gW = liveData.solar_w !== undefined ? liveData.solar_w : 0;
-  var sr = gW/1000*22/3600;
-  var cr = sW/1000*22*1.18/3600;
-  updateTopTickers(sr, cr, saveTick, costTick);
-}, 1000);
-</script>
-<script>
-var _today = new Date().toDateString();
-var _sk = 'sf_save_' + _today;
-var _ck = 'sf_cost_' + _today;
-saveTick = parseFloat(localStorage.getItem(_sk) || '0');
-costTick = parseFloat(localStorage.getItem(_ck) || '0');
-setInterval(function(){
-  localStorage.setItem(_sk, saveTick.toFixed(4));
-  localStorage.setItem(_ck, costTick.toFixed(4));
-}, 10000);
-</script>
-<script>
-var _tdate = new Date().toISOString().substring(0,10);
-function saveTotalsDB() {
-  var body = JSON.stringify({date:_tdate, saved_pkr:saveTick, consumed_pkr:costTick});
-  fetch('/api/savetotals', {method:'POST', headers:{'Content-Type':'application/json'}, body:body});
-}
-function loadTotalsDB() {
-  fetch('/api/gettotals?date=' + _tdate)
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(d && d.saved_pkr) saveTick = d.saved_pkr;
-      if(d && d.consumed_pkr) costTick = d.consumed_pkr;
-    }).catch(function(){});
-}
-loadTotalsDB();
-setInterval(saveTotalsDB, 60000);
-</script>
-<script>
-</script>
-<style>
-.usage-card{background:var(--card);border:1px solid rgba(0,230,118,.2);border-radius:12px;padding:14px;margin:0 12px 8px;}
-.usage-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
-.usage-item{text-align:center;background:rgba(0,0,0,.2);border-radius:8px;padding:8px;}
-.usage-val{font-family:'Orbitron',monospace;font-size:.9rem;color:var(--green);font-weight:700;}
-.usage-lbl{font-size:.55rem;color:var(--dim);margin-top:2px;}
-.fault-card{background:rgba(255,68,68,.06);border:1px solid rgba(255,68,68,.25);border-radius:12px;padding:14px;margin:0 12px 8px;display:none;}
-.fault-item{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.7rem;}
-.mini-chart{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px;margin:0 12px 8px;}
-.mini-chart-bars{display:flex;align-items:flex-end;gap:2px;height:60px;margin:8px 0;}
-.mc-bar{flex:1;border-radius:2px 2px 0 0;min-height:1px;transition:height .3s;}
-.mc-solar{background:rgba(0,230,118,.6);}
-.mc-load{background:rgba(129,140,248,.6);}
-.mc-batt{background:rgba(255,179,0,.4);}
-.chart-legend{display:flex;gap:10px;font-size:.55rem;color:var(--mid);}
-.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px;}
-</style>
-
-<!-- USAGE CARD -->
-<div class="usage-card" id="usageCard">
+<div class="usage-card">
   <div class="sec-ttl" style="color:var(--green)">📊 TODAY'S REAL USAGE</div>
   <div class="usage-grid">
     <div class="usage-item"><div class="usage-val" id="uSolar">--</div><div class="usage-lbl">SOLAR GENERATED</div></div>
@@ -1401,101 +329,371 @@ setInterval(saveTotalsDB, 60000);
     <div class="usage-item"><div class="usage-val" style="color:#4ade80" id="uTree">--</div><div class="usage-lbl">🌳 TREES SAVED</div></div>
   </div>
 </div>
-
-<!-- FAULT CARD -->
 <div class="fault-card" id="faultCard">
   <div class="sec-ttl" style="color:var(--red)">⚠️ INVERTER FAULTS THIS MONTH</div>
   <div id="faultList"></div>
 </div>
-
-<!-- MINI CHART -->
 <div class="mini-chart">
-  <div class="sec-ttl">📈 LAST 60 MIN — SOLAR vs LOAD vs BATTERY</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;">
-    <div style="text-align:center;background:rgba(0,0,0,.2);border-radius:8px;padding:6px;">
-      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--green)" id="mcSolarVal">--W</div>
-      <div style="font-size:.52rem;color:var(--dim)">SOLAR NOW</div>
-    </div>
-    <div style="text-align:center;background:rgba(0,0,0,.2);border-radius:8px;padding:6px;">
-      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--indigo)" id="mcLoadVal">--W</div>
-      <div style="font-size:.52rem;color:var(--dim)">LOAD NOW</div>
-    </div>
-    <div style="text-align:center;background:rgba(0,0,0,.2);border-radius:8px;padding:6px;">
-      <div style="font-family:'Orbitron',monospace;font-size:.85rem;color:var(--amber)" id="mcBattVal">--%</div>
-      <div style="font-size:.52rem;color:var(--dim)">BATTERY</div>
-    </div>
+  <div class="sec-ttl">📈 LAST 60 MIN — SOLAR vs LOAD</div>
+  <div class="mini-vals">
+    <div class="mini-val-box"><div class="mini-val" style="color:var(--green)" id="mcSolar">--W</div><div class="mini-lbl">SOLAR</div></div>
+    <div class="mini-val-box"><div class="mini-val" style="color:var(--indigo)" id="mcLoad">--W</div><div class="mini-lbl">LOAD</div></div>
+    <div class="mini-val-box"><div class="mini-val" style="color:var(--amber)" id="mcBatt">--%</div><div class="mini-lbl">BATTERY</div></div>
   </div>
-  <div class="mini-chart-bars" id="miniChartBars"></div>
+  <div class="mc-bars" id="mcBars"></div>
   <div class="chart-legend">
-    <span><span class="legend-dot" style="background:#00e676"></span>Solar</span>
-    <span><span class="legend-dot" style="background:#818cf8"></span>Load</span>
-    <span><span class="legend-dot" style="background:#ffb300"></span>Battery</span>
+    <div class="leg"><div class="leg-dot" style="background:#00e676"></div>Solar</div>
+    <div class="leg"><div class="leg-dot" style="background:#818cf8"></div>Load</div>
   </div>
 </div>
-
+<div class="sec-div" data-label="💰 BILLING & SAVINGS"></div>
+<div class="bill-card">
+  <div class="sec-ttl">⚡ WAPDA BILLING &amp; TAX ENGINE</div>
+  <div class="date-row">
+    <div class="date-box"><div class="date-lbl">FROM DATE</div><input type="date" class="date-inp" id="dateFrom"></div>
+    <div class="date-box"><div class="date-lbl">TO DATE</div><input type="date" class="date-inp" id="dateTo"></div>
+    <button class="load-btn" onclick="loadDateRange()">LOAD</button>
+  </div>
+  <div class="cd-pill">
+    <span class="cd-lbl">📅 Next meter reading (Jun 7)</span>
+    <span class="cd-days" id="cdDays">-- days</span>
+  </div>
+  <div style="font-size:.58rem;color:var(--dim);letter-spacing:.1em;margin-bottom:5px;">BILLING CYCLE</div>
+  <div class="crow">
+    <button class="cbtn act" onclick="setCycle(this)">May–Jun</button>
+    <button class="cbtn" onclick="setCycle(this)">Apr–May</button>
+    <button class="cbtn" onclick="setCycle(this)">Mar–Apr</button>
+  </div>
+  <div style="font-size:.58rem;color:var(--dim);letter-spacing:.1em;margin-bottom:5px;">FBR ATL STATUS</div>
+  <div class="trow">
+    <button class="tbtn act" id="filerBtn" onclick="setFBR('filer')">✅ FILER</button>
+    <button class="tbtn" id="nfBtn" onclick="setFBR('nonfiler')">❌ NON-FILER</button>
+  </div>
+  <div class="sblock">
+    <div class="shead"><span class="slbl">📊 Units Accumulated</span><span class="sval"><span id="unitsDisp">0</span> units</span></div>
+    <input type="range" id="unitsSlider" min="0" max="800" value="0" oninput="calcBill()">
+  </div>
+  <div class="slab-warn" id="slabWarn"></div>
+  <div class="rbox">
+    <div class="rr"><span class="rl">Energy Charges (NEPRA Slabs)</span><span class="rv" id="rEnergy">--</span></div>
+    <div class="rr"><span class="rl">FC Surcharge (Rs.3.23/unit)</span><span class="rv" id="rFC">--</span></div>
+    <div class="rr"><span class="rl">FPA Adjustment (Rs.4.50/unit)</span><span class="rv" id="rFPA">--</span></div>
+    <div class="rr"><span class="rl">GST (18%)</span><span class="rv tax" id="rGST">--</span></div>
+    <div class="rr" id="rowWHT" style="display:none"><span class="rl">WHT 7.5%</span><span class="rv tax" id="rWHT">--</span></div>
+    <div class="rr" id="rowFT" style="display:none"><span class="rl">Further+Extra Tax 9%</span><span class="rv pen" id="rFT">--</span></div>
+    <div class="rr" id="rowATL" style="display:none"><span class="rl">ATL Penalty Rs.9/unit</span><span class="rv pen" id="rATL">--</span></div>
+    <div class="rr" style="padding-top:7px"><span class="rl" style="font-weight:700;color:var(--text)">ESTIMATED CYCLE TOTAL</span><span class="rv total" id="rTotal">--</span></div>
+  </div>
+</div>
+<div class="save-card">
+  <div class="sec-ttl" style="color:var(--green)">🌿 SOLAR FINANCIAL RETURN LEDGER</div>
+  <div class="rbox" style="background:rgba(0,0,0,.15)">
+    <div class="rr"><span class="rl">Solar Generated Today</span><span class="rv" id="savKwh">-- kWh</span></div>
+    <div class="rr"><span class="rl">PKR Saved vs Grid</span><span class="rv saving" id="savPKR">--</span></div>
+    <div class="rr"><span class="rl">Tax Avoided (18% GST)</span><span class="rv saving" id="savTax">--</span></div>
+    <div class="rr" style="padding-top:7px"><span class="rl" style="font-weight:700;color:var(--text)">NET POCKET SAVINGS TODAY</span><span class="rv saving" style="font-size:.9rem" id="savTotal">--</span></div>
+  </div>
+</div>
+<div class="fcast-card">
+  <div class="sec-ttl">🌞 TOMORROW SOLAR FORECAST — ABBOTTABAD</div>
+  <div class="fcast-grid">
+    <div class="fcast-item"><div class="fcast-lbl">CONDITION</div><div class="fcast-val" id="fcastCond">--</div></div>
+    <div class="fcast-item"><div class="fcast-lbl">MAX TEMP</div><div class="fcast-val" id="fcastTemp">--</div></div>
+    <div class="fcast-item"><div class="fcast-lbl">CLOUD COVER</div><div class="fcast-val" id="fcastCloud">--</div></div>
+    <div class="fcast-item"><div class="fcast-lbl">SOLAR EXPECT</div><div class="fcast-val" id="fcastExp">--</div></div>
+  </div>
+</div>
+<div class="outage-card">
+  <div class="sec-ttl">🔌 WAPDA OUTAGES TODAY</div>
+  <div class="outage-head">
+    <div class="outage-urdu">آج واپڈا کتنی بار گئی</div>
+    <button class="log-btn" onclick="logOutage()">+ LOG</button>
+  </div>
+  <div style="font-family:'Orbitron',monospace;font-size:1.4rem;color:var(--amber);text-align:center;padding:6px 0" id="outageCount">0</div>
+</div>
+<div class="status-bar">
+  <span id="lastUpdate">--</span>
+  <span id="connStatus" class="conn-ok">● CONNECTED</span>
+</div>
+</div>
+<nav class="bnav">
+  <a class="bnav-a active" href="/dashboard"><span class="bnav-ic">🏠</span>DASHBOARD</a>
+  <a class="bnav-a" href="/analytics"><span class="bnav-ic">📊</span>ANALYTICS</a>
+  <a class="bnav-a" href="#" onclick="fetchLive();return false;"><span class="bnav-ic">⟳</span>REFRESH</a>
+  <a class="bnav-a" href="#" onclick="shareWA();return false;"><span class="bnav-ic">📱</span>SHARE</a>
+  <a class="bnav-a" href="#" onclick="openModal('settingsModal');return false;"><span class="bnav-ic">⚙️</span>SETTINGS</a>
+</nav>
 <script>
-function fetchUsage() {
-  fetch('/api/usage')
+var CFG={pkr:parseFloat(localStorage.getItem('cfg_pkr')||'22'),batt:parseFloat(localStorage.getItem('cfg_batt')||'4.8'),safe:parseFloat(localStorage.getItem('cfg_safe')||'20'),refresh:parseInt(localStorage.getItem('cfg_refresh')||'30')};
+var liveData={},isMuted=false,isFiler=true,apState={fan:false,lights:true,tv:false},outageCt=0,refreshTimer=null;
+var saveTick=0,costTick=0,saveRate=0,costRate=0,tickTimer=null;
+var _tdate=new Date().toISOString().substring(0,10);
+
+function init(){
+  var today=new Date().toDateString();
+  var sd=localStorage.getItem('outage_date')||'';
+  if(sd!==today){outageCt=0;localStorage.setItem('outage_today','0');localStorage.setItem('outage_date',today);}
+  else{outageCt=parseInt(localStorage.getItem('outage_today')||'0');}
+  document.getElementById('outageCount').textContent=outageCt;
+  loadTotalsDB();updateCountdown();renderChart();calcBill();renderAp();
+  fetchLive();fetchWeather();fetchUsage();fetchFaults();fetchMiniChart();
+  startRefreshTimer();startTickTimer();
+  setInterval(saveTotalsDB,60000);
+  setInterval(saveLocal,10000);
+}
+function openModal(id){document.getElementById(id).classList.add('show');}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+function saveSettings(){
+  CFG.pkr=parseFloat(document.getElementById('setPKR').value)||22;
+  CFG.batt=parseFloat(document.getElementById('setBatt').value)||4.8;
+  CFG.safe=parseFloat(document.getElementById('setSafe').value)||20;
+  CFG.refresh=parseInt(document.getElementById('setRefresh').value)||30;
+  localStorage.setItem('cfg_pkr',CFG.pkr);localStorage.setItem('cfg_batt',CFG.batt);
+  localStorage.setItem('cfg_safe',CFG.safe);localStorage.setItem('cfg_refresh',CFG.refresh);
+  closeModal('settingsModal');startRefreshTimer();
+}
+function startRefreshTimer(){if(refreshTimer)clearInterval(refreshTimer);refreshTimer=setInterval(fetchLive,CFG.refresh*1000);}
+function startTickTimer(){
+  if(tickTimer)clearInterval(tickTimer);
+  tickTimer=setInterval(function(){
+    saveTick+=saveRate;costTick+=costRate;updateTickerUI();
+    if(saveRate>0)spawnAnim('coinBox','💰','coin-up');
+    if(costRate>0&&Math.random()<0.3)spawnAnim('cashBox','💸','cash-out');
+  },1000);
+}
+function updateTickerUI(){
+  var ts=document.getElementById('topSave');
+  var tc=document.getElementById('topCost');
+  var tsr=document.getElementById('topSaveRate');
+  var tcr=document.getElementById('topCostRate');
+  if(ts)ts.textContent='Rs.'+saveTick.toFixed(4);
+  if(tc)tc.textContent='Rs.'+costTick.toFixed(4);
+  if(tsr)tsr.textContent='Rs.'+saveRate.toFixed(6)+'/sec';
+  if(tcr)tcr.textContent='Rs.'+costRate.toFixed(6)+'/sec';
+}
+function spawnAnim(boxId,emoji,cls){
+  var box=document.getElementById(boxId);if(!box)return;
+  var el=document.createElement('span');el.className='anim-el '+cls;
+  el.textContent=emoji;el.style.left=Math.random()*80+'%';
+  if(cls==='coin-up')el.style.bottom='0';else el.style.top='40%';
+  box.appendChild(el);
+  setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},1500);
+}
+function saveTotalsDB(){
+  fetch('/api/savetotals',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:_tdate,saved_pkr:saveTick,consumed_pkr:costTick})}).catch(function(){});
+}
+function loadTotalsDB(){
+  fetch('/api/gettotals?date='+_tdate)
+    .then(function(r){return r.json();})
+    .then(function(d){if(d&&d.saved_pkr>0)saveTick=d.saved_pkr;if(d&&d.consumed_pkr>0)costTick=d.consumed_pkr;updateTickerUI();})
+    .catch(function(){});
+}
+function saveLocal(){
+  try{localStorage.setItem('sf_save_'+_tdate,saveTick.toFixed(4));localStorage.setItem('sf_cost_'+_tdate,costTick.toFixed(4));}catch(e){}
+}
+function fetchLive(){
+  fetch('/api/live')
     .then(function(r){return r.json();})
     .then(function(d){
-      var el=document.getElementById('uSolar'); if(el) el.textContent=d.T_PV_Watt||'--';
-      el=document.getElementById('uSavings'); if(el) el.textContent=d.T_Savings||'--';
-      el=document.getElementById('uLoad'); if(el) el.textContent=d.T_Output_Load||'--';
-      el=document.getElementById('uGrid'); if(el) el.textContent=d.T_Grid_Load||'--';
-      el=document.getElementById('uPeak'); if(el) el.textContent=d.T_Peak_PV||'--';
-      el=document.getElementById('uTree'); if(el) el.textContent=d.T_Tree_Plant||'--';
-    }).catch(function(){});
+      liveData=d;updateDashboard(d);
+      document.getElementById('connStatus').textContent='● CONNECTED';
+      document.getElementById('connStatus').className='conn-ok';
+      document.getElementById('lastUpdate').textContent='Updated '+new Date().toLocaleTimeString('en-PK');
+    })
+    .catch(function(){
+      document.getElementById('connStatus').textContent='⚠ RECONNECTING';
+      document.getElementById('connStatus').className='conn-err';
+    });
 }
-
-function fetchFaults() {
-  fetch('/api/faults')
+function updateDashboard(d){
+  var notes=(d.notes||'').toLowerCase();
+  var solarW=d.solar_w!==undefined?d.solar_w:0;
+  var gridW=d.grid_w!==undefined?d.grid_w:0;
+  var loadW=d.load_w||0;var battPct=d.battery_pct||0;
+  var hasSolar=notes.indexOf('solar')!==-1||solarW>10;
+  var hasWapda=notes.indexOf('line')!==-1||notes.indexOf('hybrid')!==-1||notes.indexOf('utility')!==-1||gridW>10;
+  var battOnly=!hasSolar&&!hasWapda;
+  document.getElementById('stSolar').textContent=(d.solar_kwh||0).toFixed(2);
+  document.getElementById('stWapda').textContent=(d.utility_kwh||0).toFixed(2);
+  var saved=(d.solar_kwh||0)*CFG.pkr;
+  document.getElementById('stSaved').textContent=saved.toFixed(0);
+  var totalKwh=(d.solar_kwh||0)+(d.utility_kwh||0);
+  document.getElementById('stEff').textContent=totalKwh>0?((d.solar_kwh||0)/totalKwh*100).toFixed(0):'--';
+  var icon='🔋',badgeCls='ps-badge b-batt',badgeTxt='BATTERY ONLY';
+  if(hasSolar&&hasWapda){icon='⚡';badgeCls='ps-badge b-hybrid';badgeTxt='HYBRID MODE';}
+  else if(hasSolar){icon='☀️';badgeCls='ps-badge b-solar';badgeTxt='SOLAR MODE';}
+  else if(hasWapda){icon='🔌';badgeCls='ps-badge b-wapda';badgeTxt='WAPDA MODE';}
+  document.getElementById('psIcon').textContent=icon;
+  document.getElementById('psMode').textContent=d.notes||'--';
+  var pb=document.getElementById('psBadge');pb.className=badgeCls;pb.textContent=badgeTxt;
+  document.getElementById('alertBatt').style.display=battOnly?'flex':'none';
+  document.getElementById('alertLoad').style.display=loadW>1200?'flex':'none';
+  var tNum=parseFloat((d.temp||'').replace(/[^0-9.]/g,''))||0;
+  document.getElementById('alertTemp').style.display=tNum>55?'flex':'none';
+  if(battOnly&&!isMuted&&battPct<30)openModal('battModal');
+  document.getElementById('fSolar').textContent=solarW+'W';
+  document.getElementById('fBatt').textContent=battPct.toFixed(0)+'%';
+  document.getElementById('fHome').textContent=loadW+'W';
+  document.getElementById('fWapda').textContent=gridW+'W';
+  document.getElementById('dotSolar').setAttribute('opacity',hasSolar&&solarW>0?'1':'0');
+  document.getElementById('dotBatt').setAttribute('opacity',battOnly?'1':'0');
+  document.getElementById('dotWapda').setAttribute('opacity',hasWapda&&gridW>0?'1':'0');
+  var bhEl=document.getElementById('battHours');
+  var bsEl=document.getElementById('battSub');
+  if(hasSolar||hasWapda){bhEl.textContent='∞';bsEl.textContent=hasSolar?'Solar active':'Wapda active';}
+  else if(loadW>0){
+    var hrs=((battPct-CFG.safe)*CFG.batt)/(loadW/1000);
+    if(hrs>0){var h=Math.floor(hrs);var m=Math.round((hrs-h)*60);var fin=new Date(Date.now()+hrs*3600000);bhEl.textContent=h+'h '+m+'m';bsEl.textContent='Ends ~'+fin.toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Karachi'})+' PKT';}
+    else{bhEl.textContent='0h';bsEl.textContent='Below safe level!';}
+  }else{bhEl.textContent='∞';bsEl.textContent='No load';}
+  document.getElementById('battFill').style.width=Math.min(100,battPct)+'%';
+  document.getElementById('sgSolar').textContent=(d.solar_kwh||0).toFixed(2);
+  document.getElementById('sgBatt').textContent=battPct.toFixed(0)+'%';
+  document.getElementById('sgVolt').textContent=(d.voltage||'--')+'V';
+  document.getElementById('sgLoad').textContent=loadW+'W';
+  document.getElementById('sgWapda').textContent=(d.utility_kwh||0).toFixed(2);
+  document.getElementById('sgEnergy').textContent=(d.battery_kwh||0).toFixed(2);
+  document.getElementById('invTemp').textContent=d.temp||'--';
+  document.getElementById('invMode').textContent=d.notes||'--';
+  document.getElementById('invFan').textContent=d.fan||'--';
+  var kwh=d.solar_kwh||0;var pkrs=kwh*CFG.pkr;var taxs=pkrs*0.18;
+  document.getElementById('savKwh').textContent=kwh.toFixed(2)+' kWh';
+  document.getElementById('savPKR').textContent='Rs. '+pkrs.toFixed(0);
+  document.getElementById('savTax').textContent='Rs. '+taxs.toFixed(0);
+  document.getElementById('savTotal').textContent='Rs. '+(pkrs+taxs).toFixed(0);
+  saveRate=(solarW/1000)*CFG.pkr/3600;
+  costRate=(gridW/1000)*CFG.pkr*1.18/3600;
+  apState.fan=loadW>250;apState.lights=loadW>50;apState.tv=loadW>160;renderAp();
+  logHourly(loadW);
+}
+function fetchWeather(){
+  fetch('https://wttr.in/Abbottabad?format=j1')
     .then(function(r){return r.json();})
     .then(function(d){
-      var fc=document.getElementById('faultCard');
-      var fl=document.getElementById('faultList');
-      if(!fc||!fl) return;
-      if(d.dev_fault && Array.isArray(d.dev_fault) && d.dev_fault.length>0){
-        fc.style.display='block';
-        fl.innerHTML='';
-        d.dev_fault.slice(0,5).forEach(function(f){
-          fl.innerHTML+='<div class="fault-item"><span style="color:var(--red)">'+f.f_fault+'</span><span style="color:var(--dim)">'+f.f_date+' '+f.f_t_start+'</span></div>';
-        });
-      }
+      var tom=d.weather[1];var cond=tom.hourly[4].weatherDesc[0].value;
+      var temp=tom.maxtempC;var cloud=tom.hourly[4].cloudcover;
+      var exp=parseInt(cloud)<30?'Excellent ☀️':parseInt(cloud)<60?'Good ⛅':'Low ☁️';
+      document.getElementById('fcastCond').textContent=cond;
+      document.getElementById('fcastTemp').textContent=temp+'°C';
+      document.getElementById('fcastCloud').textContent=cloud+'%';
+      document.getElementById('fcastExp').textContent=exp;
     }).catch(function(){});
 }
-
-function fetchMiniChart() {
-  fetch('/api/chart')
-    .then(function(r){return r.json();})
-    .then(function(rows){
-      if(!rows||!rows.length) return;
-      var bars=document.getElementById('miniChartBars');
-      if(!bars) return;
-      bars.innerHTML='';
-      var maxS=1,maxL=1;
-      rows.forEach(function(r){ if(parseFloat(r.pv_watt)>maxS) maxS=parseFloat(r.pv_watt); if(parseFloat(r.output_load_w)>maxL) maxL=parseFloat(r.output_load_w); });
-      var step=Math.max(1,Math.floor(rows.length/30));
-      for(var i=rows.length-1;i>=0;i-=step){
-        var row=rows[i];
-        var sw=(parseFloat(row.pv_watt)/maxS)*100;
-        var lw=(parseFloat(row.output_load_w)/maxL)*100;
-        var bw=parseFloat(row.battery_status)||0;
-        var wrap=document.createElement('div');
-        wrap.style.cssText='flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:1px;';
-        wrap.innerHTML='<div class="mc-bar mc-solar" style="height:'+sw+'%"></div>';
-        bars.appendChild(wrap);
-      }
-      var last=rows[0];
-      var ms=document.getElementById('mcSolarVal'); if(ms) ms.textContent=last.pv_watt+'W';
-      var ml=document.getElementById('mcLoadVal'); if(ml) ml.textContent=last.output_load_w+'W';
-      var mb=document.getElementById('mcBattVal'); if(mb) mb.textContent=last.battery_status+'%';
-    }).catch(function(){});
+function updateCountdown(){
+  var now=new Date();var next=new Date(now.getFullYear(),5,7);
+  if(now>=next)next.setFullYear(next.getFullYear()+1);
+  document.getElementById('cdDays').textContent=Math.ceil((next-now)/86400000)+' days';
 }
-
-fetchUsage();
-fetchFaults();
-fetchMiniChart();
-setInterval(fetchUsage, 300000);
-setInterval(fetchFaults, 600000);
-setInterval(fetchMiniChart, 60000);
+function logHourly(w){
+  var data={};try{data=JSON.parse(localStorage.getItem('sfPeak')||'{}');}catch(e){}
+  var h=new Date().getHours();if(!data[h]||w>data[h])data[h]=w;
+  try{localStorage.setItem('sfPeak',JSON.stringify(data));}catch(e){}renderChart();
+}
+function renderChart(){
+  var data={};try{data=JSON.parse(localStorage.getItem('sfPeak')||'{}');}catch(e){}
+  var maxV=1,peakH=-1;
+  for(var h=0;h<24;h++){if((data[h]||0)>maxV){maxV=data[h];peakH=h;}}
+  var curH=new Date().getHours();
+  var ct=document.getElementById('chartBars');if(!ct)return;ct.innerHTML='';
+  for(var h=0;h<24;h++){
+    var v=data[h]||0;var pct=v>0?Math.max((v/maxV)*100,3):0;
+    var wrap=document.createElement('div');wrap.className='bw';
+    var fill=document.createElement('div');fill.className='bf';
+    if(h===peakH)fill.classList.add('bp');else if(h===curH)fill.classList.add('bn');
+    fill.style.height=pct+'%';wrap.appendChild(fill);ct.appendChild(wrap);
+  }
+  if(peakH>=0)document.getElementById('peakTag').textContent='PEAK:'+(peakH<10?'0':'')+peakH+':00';
+}
+function clearChart(){try{localStorage.removeItem('sfPeak');}catch(e){}document.getElementById('peakTag').textContent='PEAK: --';renderChart();}
+function fetchUsage(){
+  fetch('/api/usage').then(function(r){return r.json();}).then(function(d){
+    var el;
+    el=document.getElementById('uSolar');if(el)el.textContent=d.T_PV_Watt||'--';
+    el=document.getElementById('uSavings');if(el)el.textContent=d.T_Savings||'--';
+    el=document.getElementById('uLoad');if(el)el.textContent=d.T_Output_Load||'--';
+    el=document.getElementById('uGrid');if(el)el.textContent=d.T_Grid_Load||'--';
+    el=document.getElementById('uPeak');if(el)el.textContent=d.T_Peak_PV||'--';
+    el=document.getElementById('uTree');if(el)el.textContent=d.T_Tree_Plant||'--';
+  }).catch(function(){});
+}
+function fetchFaults(){
+  fetch('/api/faults').then(function(r){return r.json();}).then(function(d){
+    var fc=document.getElementById('faultCard');var fl=document.getElementById('faultList');
+    if(!fc||!fl)return;
+    if(d.dev_fault&&Array.isArray(d.dev_fault)&&d.dev_fault.length>0){
+      fc.style.display='block';fl.innerHTML='';
+      d.dev_fault.slice(0,5).forEach(function(f){fl.innerHTML+='<div class="fault-item"><span style="color:var(--red)">'+f.f_fault+'</span><span style="color:var(--dim)">'+f.f_date+' '+f.f_t_start+'</span></div>';});
+    }
+  }).catch(function(){});
+}
+function fetchMiniChart(){
+  fetch('/api/chart').then(function(r){return r.json();}).then(function(rows){
+    if(!rows||!rows.length)return;
+    var bars=document.getElementById('mcBars');if(!bars)return;bars.innerHTML='';
+    var maxS=1,maxL=1;
+    rows.forEach(function(r){if(parseFloat(r.pv_watt)>maxS)maxS=parseFloat(r.pv_watt);if(parseFloat(r.output_load_w)>maxL)maxL=parseFloat(r.output_load_w);});
+    var step=Math.max(1,Math.floor(rows.length/30));
+    for(var i=rows.length-1;i>=0;i-=step){
+      var row=rows[i];var sw=(parseFloat(row.pv_watt)/maxS)*100;
+      var wrap=document.createElement('div');wrap.style.cssText='flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;';
+      wrap.innerHTML='<div class="mc-bar mc-s" style="height:'+Math.max(sw,1)+'%"></div>';
+      bars.appendChild(wrap);
+    }
+    var last=rows[0];
+    var ms=document.getElementById('mcSolar');if(ms)ms.textContent=last.pv_watt+'W';
+    var ml=document.getElementById('mcLoad');if(ml)ml.textContent=last.output_load_w+'W';
+    var mb=document.getElementById('mcBatt');if(mb)mb.textContent=last.battery_status+'%';
+  }).catch(function(){});
+}
+var SLABS=[{max:100,rate:19.99},{max:200,rate:24.82},{max:300,rate:29.97},{max:700,rate:31.97},{max:Infinity,rate:37.27}];
+function calcEnergy(u){var tot=0,prev=0;for(var i=0;i<SLABS.length;i++){if(u<=prev)break;tot+=(Math.min(u,SLABS[i].max)-prev)*SLABS[i].rate;prev=SLABS[i].max;if(u<=SLABS[i].max)break;}return tot;}
+function setFBR(t){isFiler=(t==='filer');document.getElementById('filerBtn').className=isFiler?'tbtn act':'tbtn';document.getElementById('nfBtn').className=!isFiler?'tbtn act-nf':'tbtn';calcBill();}
+function setCycle(btn){document.querySelectorAll('.cbtn').forEach(function(b){b.classList.remove('act');});btn.classList.add('act');}
+function calcBill(){
+  var u=parseInt(document.getElementById('unitsSlider').value)||0;
+  document.getElementById('unitsDisp').textContent=u;
+  var en=calcEnergy(u),fc=u*3.23,fpa=u*4.5,sub=en+fc+fpa+35,gst=sub*0.18,aft=sub+gst;
+  var ft=0,atl=0,wht=0;
+  if(!isFiler){ft=sub*0.09;if(u>300)atl=(u-300)*9;}
+  if(aft>25000)wht=aft*0.075;
+  var tot=aft+ft+atl+wht;
+  document.getElementById('rEnergy').textContent='Rs.'+en.toFixed(0);
+  document.getElementById('rFC').textContent='Rs.'+fc.toFixed(0);
+  document.getElementById('rFPA').textContent='Rs.'+fpa.toFixed(0);
+  document.getElementById('rGST').textContent='Rs.'+gst.toFixed(0);
+  document.getElementById('rTotal').textContent='Rs.'+tot.toFixed(0);
+  var rWHT=document.getElementById('rowWHT');if(wht>0){rWHT.style.display='flex';document.getElementById('rWHT').textContent='Rs.'+wht.toFixed(0);}else rWHT.style.display='none';
+  var rFT=document.getElementById('rowFT');if(!isFiler){rFT.style.display='flex';document.getElementById('rFT').textContent='Rs.'+ft.toFixed(0);}else rFT.style.display='none';
+  var rATL=document.getElementById('rowATL');if(!isFiler&&u>300){rATL.style.display='flex';document.getElementById('rATL').textContent='Rs.'+atl.toFixed(0);}else rATL.style.display='none';
+  var slabs=[100,200,300,700],sw=document.getElementById('slabWarn'),warned=false;
+  for(var i=0;i<slabs.length;i++){if(u>=slabs[i]-25&&u<slabs[i]){sw.style.display='block';sw.textContent='⚠️ Only '+(slabs[i]-u)+' units until next slab!';warned=true;break;}}
+  if(!warned)sw.style.display='none';
+}
+function loadDateRange(){
+  var from=document.getElementById('dateFrom').value;var to=document.getElementById('dateTo').value;
+  if(!from||!to){alert('Select both dates');return;}
+  fetch('/api/analytics?period=all').then(function(r){return r.json();}).then(function(rows){
+    var days={};
+    rows.forEach(function(x){var d=x.ts.substring(0,10);if(d>=from&&d<=to){if(!days[d])days[d]=0;if(x.utility_kwh>days[d])days[d]=x.utility_kwh;}});
+    var u=0;Object.keys(days).forEach(function(d){u+=days[d];});
+    u=Math.max(0,Math.round(u));
+    document.getElementById('unitsSlider').value=Math.min(u,800);
+    document.getElementById('unitsDisp').textContent=Math.min(u,800);calcBill();
+  }).catch(function(){alert('Failed');});
+}
+function toggleAp(name){apState[name]=!apState[name];renderAp();}
+function renderAp(){
+  var fi=document.getElementById('fanIcon');var fp=document.getElementById('fanPill');
+  if(apState.fan){fi.classList.add('fan-spin');fp.className='pill p-run';fp.textContent='RUNNING';}
+  else{fi.classList.remove('fan-spin');fp.className='pill p-off';fp.textContent='OFF';}
+  var lp=document.getElementById('lightsPill');lp.className=apState.lights?'pill p-on':'pill p-off';lp.textContent=apState.lights?'ON':'OFF';
+  var tp=document.getElementById('tvPill');tp.className=apState.tv?'pill p-run':'pill p-off';tp.textContent=apState.tv?'ON':'OFF';
+}
+function logOutage(){outageCt++;localStorage.setItem('outage_today',outageCt);localStorage.setItem('outage_date',new Date().toDateString());document.getElementById('outageCount').textContent=outageCt;}
+function toggleMute(){isMuted=!isMuted;document.getElementById('muteBtn').textContent=isMuted?'🔊':'🔇';}
+function shareWA(){var d=liveData;var msg='🌞 Sufly Solar\nSolar: '+(d.solar_w||0)+'W\nBattery: '+(d.battery_pct||0).toFixed(0)+'%\nLoad: '+(d.load_w||0)+'W\nMode: '+(d.notes||'--')+'\nSaved: Rs.'+((d.solar_kwh||0)*CFG.pkr).toFixed(0);window.open('https://wa.me/?text='+encodeURIComponent(msg));}
+init();
+setInterval(fetchWeather,300000);setInterval(fetchUsage,300000);setInterval(fetchFaults,600000);setInterval(fetchMiniChart,60000);
 </script>
+</body>
+</html>

@@ -1341,3 +1341,14 @@ setInterval(function(){
   updateTopTickers(sr, cr, saveTick, costTick);
 }, 1000);
 </script>
+<script>
+var _today = new Date().toDateString();
+var _sk = 'sf_save_' + _today;
+var _ck = 'sf_cost_' + _today;
+saveTick = parseFloat(localStorage.getItem(_sk) || '0');
+costTick = parseFloat(localStorage.getItem(_ck) || '0');
+setInterval(function(){
+  localStorage.setItem(_sk, saveTick.toFixed(4));
+  localStorage.setItem(_ck, costTick.toFixed(4));
+}, 10000);
+</script>

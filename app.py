@@ -37,7 +37,7 @@ def scrape():
             'battery_pct':batt_pct,
             'load_w':load_w,
             'voltage':voltage,
-            'notes':mode,
+            'notes':mode,'solar_w':solar_w,'grid_w':grid_w,
             'temp':temp,
             'fan':fan
         }

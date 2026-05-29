@@ -549,7 +549,7 @@ function updateDashboard(d){
   var bsEl=document.getElementById('battSub');
   if(hasSolar||hasWapda){bhEl.textContent='∞';bsEl.textContent=hasSolar?'Solar active':'Wapda active';}
   else if(loadW>0){
-    var hrs=((battPct-CFG.safe)*CFG.batt)/(loadW/1000);
+    var hrs=((battPct-CFG.safe)/100*CFG.batt)/(loadW/1000);
     if(hrs>0){var h=Math.floor(hrs);var m=Math.round((hrs-h)*60);var fin=new Date(Date.now()+hrs*3600000);bhEl.textContent=h+'h '+m+'m';bsEl.textContent='Ends ~'+fin.toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Karachi'})+' PKT';}
     else{bhEl.textContent='0h';bsEl.textContent='Below safe level!';}
   }else{bhEl.textContent='∞';bsEl.textContent='No load';}

@@ -489,6 +489,7 @@ function saveTotalsDB(){
   fetch('/api/savetotals',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:_tdate,saved_pkr:saveTick,consumed_pkr:costTick})}).catch(function(){});
 }
 function loadTotalsDB(){
+  try{var ls=parseFloat(localStorage.getItem("sf_save_"+_tdate)||"0");var lc=parseFloat(localStorage.getItem("sf_cost_"+_tdate)||"0");if(ls>0)saveTick=ls;if(lc>0)costTick=lc;updateTickerUI();}catch(e){}
   fetch('/api/gettotals?date='+_tdate)
     .then(function(r){return r.json();})
     .then(function(d){if(d&&d.saved_pkr>0)saveTick=d.saved_pkr;if(d&&d.consumed_pkr>0)costTick=d.consumed_pkr;updateTickerUI();})

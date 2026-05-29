@@ -535,7 +535,7 @@ function updateDashboard(d){
   var pb=document.getElementById('psBadge');pb.className=badgeCls;pb.textContent=badgeTxt;
   document.getElementById('alertBatt').style.display=battOnly?'flex':'none';
   document.getElementById('alertLoad').style.display=loadW>1200?'flex':'none';
-  var tNum=parseFloat((d.temp||'').replace(/[^0-9.]/g,''))||0;
+  var tNum=parseFloat((d.temp||'').match(/\d+/)||[0])||0;
   document.getElementById('alertTemp').style.display=tNum>55?'flex':'none';
   if(battOnly&&!isMuted&&battPct<30)openModal('battModal');
   document.getElementById('fSolar').textContent=solarW+'W';
